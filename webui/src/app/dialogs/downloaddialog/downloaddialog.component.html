@@ -1,0 +1,26 @@
+<h2 align="center" mat-dialog-title>{{ 'dialog.export' | i18n }}</h2>
+<mat-dialog-content>
+    <div class="dialog-container">
+        <div class="text-center mt-3">
+            <button mat-stroked-button (click)="downloadEpub()">ePub</button>
+            &nbsp;
+            <button mat-stroked-button (click)="downloadPdf()">PDF</button>
+        </div>
+        <div class="mt-3">
+            @if (started) {
+            @if (error) {
+            <p>{{ 'dialog.exportfailed' | i18n }}</p>
+            }
+            @else if (ready) {
+            <p>{{ 'dialog.exportready' | i18n }}</p>
+            }
+            @else {
+            <p>{{ 'dialog.exportprogress' | i18n }}</p>
+            }
+            }
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="ok()">{{ 'dialog.close' | i18n }}</button>
+</mat-dialog-actions>

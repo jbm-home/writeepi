@@ -1,0 +1,47 @@
+{
+  "name": "writeepi",
+  "version": "1.0.0",
+  "author": "Writeepi",
+  "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
+  "exports": "./dist/desktop/src/main.js",
+  "main": "./dist/desktop/src/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && npm run copy-files && npm run copy-app",
+    "clean": "rimraf out",
+    "start": "set ELECTRON_ENABLE_LOGGING=1 && npm run build && electron dist/desktop/src/main.js",
+    "copy-files": "copyfiles -u 1 src/*.png dist/desktop/src/ && copyfiles -u 1 src/*.ico dist/desktop/src/ && copyfiles -u 1 src/*.icns dist/desktop/src/",
+    "copy-app": "copy-folder ../webui/dist/webui dist/webui/",
+    "package": "electron-forge package",
+    "make": "npm run clean && npm run build && electron-forge make",
+    "publish": "electron-forge publish",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.6.0",
+    "@electron-forge/maker-deb": "^7.6.0",
+    "@electron-forge/maker-dmg": "^7.6.0",
+    "@electron-forge/maker-squirrel": "^7.6.0",
+    "@electron-forge/maker-zip": "^7.6.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
+    "@electron-forge/plugin-fuses": "^7.6.0",
+    "@electron/fuses": "^1.8.0",
+    "@types/html-to-text": "^9.0.4",
+    "@types/uuid": "^10.0.0",
+    "copyfiles": "^2.4.1",
+    "electron": "^33.2.1",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "copy-folder-util": "^1.1.4",
+    "electron-context-menu": "^4.0.4",
+    "electron-log": "^5.2.3",
+    "electron-store": "^10.0.0",
+    "epub-gen-memory": "^1.1.2",
+    "html-to-text": "^9.0.5",
+    "jspdf": "^2.5.2",
+    "uuidv7": "^1.0.2"
+  }
+}

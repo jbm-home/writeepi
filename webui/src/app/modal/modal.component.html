@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ name }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="mb-3">
+            <!-- <label for="inputContent">{{inputTitle}}</label> -->
+            <div class="alert alert-warning" role="alert" *ngIf="extraMessage.length > 0">
+                {{extraMessage}}
+            </div>
+            <div class="input-group" *ngIf="inputTitle !== 'HIDE'">
+                <input id="inputContent" class="form-control" placeholder="{{inputTitle}}" name="inputContent"
+                    [(ngModel)]="inputContent">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close(inputContent)">{{confirmLabel}}</button>
+</div>

@@ -1,0 +1,42 @@
+<button type="button" class="btn app-nav-item" (contextmenu)="editorService.toggleContextualMenu($event, this.menuItem)" (dblclick)="editorService.toggleContextualMenu($event, this.menuItem)"
+    [class.app-nav-selected]="editorService.isCurrentSelected(this.menuItem.id)"
+    (click)="editorService.changeSelection(menuItem)" [attr.aria-expanded]="menuItem.expanded"
+    aria-controls="collapseExample">
+    <div class="bi bi-{{menuItem.icon}} ms-2 me-1">&nbsp; {{ translate(menuItem.name)}}</div>
+    <div class="bi bi-chevron-{{menuItem.expanded ? 'up' : 'down'}} small {{editorService.hasChildren(menuItem.id) ? 'visible' : 'invisible'}}"
+        (click)="editorService.hasChildren(menuItem.id) ? menuItem.expanded = !menuItem.expanded : ''">
+    </div>
+</button>
+<div class="dropdown-menu dropdown-menu-end app-on-top" [class.show]="menuItem.context === true">
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.rename(menuItem)"
+        *ngIf="!menuItem.isTrash && menuItem.canBeDeleted && !editorService.isTrashChild(menuItem)">{{ 'tree.rename' | i18n }}</div>
+
+    @if (menuItem.isSummary) {
+        <!-- nothing -->
+    }
+    @else if (menuItem.isBook) {
+        <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addChildEditor(menuItem)" *ngIf="menuItem.isFolder && level < 3">{{ 'tree.addchapter' | i18n }}</div>
+    }
+    @else if (editorService.isBookRootChild(menuItem)) {
+        <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addEditorBefore(menuItem)" *ngIf="level > 0">{{ 'tree.addchapterbefore' | i18n }}</div>
+        <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addEditorAfter(menuItem)" *ngIf="level > 0">{{ 'tree.addchapterafter' | i18n }}</div>
+    }
+    @else if (!menuItem.isTrash && !editorService.isTrashChild(menuItem)) {
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addChildFolder(menuItem)" *ngIf="menuItem.isFolder && level < 2">{{ 'tree.addchildfolder' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addChildEditor(menuItem)" *ngIf="menuItem.isFolder && level < 3">{{ 'tree.addchildeditor' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addFolderBefore(menuItem)" *ngIf="level < 3">{{ 'tree.addfolderbefore' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addFolderAfter(menuItem)" *ngIf="level < 3">{{ 'tree.addfolderafter' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addEditorBefore(menuItem)" *ngIf="level > 0">{{ 'tree.addeditorbefore' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addEditorAfter(menuItem)" *ngIf="level > 0">{{ 'tree.addeditorafter' | i18n }}</div>
+    }
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.deleteItem(menuItem)"
+        *ngIf="!menuItem.isTrash && !editorService.isTrashChild(menuItem)"
+        disabled="{{menuItem.canBeDeleted ? 'true' : undefined}}">{{ 'tree.delete' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.emptyTrash(menuItem)"
+        *ngIf="menuItem.isTrash || editorService.isTrashChild(menuItem)">{{ 'tree.emptytrash' | i18n }}</div>
+</div>
+<div class="app-nav-submenu ps-4" #collapse="ngbCollapse" [ngbCollapse]="!menuItem.expanded" (ngbCollapseChange)="menuItem.expanded = $event">
+    <div *ngFor="let child of editorService.getChildren(menuItem.id)">
+        <app-tree-item [menuItem]="child" [level]="level+1"></app-tree-item>
+    </div>
+</div>

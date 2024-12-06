@@ -1,0 +1,247 @@
+<div class="app-header">
+  <div class="app-logo">
+    <div class="app-only-on-small-device">
+      <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+    </div>
+    <div class="ms-3">
+      <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <g transform="scale(0.5)">
+          <circle cx="32" cy="32" r="30" fill="#e4d1c1" />
+          <circle cx="32" cy="32" r="14" fill="#238a7d" />
+          <circle cx="32" cy="32" r="18.5" fill="none" stroke="#238a7d" stroke-width="1.2" />
+          <circle cx="32" cy="32" r="20.5" fill="none" stroke="#238a7d" stroke-width="0.75" />
+          <circle cx="32" cy="32" r="24" fill="none" stroke="#238a7d" stroke-width="5" />
+          <circle cx="32" cy="32" r="30" fill="none" stroke="#238a7d" stroke-width="2" />
+        </g>
+      </svg>
+    </div>
+    <div class="app-title-font ms-2">
+      Writeepi
+    </div>
+  </div>
+  <div class="app-header-info">
+    <div class="app-header-book-title">{{editorService.loadedProject !== undefined && editorService.loadedProject.title
+      !== '' ? editorService.loadedProject.title :
+      '-'}}</div>
+    <div>
+      @if (editorService.editorEnable && editorService.loadedProject !== undefined) {
+      {{ 'counter.current' | i18n }} {{editorService.wordCount()}} {{ 'counter.words' | i18n }}
+      }
+      @else {
+      &nbsp;
+      }
+    </div>
+    @if (editorService.loadedProject !== undefined && editorService.loadedProject.settings !== undefined) {
+    <div>{{ 'counter.total' | i18n }} {{editorService.globalWordsCount}} /
+      {{editorService.loadedProject.settings.totalWords}}</div>
+    }
+  </div>
+  <div class="app-header-menu">
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.savenow' | i18n }}"
+      (click)="editorService.backup()" *ngIf="editorService.loadedProject !== undefined"><i
+        class="bi bi-floppy"></i></div>
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.openorcreate' | i18n }}"
+      (click)="editorService.listAllProjects()"><i class="bi bi-folder2-open"></i>
+    </div>
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.export' | i18n }}"
+      (click)="editorService.exportEpub()"
+      *ngIf="editorService.loadedProject !== undefined"><i class="bi bi-box-arrow-up"></i>
+    </div>
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.darkmode' | i18n }}" (click)="toggleDarkMode()"><i class="bi bi-highlights"></i></div>
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'main.settings' | i18n }}"
+      (click)="editorService.openSettings()"><i class="bi bi-gear"></i></div>
+  </div>
+
+</div>
+<div class="app-page">
+  <!-- Desktop and large devices -->
+  <div class="app-sidebar" id="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item" *ngFor="let menuItem of editorService.getRootMenuItems()">
+        <app-tree-item [menuItem]="menuItem" [level]="0"></app-tree-item>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.showSettings"
+          (click)="editorService.openSettings()">
+          <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'main.settings' | i18n }}</div>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <!-- Small devices -->
+  <mat-sidenav-container [hasBackdrop]="true">
+    <mat-sidenav #snav mode="over" [fixedInViewport]="true" fixedTopGap="42"
+      class="app-sidebar-small-devices app-only-on-small-device">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <div class="app-small-italic">{{ 'main.doubletap' | i18n }}</div>
+        </li>
+        <li class="nav-item" *ngFor="let menuItem of editorService.getRootMenuItems()">
+          <app-tree-item [menuItem]="menuItem" [level]="0"></app-tree-item>
+        </li>
+        <li>
+          <div class="app-separator"></div>
+        </li>
+        <li class="nav-item app-only-on-small-device"
+          *ngIf="editorService.loadedProject !== undefined">
+          <button type="button" class="btn app-nav-item" (click)="editorService.backup()">
+            <div class="bi bi-floppy ms-2 me-1">&nbsp; {{ 'menu.savenow' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item app-only-on-small-device">
+          <button type="button" class="btn app-nav-item" (click)="editorService.listAllProjects()">
+            <div class="bi bi-folder2-open ms-2 me-1">&nbsp; {{ 'menu.openorcreate' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item app-only-on-small-device"
+          *ngIf="editorService.loadedProject !== undefined">
+          <button type="button" class="btn app-nav-item" (click)="editorService.exportEpub()">
+            <div class="bi bi-box-arrow-up ms-2 me-1">&nbsp; {{ 'menu.export' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item app-only-on-small-device">
+          <button type="button" class="btn app-nav-item" (click)="toggleDarkMode()">
+            <div class="bi bi-highlights ms-2 me-1">&nbsp; {{ 'menu.darkmode' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.showSettings"
+            (click)="editorService.openSettings()">
+            <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'menu.settings' | i18n }}</div>
+          </button>
+        </li>
+      </ul>
+    </mat-sidenav>
+  </mat-sidenav-container>
+
+  <!-- /end responsive -->
+
+  <div class="app-content" mwlResizable [enableGhostResize]="true">
+    <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
+    @if (editorService.loadedProject === undefined || editorService.loadedProject.settings === undefined) {
+    <div class="app-settings">
+      <h5 class="pt-3 text-muted text-center">{{ 'main.notloaded' | i18n }}</h5>
+    </div>
+    }
+    @else if (editorService.showSettings) {
+    <div class="app-settings">
+      <h3 class="pb-3">{{ 'settings.projectsettings' | i18n }}</h3>
+      <div class="form-group mb-3">
+        <label for="projectName" class="form-text text-muted">{{ 'settings.projectname' | i18n }}</label>
+        <input type="text" class="form-control" id="projectName" placeholder="{{ 'settings.projectname' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.title">
+      </div>
+      <div class="form-group mb-3">
+        <label for="authorName" class="form-text text-muted">{{ 'settings.authorname' | i18n }}</label>
+        <input type="text" class="form-control" id="authorName" placeholder="{{ 'settings.authorname' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.author">
+      </div>
+      <div class="form-group mb-3">
+        <label for="projectLang" class="form-text text-muted">{{ 'settings.lang' | i18n }}</label>
+        <select class="form-control" id="projectLang" [(ngModel)]="editorService.loadedProject.lang"
+          (ngModelChange)="setLang($event)">
+          <option>en</option>
+          <option>fr</option>
+          <option>de</option>
+          <option>es</option>
+        </select>
+      </div>
+      <div class="form-group mb-3">
+        <label for="description" class="form-text text-muted">{{ 'settings.description' | i18n }}</label>
+        <textarea class="form-control" id="description" rows="5"
+          [(ngModel)]="editorService.loadedProject.description"></textarea>
+      </div>
+      <h3 class="pt-3 pb-3">{{ 'settings.objectives' | i18n }}</h3>
+      <div class="mb-3">
+        <label for="totalWords" class="form-text text-muted">{{ 'settings.totalwords' | i18n }}</label>
+        <input type="number" class="form-control" id="totalWords" placeholder="{{ 'settings.totalwords' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.settings.totalWords">
+      </div>
+      <h3 class="pt-3 pb-3">{{ 'settings.editorsettings' | i18n }}</h3>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.dashConf">{{ 'settings.dashConf' |
+          i18n }}</mat-slide-toggle>
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.quoteConf">{{ 'settings.quoteConf' |
+          i18n }}</mat-slide-toggle>
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.spaceConf">{{ 'settings.spaceConf' |
+          i18n }}</mat-slide-toggle>
+      </div>
+      <h3 class="pt-3 pb-3">{{ 'settings.backupsettings' | i18n }}</h3>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.backupOnChange">{{
+          'settings.backupOnChange' | i18n }}</mat-slide-toggle>
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.backupInterval">{{
+          'settings.backupInterval' | i18n }}</mat-slide-toggle>
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle [(ngModel)]="editorService.loadedProject.settings.backupAutoDisplayMessage">{{
+          'settings.backupAutoDisplayMessage' | i18n }}</mat-slide-toggle>
+      </div>
+    </div>
+    }
+    @else if (editorService.isCharacterContext() && editorService.editorEnable) {
+    <div class="app-settings" style="overflow-y: scroll">
+      <h3 class="pb-3 text-center">{{ editorService.getCurrentSelectedUserContent()?.name }}</h3>
+      <div class="form-group mb-3">
+        <label for="age" class="form-text text-muted">{{ 'character.age' | i18n }}</label>
+        <input type="number" class="form-control" id="age" placeholder="{{ 'character.age' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.age">
+      </div>
+      <div class="form-group mb-3">
+        <label for="location" class="form-text text-muted">{{ 'character.location' | i18n }}</label>
+        <input type="text" class="form-control" id="location" placeholder="{{ 'character.location' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.location">
+      </div>
+      <div class="form-group mb-3">
+        <label for="details" class="form-text text-muted">{{ 'character.details' | i18n }}</label>
+        <textarea class="form-control" id="details" placeholder="{{ 'character.details' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.details"></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label for="background" class="form-text text-muted">{{ 'character.background' | i18n }}</label>
+        <textarea class="form-control" id="background" placeholder="{{ 'character.background' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.background"></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label for="relation" class="form-text text-muted">{{ 'character.relation' | i18n }}</label>
+        <textarea class="form-control" id="relation" placeholder="{{ 'character.relation' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.relation"></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label for="personality" class="form-text text-muted">{{ 'character.personality' | i18n }}</label>
+        <textarea class="form-control" id="personality" placeholder="{{ 'character.personality' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.personality"></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label for="appearance" class="form-text text-muted">{{ 'character.appearance' | i18n }}</label>
+        <textarea class="form-control" id="appearance" placeholder="{{ 'character.appearance' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.appearance"></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label for="notes" class="form-text text-muted">{{ 'character.notes' | i18n }}</label>
+        <textarea class="form-control" id="notes" placeholder="{{ 'character.notes' | i18n }}"
+          [(ngModel)]="editorService.currentCharacterData.notes"></textarea>
+      </div>
+    </div>
+    }
+    @else {
+    <quill-editor class="app-editor" [(ngModel)]="editorService.editor" *ngIf="editorService.editorEnable"
+      (onEditorCreated)="editorService.initialize($event)"
+      (onContentChanged)="editorService.contentChanged($event)"></quill-editor>
+    }
+    <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+  </div>
+  <div class="app-rightbar">
+    <div class="app-rightbar-menu ps-1">
+      {{ 'main.contextnotes' | i18n }} <i class="bi bi-chevron-down"></i>
+    </div>
+    <textarea class="app-rightbar-textbox" [(ngModel)]="editorService.notes"
+      [disabled]="editorService.currentSelectedInTree === undefined"></textarea>
+  </div>
+</div>
