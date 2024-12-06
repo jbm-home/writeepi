@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     export: (data: any) => ipcRenderer.invoke('export', data),
     buildPdf: (id: string) => ipcRenderer.invoke('build-pdf', id),
     buildEpub: (id: string) => ipcRenderer.invoke('build-epub', id),
+    buildDocx: (id: string) => ipcRenderer.invoke('build-docx', id),
     newGuid: () => ipcRenderer.invoke('new-guid'),
     storeLocation: () => ipcRenderer.invoke('store-location'),
     darkModeToggle: (theme: string) => ipcRenderer.invoke('darkmode-toggle', theme),

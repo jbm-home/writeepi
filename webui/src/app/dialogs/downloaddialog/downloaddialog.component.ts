@@ -38,6 +38,14 @@ export class DownloaddialogComponent implements OnInit {
     this.ready = true;
   }
 
+  async downloadDocx() {
+    this.error = false;
+    this.ready = false;
+    this.started = true;
+    this.error = await this.electronService.api.buildDocx(this.data.uuid);
+    this.ready = true;
+  }
+
   ok(): void {
     this.dialogRef.close();
   }

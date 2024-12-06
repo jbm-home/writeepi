@@ -6,6 +6,7 @@ import contextMenu from 'electron-context-menu';
 import { PdfExporter } from './services/pdfExporter.js';
 import { Project } from './services/project.js';
 import { EpubExporter } from './services/epubExporter.js';
+import { DocxExporter } from './services/docxExporter.js';
 
 export class WriteepiDesktop {
   mainWindow: BrowserWindow | null = null;
@@ -13,6 +14,7 @@ export class WriteepiDesktop {
   project: Project = new Project(this);
   pdfExporter: PdfExporter = new PdfExporter(this);
   epubExporter: EpubExporter = new EpubExporter(this);
+  docxExporter: DocxExporter = new DocxExporter(this);
 
   mainstore: Store = new Store({ name: 'writeepi', cwd: this.project.loadCustomConfig() });
   backstore: Store = new Store({ name: 'writeepi-backup', cwd: this.project.loadCustomConfig() });
@@ -29,6 +31,7 @@ export class WriteepiDesktop {
     ipcMain.handle('new-guid', this.project.handleNewGuid);
     ipcMain.handle('build-pdf', this.pdfExporter.handleBuildPdf);
     ipcMain.handle('build-epub', this.epubExporter.handleBuildEpub);
+    ipcMain.handle('build-docx', this.docxExporter.handleBuildDocx);
     ipcMain.handle('create-project', this.project.handleCreateProject);
     ipcMain.handle('darkmode-toggle', this.handleDarkModeToggle);
   }

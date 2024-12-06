@@ -1,4 +1,6 @@
 # Writeepi
+Main site: https://writeepi.com
+
 Simple, accessible but powerful all-in-one word-processing and organization app for writers
 
 ![screenshot](assets/capture.png)
