@@ -1,43 +1,68 @@
-import { app, dialog } from "electron";
+import { BrowserWindow } from "electron";
 import { WriteepiDesktop } from "../main.js";
-import Store from 'electron-store';
 import { existsSync, readFileSync } from 'original-fs';
+import path from "path";
+import { fileURLToPath } from "url";
+import { encode } from 'html-entities';
 
 export class Thes {
     desktop: WriteepiDesktop;
     database: any = [];
+
+    dirname = path.dirname(fileURLToPath(import.meta.url));
 
     constructor(desktop: WriteepiDesktop) {
         this.desktop = desktop;
     }
 
     setLang = (event: any, lang: string) => {
-        const basePath = 'dist/desktop/src/resources/thes/';
-        let path = '';
+        let dat = '';
         switch (lang) {
             case 'en':
             case 'fr':
             case 'it':
             case 'de':
             case 'es':
-                path = basePath + lang + '.dat';
+                dat = path.join(this.dirname, '../resources/thes', lang + '.dat');
                 break;
             default:
-                path = basePath + 'en.dat';
+                dat = path.join(this.dirname, '../resources/thes', 'en.dat');
                 break;
         }
-        this.load(path);
+        this.load(dat);
     }
 
 
     handleSearch = async (event: any, text: string) => {
         const result: string[] = this.find(text);
         if (this.desktop.mainWindow != null) {
-            let message = '';
+            let message = '<ul>';
             result.forEach(element => {
-                message += element + '\n';
+                message += "<li>" + encode(element) + '</li>';
             });
-            dialog.showMessageBoxSync(this.desktop.mainWindow, { message: message, title: 'Thesaurus' });
+            message += "</ul>"
+
+            let childWindow = new BrowserWindow({
+                height: 450,
+                width: 350,
+                show: false,
+                minimizable: false,
+                maximizable: false,
+                parent: this.desktop.mainWindow,
+                webPreferences: {
+                    nodeIntegration: true,
+                }
+            });
+            childWindow.setIcon(path.join(this.dirname, '..', 'favicon.png'));
+
+            childWindow.setTitle('Thesaurus');
+            childWindow.removeMenu();
+
+            const content = result.length > 0 ? message : "No results";
+            const html = "<html><head><meta charset=\"UTF-8\"></head><body><h2>" + text + ":</h2>" + content + "</body></html>";
+
+            childWindow.loadURL("data:text/html;base64," + Buffer.from(html).toString("base64"));
+            childWindow.show();
         }
         return result;
     }
@@ -65,14 +90,19 @@ export class Thes {
                     _ref1 = columns.slice(1);
                     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
                         syn = _ref1[_j];
-                        if ((syn == null) || syn === "") {
+                        if (syn == null || syn === "") {
                             continue;
                         }
                         syn = syn.trim();
                         if (this.indexOf(this.database[current.word], syn) >= 0) {
                             continue;
                         }
-                        this.database[current.word].push(syn);
+                        try {
+                            this.database[current.word].push(syn);
+                        } catch (e) {
+                            console.log("Cannot add word: " + current.word);
+                            console.log(e);
+                        }
                     }
                 }
             }
@@ -90,7 +120,7 @@ export class Thes {
     }
 
     private reset = () => {
-        return this.database = [];
+        this.database = [];
     };
 
     private find = (key: string) => {
