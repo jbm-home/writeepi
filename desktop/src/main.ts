@@ -7,6 +7,7 @@ import { PdfExporter } from './services/pdfExporter.js';
 import { Project } from './services/project.js';
 import { EpubExporter } from './services/epubExporter.js';
 import { DocxExporter } from './services/docxExporter.js';
+import { Thes } from './services/thes.js';
 
 export class WriteepiDesktop {
   mainWindow: BrowserWindow | null = null;
@@ -15,6 +16,7 @@ export class WriteepiDesktop {
   pdfExporter: PdfExporter = new PdfExporter(this);
   epubExporter: EpubExporter = new EpubExporter(this);
   docxExporter: DocxExporter = new DocxExporter(this);
+  thes: Thes = new Thes(this);
 
   mainstore: Store = new Store({ name: 'writeepi', cwd: this.project.loadCustomConfig() });
   backstore: Store = new Store({ name: 'writeepi-backup', cwd: this.project.loadCustomConfig() });
@@ -34,6 +36,7 @@ export class WriteepiDesktop {
     ipcMain.handle('build-docx', this.docxExporter.handleBuildDocx);
     ipcMain.handle('create-project', this.project.handleCreateProject);
     ipcMain.handle('darkmode-toggle', this.handleDarkModeToggle);
+    ipcMain.handle('set-lang', this.thes.setLang);
   }
 
   createWindow = () => {
@@ -41,7 +44,17 @@ export class WriteepiDesktop {
     const __dirname = path.dirname(__filename);
     const size = screen.getPrimaryDisplay().workAreaSize;
     contextMenu({
-      showInspectElement: false
+      showInspectElement: false,
+      append: (defaultActions, parameters, browserWindow) => [
+        {
+          label: 'Thesaurus "{selection}"',
+          // Only show it when right-clicking text
+          visible: parameters.selectionText.trim().length > 0,
+          click: () => {
+            this.thes.handleSearch({}, parameters.selectionText.trim());
+          }
+        }
+      ]
     });
     this.mainWindow = new BrowserWindow({
       x: 0,

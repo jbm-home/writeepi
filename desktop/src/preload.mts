@@ -13,4 +13,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     newGuid: () => ipcRenderer.invoke('new-guid'),
     storeLocation: () => ipcRenderer.invoke('store-location'),
     darkModeToggle: (theme: string) => ipcRenderer.invoke('darkmode-toggle', theme),
+    setLang: (lang: string) => ipcRenderer.invoke('set-lang', lang),
 })

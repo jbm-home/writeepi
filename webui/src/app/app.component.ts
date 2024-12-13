@@ -105,6 +105,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.i18n.selectedLang = lang;
     localStorage.setItem('selectedLang', lang);
     this.i18n.use(lang);
+    this.electronService.api.setLang(lang);
   }
 
   ngOnDestroy(): void {
