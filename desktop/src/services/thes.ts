@@ -1,6 +1,6 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, dialog } from "electron";
 import { WriteepiDesktop } from "../main.js";
-import { existsSync, readFileSync } from 'original-fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from "path";
 import { fileURLToPath } from "url";
 import { encode } from 'html-entities';
@@ -70,6 +70,10 @@ export class Thes {
     private load = (inputFile: string) => {
         let columns, line, syn, _i, _j, _len, _len1, _ref1;
         this.reset();
+        if (!existsSync(inputFile)) {
+            dialog.showErrorBox("Thesaurus", "Cannot load thesaurus data");
+            return;
+        }
         const input = readFileSync(inputFile, "utf8");
         let current = {
             meanings: 0,
