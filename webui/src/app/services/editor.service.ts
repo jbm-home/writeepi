@@ -579,7 +579,12 @@ export class EditorService {
 
   openModal(menuItem: any, action: any) {
     const modalRef = this.modalService.open(ModaleComponent);
-    modalRef.componentInstance.name = `${action.description}: ${menuItem.name}`;
+    let menuItemName: string = menuItem.name;
+    if (menuItemName.endsWith('|I18N')) {
+      const treeNodes = this.i18n.data.treeNodes;
+      menuItemName = treeNodes[menuItemName] !== undefined ? treeNodes[menuItemName] : menuItemName;
+    }
+    modalRef.componentInstance.name = `${action.description}: ${menuItemName}`;
 
     if (action.key === this.modalActions.delete.key) {
       modalRef.componentInstance.extraMessage = 'This item and its children will be moved to trash';
@@ -594,7 +599,7 @@ export class EditorService {
     } else if (action.key === this.modalActions.rename.key) {
       modalRef.componentInstance.extraMessage = '';
       modalRef.componentInstance.inputTitle = 'New name';
-      modalRef.componentInstance.inputContent = menuItem.name;
+      modalRef.componentInstance.inputContent = menuItemName;
       modalRef.componentInstance.confirmLabel = 'Rename';
     } else {
       modalRef.componentInstance.extraMessage = '';
