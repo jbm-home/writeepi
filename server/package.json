@@ -1,0 +1,48 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Writeepi Backend",
+  "main": "main.ts",
+  "type": "module",
+  "scripts": {
+    "start": "npx tsx src/main.ts | bunyan -L"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbm-home/writeepi.git"
+  },
+  "author": "Writeepi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jbm-home/writeepi/issues"
+  },
+  "homepage": "https://github.com/jbm-home/writeepi#readme",
+  "devDependencies": {
+    "@types/bunyan": "^1.8.11",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/crypto-js": "^4.2.2",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
+    "@types/node": "^22.13.1",
+    "@types/nodemailer": "^6.4.17",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "bunyan": "^1.8.15",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "docx": "^9.1.0",
+    "epub-gen-memory": "^1.1.2",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "html-entities": "^2.5.2",
+    "html-to-text": "^9.0.5",
+    "mariadb": "^3.4.0",
+    "nodemailer": "^6.10.0",
+    "uuid": "^11.0.5"
+  }
+}

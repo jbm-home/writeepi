@@ -18,7 +18,7 @@
     "publish": "electron-forge publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",
     "@electron-forge/maker-deb": "^7.6.0",
