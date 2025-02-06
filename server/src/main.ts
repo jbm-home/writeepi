@@ -13,6 +13,8 @@ import { MariaDBStore } from './middlewares/mariadb-session.js'
 import { ExportController } from './resources/export/export.controller.js';
 import { Scheduler } from './utils/scheduler.js';
 import { BackupController } from './resources/backup/backup.controller.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 const log = bunyan.createLogger({ name: "Writeepi:Start", level: "debug" });
 log.level(bunyan.DEBUG);
@@ -26,6 +28,10 @@ const sessionStore = new MariaDBStore();
 const ONEMINUTE = 1000 * 60;
 const ONEHOUR = ONEMINUTE * 60;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const webpath = __dirname + '/../../webui/dist/webui/browser/';
+
 scheduler.Schedule(
     'Session Cleaner',
     () => { sessionStore.cleanOlds(config.SESSION_DURATION_DAYS + 1) },
@@ -33,7 +39,7 @@ scheduler.Schedule(
     ONEMINUTE
 );
 
-app.use(express.json({limit: 104857600}));
+app.use(express.json({ limit: 104857600 }));
 app.use(cors());
 app.use(sessions({
     secret: config.COOKIE_SECRET,
@@ -45,8 +51,10 @@ app.use(sessions({
 app.use(cookieParser());
 app.use('/api/session', SessionController);
 app.use('/api/export', ExportController);
-app.use('/api/backup', BackupController);
+app.use('/api/content', BackupController);
+app.use('/', express.static(webpath));
 app.all('*', UnknownRoutesHandler);
 app.use(ExceptionsHandler);
 
+log.info('Web path: ' + webpath);
 app.listen(config.API_PORT, 'localhost', () => log.info('Server is running on port ' + config.API_PORT));

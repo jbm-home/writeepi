@@ -1,25 +1,25 @@
 <h2 align="center" mat-dialog-title>{{ 'dialog.projects' | i18n }}</h2>
 <mat-dialog-content>
     <mat-tab-group mat-stretch-tabs="false" animationDuration="300ms" mat-align-tabs="start" dynamicHeight #tabgroup
-        [selectedIndex]="recovery.length > 0 ? 2 : data.input !== undefined ? 1 : 0">
+        [selectedIndex]="recovery.length > 0 ? 2 : data.input !== undefined && data.input.length > 0 ? 1 : 0">
         <mat-tab label="{{ 'dialog.new' | i18n }}">
             <div class="text-center mt-3 mb-3">{{ 'dialog.createproject' | i18n }}</div>
         </mat-tab>
-        <mat-tab label="{{ 'dialog.open' | i18n }}" selected>
-            <mat-selection-list [multiple]="false" #openprojectslist>
+        <mat-tab label="{{ 'dialog.open' | i18n }}" [disabled]="data.input === undefined || data.input.length === 0">
+            <mat-selection-list [multiple]="false" [(ngModel)]="selectedProject">
                 <!-- <div mat-subheader>Projects</div> -->
                 @for (item of data.input; track item) {
                 <mat-list-option [value]="item.id">
-                    <div matListItemTitle>{{item.title}}</div>
+                    <div matListItemTitle>{{item.title}} {{item.id}}</div>
                     <div matListItemLine>{{item.updatedAt | date:"medium"}}</div>
                     <!-- lang, title, description, author, created_at, updatedAt -->
                 </mat-list-option>
                 }
             </mat-selection-list>
-            <div><button mat-button (click)="storeLocation()">{{ 'dialog.storelocation' | i18n }}</button></div>
+            <div *ngIf="!cloudMode"><button mat-button (click)="storeLocation()">{{ 'dialog.storelocation' | i18n }}</button></div>
         </mat-tab>
         <mat-tab label="{{ 'dialog.recovery' | i18n }}" [disabled]="recovery.length === 0">
-            <mat-selection-list [multiple]="false" #openrecoverylist>
+            <mat-selection-list [multiple]="false" [(ngModel)]="selectedRecovery">
                 <!-- <div mat-subheader>Projects</div> -->
                 @for (item of recovery; track item) {
                 <mat-list-option [value]="item.id">

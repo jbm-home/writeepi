@@ -50,6 +50,13 @@
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.darkmode' | i18n }}" (click)="toggleDarkMode()"><i class="bi bi-highlights"></i></div>
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'main.settings' | i18n }}"
       (click)="editorService.openSettings()"><i class="bi bi-gear"></i></div>
+    <div class="app-header-button me-3" placement="left"
+      ngbTooltip="{{sessionService.userInfo.fullname}}"
+      *ngIf="!!cloudMode && sessionService.connected" (click)="openLogoutModal()"><i class="bi bi-person-check"
+        style="color: green;"></i></div>
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.login' | i18n }}"
+      *ngIf="!!cloudMode && !sessionService.connected" (click)="openLoginModal()"><i class="bi bi-person-exclamation"
+        style="color: orangered"></i></div>
   </div>
 
 </div>
@@ -108,6 +115,16 @@
           <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.showSettings"
             (click)="editorService.openSettings()">
             <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'menu.settings' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item app-only-on-small-device" *ngIf="!!cloudMode && sessionService.connected">
+          <button type="button" class="btn app-nav-item" (click)="openLogoutModal()">
+            <div class="bi bi-person-check ms-2 me-1">&nbsp; {{ 'menu.logout' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item app-only-on-small-device" *ngIf="!!cloudMode && !sessionService.connected">
+          <button type="button" class="btn app-nav-item" (click)="openLoginModal()">
+            <div class="bi bi-person-exclamation ms-2 me-1">&nbsp; {{ 'menu.login' | i18n }}</div>
           </button>
         </li>
       </ul>

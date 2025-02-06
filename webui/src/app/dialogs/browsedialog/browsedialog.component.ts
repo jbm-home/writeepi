@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { MatSelectionList } from '@angular/material/list';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Failover } from '../../utils/failover';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-browsedialog',
@@ -11,11 +12,11 @@ import { Failover } from '../../utils/failover';
   styleUrl: './browsedialog.component.scss'
 })
 export class BrowsedialogComponent implements OnInit {
-  @ViewChild('openprojectslist', {static: true}) openprojectslist!: MatSelectionList;
-  @ViewChild('openrecoverylist', {static: true}) openrecoverylist!: MatSelectionList;
   @ViewChild('tabgroup', {static: true}) tabgroup!: MatTabGroup;
 
   recovery: any[] = [];
+  selectedProject: string[] = [];
+  selectedRecovery: string[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<any>,
@@ -26,6 +27,10 @@ export class BrowsedialogComponent implements OnInit {
     if (Failover.hasAvailableFailover()) {
       this.recovery = Failover.loadAllFailovers();
     }
+  }
+
+  get cloudMode() {
+    return AppComponent.CLOUDMODE;
   }
 
   removeAllRecoveries() {
@@ -42,12 +47,12 @@ export class BrowsedialogComponent implements OnInit {
   ok(): void {
     if (this.tabgroup.selectedIndex === 0) {
       this.data.tabIndex = 0;
-    } else if (this.tabgroup.selectedIndex === 1 && this.openprojectslist.selectedOptions.hasValue()) {
+    } else if (this.tabgroup.selectedIndex === 1 && this.selectedProject.length > 0) {
       this.data.tabIndex = 1;
-      this.data.projectId = this.openprojectslist.selectedOptions.selected[0].value;
-    } else if (this.tabgroup.selectedIndex === 2 && this.openrecoverylist.selectedOptions.hasValue()) {
+      this.data.projectId = this.selectedProject[0];
+    } else if (this.tabgroup.selectedIndex === 2 && this.selectedRecovery.length > 0) {
       this.data.tabIndex = 2;
-      const recoveryId = this.openrecoverylist.selectedOptions.selected[0].value;
+      const recoveryId = this.selectedRecovery[0];
       this.data.recoveryData = this.recovery.find(r => r.id === recoveryId);
     }
     this.dialogRef.close({ validated: true, data: this.data });

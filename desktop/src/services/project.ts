@@ -1,7 +1,7 @@
 import { app, dialog } from "electron";
 import { WriteepiDesktop } from "../main.js";
 import Store from 'electron-store';
-import { UserProject } from "../../../webui/src/app/types/userproject.js";
+import { UserProject, UserProjectTemplate } from "../../../webui/src/app/types/userproject.js";
 import { existsSync, writeFileSync } from 'original-fs';
 import { uuidv7 } from "uuidv7"
 import { createHash } from "crypto"
@@ -110,13 +110,13 @@ export class Project {
     try {
       let backup = this.desktop.mainstore.get('current') as any[];
       if (backup === undefined || backup.length === 0) {
-        return this.defaultProject;
+        return UserProjectTemplate.DEFAULT_PROJECT;
       } else {
         const candidate = backup.find((elem) => elem.id === id)
-        return candidate !== undefined ? candidate : this.defaultProject;
+        return candidate !== undefined ? candidate : UserProjectTemplate.DEFAULT_PROJECT;
       }
     } catch (e) {
-      return this.defaultProject;;
+      return UserProjectTemplate.DEFAULT_PROJECT;;
     }
   }
 
@@ -138,7 +138,7 @@ export class Project {
   }
 
   handleCreateProject = async (event: any, data: UserProject) => {
-    return this.defaultProject;
+    return UserProjectTemplate.DEFAULT_PROJECT;
   }
 
   handleNewGuid = async (event: any) => {
@@ -151,34 +151,4 @@ export class Project {
     const md5Latest = createHash('md5').update(JSON.stringify(latest.content)).digest("hex");
     return md5ToCompare === md5Latest;
   }
-
-  defaultProject: UserProject = {
-    id: uuidv7(),
-    userId: '',
-    lang: "",
-    title: "",
-    description: "n/a",
-    author: "",
-    settings: {
-      dashConf: true,
-      quoteConf: true,
-      spaceConf: true,
-      backupOnChange: true,
-      backupInterval: true,
-      backupAutoDisplayMessage: false,
-      totalWords: 70000,
-    },
-    content:
-      [
-        { id: uuidv7(), orderId: 0, name: "SUMMARY|I18N", icon: "file-check", isFolder: false, expanded: false, context: false, canBeDeleted: false, isSummary: true, isBook: false, words: 0, isTrash: false, isCharacter: false },
-        { id: uuidv7(), orderId: 1, name: "BOOK|I18N", icon: "book", isFolder: true, expanded: false, context: false, canBeDeleted: false, isBook: true, words: 0, isTrash: false, isCharacter: false, isSummary: false },
-        { id: uuidv7(), orderId: 2, name: "CHARACTERS|I18N", icon: "file-earmark-person", isFolder: true, isCharacter: true, expanded: false, context: false, canBeDeleted: false, isBook: false, words: 0, isTrash: false, isSummary: false },
-        { id: uuidv7(), orderId: 3, name: "LOCATIONS|I18N", icon: "map", isFolder: true, expanded: false, context: false, canBeDeleted: false, isBook: false, words: 0, isTrash: false, isCharacter: false, isSummary: false },
-        { id: uuidv7(), orderId: 4, name: "NOTES|I18N", icon: "journal", isFolder: true, expanded: false, context: false, canBeDeleted: false, isBook: false, words: 0, isTrash: false, isCharacter: false, isSummary: false },
-        { id: uuidv7(), orderId: 5, name: "TRASH|I18N", icon: "recycle", isFolder: true, expanded: false, context: false, canBeDeleted: false, isTrash: true, isBook: false, words: 0, isCharacter: false, isSummary: false },
-      ],
-    createdAt: (new Date()).toISOString(),
-    updatedAt: (new Date()).toISOString(),
-    updatedTimestamp: Date.now(),
-  };
 }

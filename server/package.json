@@ -5,6 +5,7 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
+    "fullbuildandstart": "cd ../webui && npm i && npm run buildprod && cd ../server && npx tsx src/main.ts | bunyan -L",
     "start": "npx tsx src/main.ts | bunyan -L"
   },
   "repository": {

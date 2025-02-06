@@ -1,0 +1,10 @@
+<h2 align="center" mat-dialog-title>LOGOUT</h2>
+<mat-dialog-content>
+    <div class="dialog-container">
+        <p>{{ 'dialog.doyouwant' | i18n }}</p>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">{{ 'dialog.cancel' | i18n }}</button>
+    <button mat-button (click)="ok()">{{ 'dialog.ok' | i18n }}</button>
+</mat-dialog-actions>

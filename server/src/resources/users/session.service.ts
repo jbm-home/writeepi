@@ -1,5 +1,4 @@
 import { MariaDb } from "../../database/mariadb.js";
-import { Response } from "../../types/services.js";
 import CryptoJS from "crypto-js";
 import { config } from "../../config.js";
 import bunyan from "bunyan";
@@ -9,11 +8,12 @@ import { IpUtils } from "../../utils/iputils.js";
 import { Capitalize } from '../../utils/capitalize.js';
 import { User } from "../../types/user.js";
 import { UuidUtils } from '../../utils/uuidutils.js';
+import { ResponseMessage } from "../../types/reponse.js";
 
 export class SessionService {
     log = bunyan.createLogger({ name: "Writeepi:Session", level: "debug" });
 
-    async login(req: any): Promise<Response> {
+    async login(req: any): Promise<ResponseMessage> {
         if (req.body.email !== undefined && req.body.password !== undefined) {
             const email = req.body.email.toLowerCase();
             const res = await MariaDb.request(`SELECT * FROM \`users\` WHERE \`email\` = ${await MariaDb.escape(email)};`);
@@ -29,18 +29,18 @@ export class SessionService {
                         req.session.email = res[0].email;
                         await MariaDb.request(`UPDATE \`users\` SET \`update\` = current_timestamp() WHERE \`uuid\` = ${await MariaDb.escape(res[0].uuid)} LIMIT 1;`);
                         this.log.debug(`User '${res[0].email}' has logged in successfully`);
-                        return { error: false }
+                        return { };
                     }
                 } catch (err: any) {
                     this.log.error('Login critical error: ' + err);
-                    return { error: true, message: 'Server error' }
+                    return { error: 'Login critical error' };
                 }
             }
             this.log.debug(`Failed connection attempt from ${req.body.email} '${IpUtils.getIp(req)}' (bad login or password)`);
-            return { error: true, message: 'Bad login or password' }
+            return { error: 'bad login or password' };
         }
         this.log.debug(`Failed connection attempt from '${IpUtils.getIp(req)}' (no login or password)`);
-        return { error: true, message: 'No login or password' }
+        return { error: 'no login or password' };
     }
 
     async allUsers(req: any): Promise<User[]> {
@@ -65,34 +65,56 @@ export class SessionService {
         return users;
     }
 
-    async updateUser(req: any): Promise<Response> {
+    async user(req: any): Promise<User | undefined> {
+        const uid = req.session.uid;
+        if (UuidUtils.isValidUuid(uid)) {
+            const res = await MariaDb.request(`SELECT * FROM \`users\` WHERE \`uuid\` = '${uid}' LIMIT 1;`);
+            this.log.debug(`Get user info '${IpUtils.getIp(req)}': ${uid}`);
+            if (res.length > 0) {
+                const user: User = {
+                    uuid: uid,
+                    firstname: res[0].firstname,
+                    lastname: res[0].lastname,
+                    email: res[0].email,
+                    phone: res[0].phone,
+                    active: res[0].active,
+                    level: res[0].level,
+                }
+                return user;
+            }
+        }
+        this.log.debug(`Cannot get user '${IpUtils.getIp(req)}' (no auth session)`);
+        return undefined;
+    }
+
+    async updateUser(req: any): Promise<ResponseMessage> {
         const uid = req.params.uuid;
         const level = Number(req.body.level);
         const adminUid = req.session.uid;
         if (UuidUtils.isValidUuid(uid) && Number.isInteger(level) && level > 0 && level < config.LEVEL.ADMIN && uid !== adminUid) {
             this.log.debug(`Admin ${adminUid} update from '${IpUtils.getIp(req)}'`);
-            await MariaDb.request(`UPDATE \`users\` SET \`level\` = ${level} WHERE \`uuid\` = ${uid} LIMIT 1;`);
-            return { error: false };
+            await MariaDb.request(`UPDATE \`users\` SET \`level\` = ${level} WHERE \`uuid\` = '${uid}' LIMIT 1;`);
+            return { };
         }
         this.log.debug(`Failed admin update from '${IpUtils.getIp(req)}' (invalid data)`);
-        return { error: true, message: 'Invalid data' };
+        return { error: 'Invalid data'};
     }
 
-    async updateUserPhone(req: any): Promise<Response> {
+    async updateUserPhone(req: any): Promise<ResponseMessage> {
         const uid = req.params.uuid;
         const phone = await MariaDb.escape(req.body.phone);
         const adminUid = req.session.uid;
         const regexPhone = /^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/u;
         if (UuidUtils.isValidUuid(uid) && req.body.phone && req.body.phone.match(regexPhone) && req.body.phone.length > 4) {
             this.log.debug(`Admin ${adminUid} phone update from '${IpUtils.getIp(req)}'`);
-            await MariaDb.request(`UPDATE \`users\` SET \`phone\` = ${phone} WHERE \`uuid\` = ${uid} LIMIT 1;`);
-            return { error: false };
+            await MariaDb.request(`UPDATE \`users\` SET \`phone\` = ${phone} WHERE \`uuid\` = '${uid}' LIMIT 1;`);
+            return { };
         }
         this.log.debug(`Failed admin phone update from '${IpUtils.getIp(req)}' (invalid data)`);
-        return { error: true, message: 'Invalid data' };
+        return { error: 'Invalid data'};
     }
 
-    async register(req: any): Promise<Response> {
+    async register(req: any): Promise<ResponseMessage> {
         if (req.body.firstname !== undefined
             && req.body.lastname !== undefined
             && req.body.email !== undefined
@@ -110,33 +132,33 @@ export class SessionService {
             const namesValidated = req.body.firstname.match(regexNames) && req.body.lastname.match(regexNames);
             if (!emailValidated) {
                 this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (email not valid)`);
-                return { error: true, message: 'Invalid email' };
+                return { error: 'Invalid email' };
             } else if (!phoneValidated) {
                 this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (phone number not valid)`);
-                return { error: true, message: 'Invalid phone number' };
+                return { error: 'Invalid phone number' };
             } else if (!namesValidated) {
                 this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (first or lastname invalid)`);
-                return { error: true, message: 'Invalid firstname or lastname' };
+                return { error: 'Invalid firstname or lastname' };
             } else {
                 const firstName = Capitalize.from(req.body.firstname);
                 const lastName = Capitalize.from(req.body.lastname);
                 const res = await MariaDb.request(`SELECT \`email\` FROM \`users\`;`);
                 if (res.findIndex((e: any) => e.email === email) < 0) {
                     this.log.debug(`Registration from '${IpUtils.getIp(req)}' email '${email}'`);
-                            const created = await MariaDb.createUser(firstName, lastName, email, req.body.password, phone, config.LEVEL.USER);
-                            if (created) {
-                                return { error: false };
-                            } else {
-                                return { error: true, message: 'Error when trying to create account (invalid email?)' };
-                            }
+                    const created = await MariaDb.createUser(firstName, lastName, email, req.body.password, phone, config.LEVEL.USER);
+                    if (created) {
+                        return { };
+                    } else {
+                        return { error: 'Error when trying to create account (invalid email?)' };
+                    }
                 } else {
                     this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' email '${email}' (already exists)`);
-                    return { error: true, message: 'User already exists' };
+                    return { error: 'User already exists' };
                 }
             }
         }
         this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (missing data)`);
-        return { error: true, message: 'Missing data' };
+        return { error: 'Missing data' };
     }
 
     async reset(req: any) {

@@ -15,3 +15,9 @@ export class BadRequestException extends Exception {
     super(error, 400)
   }
 }
+
+export class UnauthorizedException extends Exception {
+  constructor(error: any) {
+    super(error, 401)
+  }
+}

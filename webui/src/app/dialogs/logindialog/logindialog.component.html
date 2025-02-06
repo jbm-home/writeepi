@@ -1,0 +1,35 @@
+<h2 align="center" mat-dialog-title>
+    Login
+    <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <g transform="scale(0.5)">
+            <circle cx="32" cy="32" r="30" fill="#e4d1c1" />
+            <circle cx="32" cy="32" r="14" fill="#238a7d" />
+            <circle cx="32" cy="32" r="18.5" fill="none" stroke="#238a7d" stroke-width="1.2" />
+            <circle cx="32" cy="32" r="20.5" fill="none" stroke="#238a7d" stroke-width="0.75" />
+            <circle cx="32" cy="32" r="24" fill="none" stroke="#238a7d" stroke-width="5" />
+            <circle cx="32" cy="32" r="30" fill="none" stroke="#238a7d" stroke-width="2" />
+        </g>
+    </svg>
+    Writeepi
+</h2>
+<mat-dialog-content>
+    <div class="dialog-container">
+        <p>&nbsp;</p>
+        <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>{{ 'dialog.email' | i18n }}</mat-label>
+            <input matInput [(ngModel)]="data.login" placeholder="{{ 'dialog.email' | i18n }}" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>{{ 'dialog.password' | i18n }}</mat-label>
+            <input matInput [(ngModel)]="data.password" type="password" placeholder="{{ 'dialog.password' | i18n }}" required>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <a mat-button href="https://www.writeepi.com/register" target="_blank">{{ 'dialog.registernew' | i18n }}</a>
+</mat-dialog-actions>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">{{ 'dialog.cancel' | i18n }}</button>
+    <button mat-button (click)="ok()">{{ 'dialog.ok' | i18n }}</button>
+</mat-dialog-actions>

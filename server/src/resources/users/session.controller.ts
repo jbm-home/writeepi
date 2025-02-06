@@ -12,6 +12,12 @@ SessionController.get('/', (req, res): any => {
         .json(req.session);
 });
 
+SessionController.get('/user', Authorized.USER, async (req, res): Promise<any> => {
+    return res
+        .status(200)
+        .json(await service.user(req));
+});
+
 SessionController.get('/users', Authorized.ADMIN, async (req, res): Promise<any> => {
     return res
         .status(200)
@@ -48,26 +54,25 @@ SessionController.post('/register', Authorized.GUESTONLY, async (req, res): Prom
         .json(await service.register(req));
 });
 
-// TODO: check rights
-SessionController.post('/reset', async (req, res): Promise<any> => {
+SessionController.post('/reset', Authorized.GUESTONLY, async (req, res): Promise<any> => {
     return res
         .status(200)
         .json(await service.reset(req));
 });
 
-SessionController.post('/password', async (req, res): Promise<any> => {
+SessionController.post('/password', Authorized.GUESTONLY, async (req, res): Promise<any> => {
     return res
         .status(200)
         .json(await service.password(req));
 });
 
-SessionController.post('/password/admin', async (req, res): Promise<any> => {
+SessionController.post('/password/admin', Authorized.ADMIN, async (req, res): Promise<any> => {
     return res
         .status(200)
         .json(await service.passwordAdmin(req));
 });
 
-SessionController.post('/password/user', async (req, res): Promise<any> => {
+SessionController.post('/password/user', Authorized.USER, async (req, res): Promise<any> => {
     return res
         .status(200)
         .json(await service.passwordUser(req));

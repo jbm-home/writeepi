@@ -26,6 +26,8 @@ import { DownloaddialogComponent } from './dialogs/downloaddialog/downloaddialog
 import { BrowsedialogComponent } from './dialogs/browsedialog/browsedialog.component';
 import { I18nPipe } from './pipes/i18n.pipe';
 import { I18nService } from './services/i18n.service';
+import { LogindialogComponent } from './dialogs/logindialog/logindialog.component';
+import { LogoutdialogComponent } from './dialogs/logoutdialog/logoutdialog.component';
 
 export function setupI18nFactory(
   service: I18nService): Function {
@@ -39,6 +41,8 @@ export function setupI18nFactory(
     I18nPipe,
     TreeItemComponent,
     DownloaddialogComponent,
+    LogindialogComponent,
+    LogoutdialogComponent,
     BrowsedialogComponent
   ],
   imports: [

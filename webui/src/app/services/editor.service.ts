@@ -11,7 +11,7 @@ import { uuidv7 } from '../utils/uuidv7';
 import { BrowsedialogComponent } from '../dialogs/browsedialog/browsedialog.component';
 import { Failover } from '../utils/failover';
 import { I18nService } from './i18n.service';
-import { ElectronService } from './electron.service';
+import { BackupService } from './backup.service';
 
 export class ModalAction {
   key: string = '';
@@ -75,7 +75,7 @@ export class EditorService {
     + "<strong>Appearance:</strong></p><p></p><p></p><p><strong>Background:</strong></p><p></p><p></p><p><strong>Notes:</strong></p><p></p>";
 
   constructor(private i18n: I18nService,
-    private electronService: ElectronService,
+    private backupService: BackupService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog) { }
 
@@ -197,7 +197,7 @@ export class EditorService {
     this.saveCurrentToProject();
 
     if (this.loadedProject !== undefined) {
-      const data = await this.electronService.api.saveBackup(this.loadedProject);
+      const data = await this.backupService.saveBackup(this.loadedProject);
 
       if (data !== undefined) {
         this.currentBackupUuid = data;
@@ -251,13 +251,10 @@ export class EditorService {
   }
 
   async listAllProjects() {
-    // load from server
-    const data = await this.electronService.api.listBackup();
-    // TODO: store list to permit user to display and choose backup
-    if (data !== undefined /*&& data.length > 0 && data[0].id !== undefined*/) {
+    const data = await this.backupService.listBackup();
+    if (data !== undefined) {
       this.openProjectsModal(data);
     } else {
-      // Nothing found or not connected
       this.resetAll();
       this.checkMandatorySettings();
     }
@@ -265,7 +262,7 @@ export class EditorService {
 
   async createNewProject() {
     this.resetAll();
-    const project = await this.electronService.api.createProject();
+    const project = await this.backupService.createProject();
     project.content.forEach((c: any) => {
       if (c.parentId === null) {
         delete c.parentId;
@@ -285,7 +282,7 @@ export class EditorService {
   }
 
   async storeLocation() {
-    const data = await this.electronService.api.storeLocation();
+    const data = await this.backupService.openStoreLocation();
     if (data) {
       this.listAllProjects();
     } else {
@@ -294,7 +291,7 @@ export class EditorService {
   }
 
   async loadBackup(projectId: any) {
-    const project = await this.electronService.api.loadBackup(projectId);
+    const project = await this.backupService.loadBackup(projectId);
     project.content.forEach((c: any) => {
       if (c.parentId === null) {
         delete c.parentId;

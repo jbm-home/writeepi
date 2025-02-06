@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ElectronService } from '../../services/electron.service';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-downloaddialog',
@@ -26,7 +27,7 @@ export class DownloaddialogComponent implements OnInit {
     this.error = false;
     this.ready = false;
     this.started = true;
-    this.error = await this.electronService.api.buildPdf(this.data.uuid);
+    this.error = AppComponent.CLOUDMODE ? alert('TODO: cloud mode') : await this.electronService.api.buildPdf(this.data.uuid);
     this.ready = true;
   }
 
@@ -34,7 +35,7 @@ export class DownloaddialogComponent implements OnInit {
     this.error = false;
     this.ready = false;
     this.started = true;
-    this.error = await this.electronService.api.buildEpub(this.data.uuid);
+    this.error = AppComponent.CLOUDMODE ? alert('TODO: cloud mode') : await this.electronService.api.buildEpub(this.data.uuid);
     this.ready = true;
   }
 
@@ -42,7 +43,7 @@ export class DownloaddialogComponent implements OnInit {
     this.error = false;
     this.ready = false;
     this.started = true;
-    this.error = await this.electronService.api.buildDocx(this.data.uuid);
+    this.error = AppComponent.CLOUDMODE ? alert('TODO: cloud mode') : await this.electronService.api.buildDocx(this.data.uuid);
     this.ready = true;
   }
 
