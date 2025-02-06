@@ -55,7 +55,7 @@ export class EditorService {
 
   loadedProject?: UserProject;
 
-  DEFAULT_CHARCTER_DATA = {
+  DEFAULT_CHARACTER_DATA = {
     name: '',
     age: '',
     location: '',
@@ -67,7 +67,7 @@ export class EditorService {
     notes: '',
   };
 
-  currentCharacterData = this.DEFAULT_CHARCTER_DATA;
+  currentCharacterData = this.DEFAULT_CHARACTER_DATA;
 
   characterTemplate = "<p><strong>Character: Name</strong></p><p>x years, location</p><p></p>"
     + "<p><strong>Details:</strong></p><p><strong>some details about character</strong></p><p></p>"
@@ -251,6 +251,7 @@ export class EditorService {
   }
 
   async listAllProjects() {
+    this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
     const data = await this.backupService.listBackup();
     if (data !== undefined) {
       this.openProjectsModal(data);
@@ -299,6 +300,7 @@ export class EditorService {
     });
     this.currentBackupUuid = project.id;
     this.loadedProject = project;
+    this.i18n.setLang(project.lang);
     this.updateGlobalWordsCount();
     this.checkMandatorySettings();
   }
@@ -393,14 +395,14 @@ export class EditorService {
     this.updateGlobalWordsCount();
     this.showSettings = false;
     this.saveCurrentToProject();
-    this.currentCharacterData = this.DEFAULT_CHARCTER_DATA;
+    this.currentCharacterData = this.DEFAULT_CHARACTER_DATA;
     this.currentSelectedInTree = menuItem?.id;
     this.editor = this.loadDefaultEditorContent(menuItem);
     this.notes = menuItem?.notes ?? '';
     if (menuItem !== undefined && !menuItem.isFolder) {
       this.enableEditor();
       if (this.isCharacterContext()) {
-        this.currentCharacterData = this.parseCharacter();
+        this.currentCharacterData = this.parseCharacter(menuItem);
       }
     } else {
       this.disableEditor();
@@ -763,11 +765,10 @@ export class EditorService {
     return this.currentSelectedInTree !== undefined ? this.isCharacterRootChildByParentId(this.currentSelectedInTree) : false;
   }
 
-  parseCharacter(): any {
-    const currentContent = this.getCurrentSelectedUserContent();
-    if (currentContent?.chapter !== undefined) {
+  parseCharacter(content: Content): any {
+    if (content.chapter !== undefined) {
       try {
-        let charData = JSON.parse(currentContent.chapter);
+        let charData = JSON.parse(content.chapter);
         return {
           name: charData.name,
           age: charData.age,
@@ -783,7 +784,7 @@ export class EditorService {
         // console.log(e);
       }
     }
-    return this.DEFAULT_CHARCTER_DATA;
+    return this.DEFAULT_CHARACTER_DATA;
   }
 
   saveCharacter(): string {
@@ -796,6 +797,6 @@ export class EditorService {
         // console.log(e);
       }
     }
-    return JSON.stringify(this.DEFAULT_CHARCTER_DATA);
+    return JSON.stringify(this.DEFAULT_CHARACTER_DATA);
   }
 }

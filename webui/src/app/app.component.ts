@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private i18n: I18nService,
+    public i18n: I18nService,
     private i18nPipe: I18nPipe,
     private electronService: ElectronService,
     public editorService: EditorService,
@@ -95,24 +95,12 @@ export class AppComponent implements OnInit, OnDestroy {
   loadStorageLang() {
     let lang: string = localStorage.getItem('selectedLang') ?? navigator.language.slice(0, 2);
     if (lang.length > 0) {
-      this.setLang(lang);
+      this.i18n.setLang(lang);
     }
   }
 
   getI18nForKey(key: string) {
     return this.i18nPipe.transform(key);
-  }
-
-  setLang(lang: string) {
-    if (!this.i18n.isSupportedLanguage(lang)) {
-      lang = this.i18n.getDefaultLang().code;
-    }
-    this.i18n.selectedLang = lang;
-    localStorage.setItem('selectedLang', lang);
-    this.i18n.use(lang);
-    if (!AppComponent.CLOUDMODE) {
-      this.electronService.api.setLang(lang);
-    }
   }
 
   ngOnDestroy(): void {

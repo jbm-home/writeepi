@@ -156,11 +156,12 @@
       <div class="form-group mb-3">
         <label for="projectLang" class="form-text text-muted">{{ 'settings.lang' | i18n }}</label>
         <select class="form-control" id="projectLang" [(ngModel)]="editorService.loadedProject.lang"
-          (ngModelChange)="setLang($event)">
+          (ngModelChange)="i18n.setLang($event)">
           <option>en</option>
           <option>fr</option>
           <option>de</option>
           <option>es</option>
+          <option>it</option>
         </select>
       </div>
       <div class="form-group mb-3">

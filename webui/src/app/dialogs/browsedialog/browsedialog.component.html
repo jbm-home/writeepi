@@ -10,7 +10,7 @@
                 <!-- <div mat-subheader>Projects</div> -->
                 @for (item of data.input; track item) {
                 <mat-list-option [value]="item.id">
-                    <div matListItemTitle>{{item.title}} {{item.id}}</div>
+                    <div matListItemTitle>{{item.title}}</div>
                     <div matListItemLine>{{item.updatedAt | date:"medium"}}</div>
                     <!-- lang, title, description, author, created_at, updatedAt -->
                 </mat-list-option>
