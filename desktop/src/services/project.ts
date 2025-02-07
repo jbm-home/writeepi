@@ -62,6 +62,9 @@ export class Project {
 
       // optional backup
       let optBackup = this.desktop.backstore.get('backup') as UserProject[];
+      if (optBackup === undefined) {
+        optBackup = [];
+      }
       const lastBackup = optBackup.sort((elem1, elem2) => {
         const elem1Ts = elem1.updatedTimestamp !== undefined ? elem1.updatedTimestamp : 0;
         const elem2Ts = elem2.updatedTimestamp !== undefined ? elem2.updatedTimestamp : 0;
