@@ -1,7 +1,8 @@
 import { MariaDb } from "../../database/mariadb.js";
 import bunyan from "bunyan";
 import { UuidUtils } from '../../utils/uuidutils.js';
-import { UserProject, UserProjectTemplate } from "../../../../webui/src/app/types/userproject.js"
+import { UserProject } from "../../../../webui/src/app/types/userproject.js"
+import { DefaultProject } from "../../../../webui/src/app/types/defaultproject.js"
 
 export class BackupService {
     log = bunyan.createLogger({ name: "Writeepi:Backup", level: "debug" });
@@ -69,7 +70,7 @@ export class BackupService {
         const userUid = await MariaDb.escape(req.session.uid);
 
         if (UuidUtils.isValidUuid(req.session.uid)) {
-            const project = UserProjectTemplate.DEFAULT_PROJECT;
+            const project: UserProject = DefaultProject.DEFAULT_PROJECT;
             project.userId = userUid;
             await MariaDb.request(`INSERT INTO \`user_content\` (\`id\`, \`userId\`, \`lang\`, \`title\`, \`author\`, \`description\`, \`settings\`, \`content\`) VALUES(
                     ${await MariaDb.escape(project.id)},

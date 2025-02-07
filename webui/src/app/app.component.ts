@@ -71,12 +71,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   setThemeMode() {
     const matchMedia = window.matchMedia('(prefers-color-scheme: dark)');
-    this.switchDarkMode(matchMedia.matches ? 'dark' : 'light');
+    this.darkMode = matchMedia.matches;
+    this.switchDarkMode(this.darkMode ? 'dark' : 'light');
 
-    matchMedia.addEventListener('change', e => {
-      const match = e.matches;
-      this.switchDarkMode(match ? 'dark' : 'light');
-    });
+    // matchMedia.addEventListener('change', e => {
+    //   const match = e.matches;
+    //   this.darkMode = match;
+    //   this.switchDarkMode(this.darkMode ? 'dark' : 'light');
+    // });
   }
 
   switchDarkMode(theme: string) {
@@ -89,7 +91,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!AppComponent.CLOUDMODE) {
       await this.electronService.api.darkModeToggle(this.darkMode ? 'light' : 'dark');
     }
-    this.setThemeMode()
+    this.switchDarkMode(this.darkMode ? 'light' : 'dark');
   }
 
   loadStorageLang() {

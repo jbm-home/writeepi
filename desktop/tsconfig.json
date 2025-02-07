@@ -1,18 +1,15 @@
 {
 	"compilerOptions": {
 		"outDir": "./dist",
-		"module": "node16",
-		"moduleResolution": "node16",
-		"moduleDetection": "force",
-		"target": "esnext",
+		"module": "NodeNext",
+		"moduleResolution": "nodenext",
+		"target": "ESNext",
 		"lib": [
-			"DOM",
-			"DOM.Iterable",
-			"ES2022" // Node.js 18
+			"ESNext"
 		],
-		"resolveJsonModule": false, // ESM doesn't yet support JSON modules.
+		"allowJs": true,
+		"resolveJsonModule": false,
 		"esModuleInterop": true,
-		"jsx": "react",
 		"declaration": true,
 		"newLine": "lf",
 		"stripInternal": true,

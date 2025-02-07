@@ -1,19 +1,20 @@
 import { app, dialog } from "electron";
 import { WriteepiDesktop } from "../main.js";
 import Store from 'electron-store';
-import { UserProject, UserProjectTemplate } from "../../../webui/src/app/types/userproject.js";
+import { UserProject } from "../../../webui/src/app/types/userproject.js";
+import { DefaultProject } from "../../../webui/src/app/types/defaultproject.js"
 import { existsSync, writeFileSync } from 'original-fs';
 import { uuidv7 } from "uuidv7"
 import { createHash } from "crypto"
 
 export class Project {
-    desktop: WriteepiDesktop;
+  desktop: WriteepiDesktop;
 
-    constructor(desktop: WriteepiDesktop) {
-        this.desktop = desktop;
-    }
+  constructor(desktop: WriteepiDesktop) {
+    this.desktop = desktop;
+  }
 
-    
+
   handleChangeStoreLocation = async (event: any) => {
     if (this.desktop.mainWindow != null) {
       let result = await dialog.showOpenDialog(this.desktop.mainWindow, { properties: ['createDirectory', 'openDirectory'] });
@@ -110,13 +111,13 @@ export class Project {
     try {
       let backup = this.desktop.mainstore.get('current') as any[];
       if (backup === undefined || backup.length === 0) {
-        return UserProjectTemplate.DEFAULT_PROJECT;
+        return DefaultProject.DEFAULT_PROJECT;
       } else {
         const candidate = backup.find((elem) => elem.id === id)
-        return candidate !== undefined ? candidate : UserProjectTemplate.DEFAULT_PROJECT;
+        return candidate !== undefined ? candidate : DefaultProject.DEFAULT_PROJECT;
       }
     } catch (e) {
-      return UserProjectTemplate.DEFAULT_PROJECT;;
+      return DefaultProject.DEFAULT_PROJECT;
     }
   }
 
@@ -138,7 +139,7 @@ export class Project {
   }
 
   handleCreateProject = async (event: any, data: UserProject) => {
-    return UserProjectTemplate.DEFAULT_PROJECT;
+    return DefaultProject.DEFAULT_PROJECT;
   }
 
   handleNewGuid = async (event: any) => {
