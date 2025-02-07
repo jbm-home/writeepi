@@ -1,0 +1,29 @@
+{
+    "name": "writeepi",
+    "version": "1.1.0",
+    "author": "Writeepi",
+    "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
+    "scripts": {
+      "build:webui": "cd webui && npm run buildprod",
+      "install:webui": "cd webui && npm i",
+
+      "build:desktop": "cd desktop && npm run make",
+      "install:desktop": "cd desktop && npm i",
+
+      "install:server": "cd server && npm i",
+
+      "build:all": "npm run build:webui && npm run build:desktop",
+      "install:all": "npm run install:webui && npm run install:desktop && npm run install:server",
+      
+      "start:desktop": "cd desktop && npm run start",
+      "start:desktop:buildfront": "cd desktop && npm run start:buildfront",
+      "start:server": "cd server && npm run start",
+      "start:server:dev:win": "cd server && npm run startdevwin",
+      "start:server:dev:linux": "cd server && npm run startdevlinux",
+      "start:server:buildfront": "cd server && npm run fullbuildandstart"
+    },
+    "license": "GPL-3.0",
+    "devDependencies": { },
+    "dependencies": { }
+  }
+  

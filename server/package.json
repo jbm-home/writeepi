@@ -5,7 +5,8 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
-    "fullbuildandstart": "cd ../webui && npm i && npm run buildprod && cd ../server && npx tsx src/main.ts | bunyan -L",
+    "fullbuildandstart": "cd ../webui && npm run buildprod && cd ../server && npx tsx src/main.ts | bunyan -L",
+    "build": "npx tsc",
     "start": "npx tsx src/main.ts | bunyan -L",
     "startdevwin": "set PROFILE=DEV && npx tsx src/main.ts | bunyan -L",
     "startdevlinux": "set PROFILE=DEV npx tsx src/main.ts | bunyan -L"

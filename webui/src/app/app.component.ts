@@ -74,11 +74,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.darkMode = matchMedia.matches;
     this.switchDarkMode(this.darkMode ? 'dark' : 'light');
 
-    // matchMedia.addEventListener('change', e => {
-    //   const match = e.matches;
-    //   this.darkMode = match;
-    //   this.switchDarkMode(this.darkMode ? 'dark' : 'light');
-    // });
+    matchMedia.addEventListener('change', e => {
+      const match = e.matches;
+      this.darkMode = match;
+      this.switchDarkMode(this.darkMode ? 'dark' : 'light');
+    });
   }
 
   switchDarkMode(theme: string) {
@@ -91,7 +91,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!AppComponent.CLOUDMODE) {
       await this.electronService.api.darkModeToggle(this.darkMode ? 'light' : 'dark');
     }
-    this.switchDarkMode(this.darkMode ? 'light' : 'dark');
+    // TODO: fix me on cloud version
+    //this.switchDarkMode(this.darkMode ? 'light' : 'dark');
   }
 
   loadStorageLang() {
