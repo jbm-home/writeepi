@@ -3,14 +3,14 @@ import { EPub } from 'epub-gen-memory';
 import type { Options, Chapter } from 'epub-gen-memory';
 
 export class EpubCommon {
-    public async buildEpub(userContent: UserProject) {
+    public async buildEpub(userContent: UserProject): Promise<Buffer> {
         const options: Options = {
             lang: userContent.lang,
             title: userContent.title,
             author: userContent.author,
             prependChapterTitles: true,
             css: "body { margin-left: .5em; margin-right: .5em; text-align: justify; }\n"
-                + "p { font-family: serif; font-size: 10pt; text-align: justify; text-indent: 1em; margin-top: 0px; margin-bottom: 1ex; }\n"
+                + "p { font-family: serif; font-size: 16pt; text-align: justify; text-indent: 1em; margin-top: 0px; margin-bottom: 1ex; }\n"
                 + "h1, h2 { font-family: sans-serif; font-style: normal; text-align: center; color: black; width: 100%; }\n"
                 + "h1, h2 { margin-bottom: 50px; }\n"
                 + ".index-title { text-align: center; margin-top: 5em; margin-bottom: 5em; width: 100%; }\n"
@@ -36,7 +36,7 @@ export class EpubCommon {
         });
         userContent.content.forEach((c) => {
             if (c !== undefined && c.isBook && !c.isFolder) {
-                content.push({ title: c.name, content: c.chapter !== undefined ? c.chapter : '' });
+                content.push({ title: c.name, content: c.chapter !== undefined && c.chapter != null ? c.chapter : '' });
             }
         });
         const epub = new EPub(options, content);

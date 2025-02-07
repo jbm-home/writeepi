@@ -5,14 +5,14 @@ import { dialog } from "electron";
 import { EpubCommon } from "./epubCommon.js";
 
 export class EpubExporter {
-    desktop?: WriteepiDesktop;
+    desktop: WriteepiDesktop;
 
-    constructor(desktop?: WriteepiDesktop) {
+    constructor(desktop: WriteepiDesktop) {
         this.desktop = desktop;
     }
 
     handleBuildEpub = async (event: any, id: string) => {
-        if (this.desktop?.mainWindow != null) {
+        if (this.desktop !== undefined && this.desktop.mainWindow != null) {
           let result = await dialog.showSaveDialog(this.desktop.mainWindow, { filters: [{ name: 'ePub', extensions: ['epub'] }] });
           if (!result.canceled && result.filePath != null) {
     

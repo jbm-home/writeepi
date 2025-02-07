@@ -4,14 +4,14 @@ import { UserProject } from '../../../webui/src/app/types/userproject.js';
 import { PdfCommon } from './pdfCommon.js';
 
 export class PdfExporter {
-    desktop?: WriteepiDesktop;
+    desktop: WriteepiDesktop;
 
-    constructor(desktop?: WriteepiDesktop) {
+    constructor(desktop: WriteepiDesktop) {
         this.desktop = desktop;
     }
 
-    async handleBuildPdf (event: any, id: string) {
-        if (this.desktop?.mainWindow != null) {
+    handleBuildPdf = async (event: any, id: string) => {
+        if (this.desktop !== undefined && this.desktop.mainWindow != null) {
             let result = await dialog.showSaveDialog(this.desktop.mainWindow, { filters: [{ name: 'PDF', extensions: ['pdf'] }] });
             if (!result.canceled && result.filePath != null) {
                 let backup = this.desktop.mainstore.get('current') as any[];

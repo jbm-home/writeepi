@@ -120,7 +120,7 @@ export class DocxCommon {
                                 ],
                             }),
                             new Paragraph({
-                                alignment: AlignmentType.LEFT,
+                                alignment: AlignmentType.JUSTIFIED,
                                 spacing: {
                                     before: 600,
                                 },

@@ -5,14 +5,15 @@ import { writeFileSync } from 'original-fs';
 import { DocxCommon } from './docxCommon.js';
 
 export class DocxExporter {
-    desktop?: WriteepiDesktop;
+    desktop: WriteepiDesktop;
 
-    constructor(desktop?: WriteepiDesktop) {
+    constructor(desktop: WriteepiDesktop) {
         this.desktop = desktop;
+        console.log(desktop !== undefined);
     }
 
     handleBuildDocx = async (event: any, id: string) => {
-        if (this.desktop?.mainWindow != null) {
+        if (this.desktop !== undefined && this.desktop.mainWindow != null) {
             let result = await dialog.showSaveDialog(this.desktop.mainWindow, { filters: [{ name: 'DOCX', extensions: ['docx'] }] });
             if (!result.canceled && result.filePath != null) {
                 let backup = this.desktop.mainstore.get('current') as any[];

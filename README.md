@@ -1,5 +1,5 @@
 # Writeepi
-Main site: https://writeepi.com
+Main site: https://www.writeepi.com
 
 Simple, accessible but powerful all-in-one word-processing and organization app for writers
 

@@ -28,7 +28,7 @@ export class PdfCommon {
             pdfConverter.save(resultPath);
             return undefined;
         } else {
-            return pdfConverter.output('bloburl');
+            return pdfConverter.output();
         }
     }
 
