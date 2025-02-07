@@ -1,17 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModaleComponent } from '../modal/modal.component';
-import { Content, UserProject } from "../types/userproject";
+import { ModaleComponent } from '../modal/modal.component.js';
+import { Content, UserProject } from "../types/userproject.js";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { DownloaddialogComponent } from '../dialogs/downloaddialog/downloaddialog.component';
+import { DownloaddialogComponent } from '../dialogs/downloaddialog/downloaddialog.component.js';
 import Quill from 'quill';
-import Delta from 'quill-delta';
-import { uuidv7 } from '../utils/uuidv7';
-import { BrowsedialogComponent } from '../dialogs/browsedialog/browsedialog.component';
-import { Failover } from '../utils/failover';
-import { I18nService } from './i18n.service';
-import { BackupService } from './backup.service';
+import Delta from 'quill-delta'
+import { UuidUtils } from "../../../../server/src/utils/uuidutils.js"
+import { BrowsedialogComponent } from '../dialogs/browsedialog/browsedialog.component.js';
+import { Failover } from '../utils/failover.js';
+import { I18nService } from './i18n.service.js';
+import { BackupService } from './backup.service.js';
 
 export class ModalAction {
   key: string = '';
@@ -144,27 +144,30 @@ export class EditorService {
   checkCharacterForReplace(character: string, position: number) {
     if (this.loadedProject?.settings.dashConf && character === "-") {
       if (position > 0 && this.quill?.getText(position - 1, 1) === '-') {
+        // @ts-ignore
         const delta = new Delta();
         const ops = delta.retain(position - 1).insert('— ').delete(2);
         this.quill?.updateContents(ops);
       }
     } else if (this.loadedProject?.settings.spaceConf && character === " ") {
       if (position > 0 && this.quill?.getText(position - 1, 1) === ' ') {
+        // @ts-ignore
         const delta = new Delta();
         const ops = delta.retain(position - 1).insert('. ').delete(2);
         this.quill?.updateContents(ops);
       }
-    } else if (this.loadedProject?.settings.quoteConf && character === "\"") {
-      const delta = new Delta();
-      const charBefore = this.quill?.getText(position - 1, 1);
-      if (position === 0 || (!this.hasOpenningQuote && charBefore !== undefined && !(/[A-Za-zÀ-ÖØ-öø-ÿ0-9]/i.test(charBefore)))) {
-        const ops = delta.retain(position).insert('«').delete(1);
+    } else if (this.loadedProject?.settings.quoteConf) {
+      if (character === "<" && position > 0 && this.quill?.getText(position - 1, 1) === '<') {
+        // @ts-ignore
+        const delta = new Delta();
+        const ops = delta.retain(position - 1).insert('« ').delete(2);
         this.quill?.updateContents(ops);
-        this.hasOpenningQuote = true;
-      } else {
-        const ops = delta.retain(position).insert('»').delete(1);
+      }
+      if (character === ">" && position > 0 && this.quill?.getText(position - 1, 1) === '>') {
+        // @ts-ignore
+        const delta = new Delta();
+        const ops = delta.retain(position - 1).insert('» ').delete(2);
         this.quill?.updateContents(ops);
-        this.hasOpenningQuote = false;
       }
     }
   }
@@ -336,7 +339,7 @@ export class EditorService {
   }
 
   updateGlobalWordsCount() {
-    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p) => p.isBook).map(p => p.words ?? 0).reduce((a, b) => { return a + b; }) : 0;
+    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: { isBook: any; }) => p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
   }
 
   disableEditor() {
@@ -348,7 +351,7 @@ export class EditorService {
   }
 
   getCurrentSelectedUserContent(): Content | undefined {
-    return this.loadedProject?.content.find((c) => c.id === this.currentSelectedInTree);
+    return this.loadedProject?.content.find((c: { id: string | undefined; }) => c.id === this.currentSelectedInTree);
   }
 
   checkMandatorySettings() {
@@ -413,7 +416,7 @@ export class EditorService {
   }
 
   increaseOrderIdsFrom(fromOrderId: number) {
-    this.loadedProject?.content.forEach(item => item.orderId = item.orderId >= fromOrderId ? item.orderId + 1 : item.orderId);
+    this.loadedProject?.content.forEach((item: { orderId: number; }) => item.orderId = item.orderId >= fromOrderId ? item.orderId + 1 : item.orderId);
   }
 
   getRootMenuItems() {
@@ -421,7 +424,7 @@ export class EditorService {
   }
 
   getChildren(parentId?: string): Content[] {
-    const arr = this.loadedProject?.content.filter((item) => item.parentId === parentId);
+    const arr = this.loadedProject?.content.filter((item: any) => item.parentId === parentId);
     return arr !== undefined ? this.sortBy(arr, t => t.orderId) : [];
   }
 
@@ -431,7 +434,7 @@ export class EditorService {
 
   getNewMaxOrder(): number {
     if (this.loadedProject !== undefined) {
-      let maxOrderId = Math.max(...this.loadedProject.content.map(arr => arr.orderId));
+      let maxOrderId = Math.max(...this.loadedProject.content.map((arr: { orderId: any; }) => arr.orderId));
       return 1 + maxOrderId;
     } else {
       return 0;
@@ -439,11 +442,11 @@ export class EditorService {
   }
 
   getMenuItemById(id: string): Content | undefined {
-    return this.loadedProject?.content.find((item) => item.id === id);
+    return this.loadedProject?.content.find((item: { id: string; }) => item.id === id);
   }
 
   getTrashId(): string | undefined {
-    const trashId = this.loadedProject?.content.find((item) => item.isTrash === true);
+    const trashId = this.loadedProject?.content.find((item: { isTrash: boolean; }) => item.isTrash === true);
     return trashId !== undefined ? trashId.id : undefined;
   }
 
@@ -462,7 +465,7 @@ export class EditorService {
   }
 
   getBookRootId(): string | undefined {
-    const bookId = this.loadedProject?.content.find((item) => item.isBook === true);
+    const bookId = this.loadedProject?.content.find((item: { isBook: boolean; }) => item.isBook === true);
     return bookId !== undefined ? bookId.id : undefined;
   }
 
@@ -483,7 +486,7 @@ export class EditorService {
   }
 
   getCharacterRootId(): string | undefined {
-    const characterId = this.loadedProject?.content.find((item) => item.isCharacter === true);
+    const characterId = this.loadedProject?.content.find((item: { isCharacter: boolean; }) => item.isCharacter === true);
     return characterId !== undefined ? characterId.id : undefined;
   }
 
@@ -564,14 +567,14 @@ export class EditorService {
 
   toggleContextualMenu(event: any, item: any) {
     event.preventDefault();
-    this.loadedProject?.content.forEach(element => {
+    this.loadedProject?.content.forEach((element: { context: boolean; }) => {
       element.context = false;
     });
     item.context = true
   }
 
   closeAllContexts() {
-    this.loadedProject?.content.forEach(element => {
+    this.loadedProject?.content.forEach((element: { context: boolean; }) => {
       element.context = false;
     });
   }
@@ -617,7 +620,7 @@ export class EditorService {
           } else if (action.key === this.modalActions.addChildFolder.key) {
             menuItem.expanded = true;
             this.loadedProject?.content.push({
-              id: uuidv7(),
+              id: UuidUtils.v7(),
               parentId: menuItem.id,
               orderId: this.getNewMaxOrder(),
               name: newName.toString(),
@@ -635,7 +638,7 @@ export class EditorService {
           } else if (action.key === this.modalActions.addChildEditor.key) {
             menuItem.expanded = true;
             this.loadedProject?.content.push({
-              id: uuidv7(),
+              id: UuidUtils.v7(),
               parentId: menuItem.id,
               orderId: this.getNewMaxOrder(),
               name: newName.toString(),
@@ -653,7 +656,7 @@ export class EditorService {
           } else if (action.key === this.modalActions.addFolderAfter.key) {
             this.increaseOrderIdsFrom(refOrder + 1);
             this.loadedProject?.content.push({
-              id: uuidv7(),
+              id: UuidUtils.v7(),
               parentId: menuItem.parentId,
               orderId: refOrder + 1,
               name: newName.toString(),
@@ -671,7 +674,7 @@ export class EditorService {
           } else if (action.key === this.modalActions.addFolderBefore.key) {
             this.increaseOrderIdsFrom(refOrder);
             this.loadedProject?.content.push({
-              id: uuidv7(),
+              id: UuidUtils.v7(),
               parentId: menuItem.parentId,
               orderId: refOrder,
               name: newName.toString(),
@@ -689,7 +692,7 @@ export class EditorService {
           } else if (action.key === this.modalActions.addEditorAfter.key) {
             this.increaseOrderIdsFrom(refOrder + 1);
             this.loadedProject?.content.push({
-              id: uuidv7(),
+              id: UuidUtils.v7(),
               parentId: menuItem.parentId,
               orderId: refOrder + 1,
               name: newName.toString(),
@@ -707,7 +710,7 @@ export class EditorService {
           } else if (action.key === this.modalActions.addEditorBefore.key) {
             this.increaseOrderIdsFrom(refOrder);
             this.loadedProject?.content.push({
-              id: uuidv7(),
+              id: UuidUtils.v7(),
               parentId: menuItem.parentId,
               orderId: refOrder,
               name: newName.toString(),
@@ -724,12 +727,12 @@ export class EditorService {
             })
           } else if (action.key === this.modalActions.delete.key && menuItem.canBeDeleted) {
             const trashId = this.getTrashId();
-            this.loadedProject?.content.filter((item) => item.parentId === menuItem.id).forEach((item) => { item.parentId = trashId });
+            this.loadedProject?.content.filter((item: any) => item.parentId === menuItem.id).forEach((item: any) => { item.parentId = trashId });
             menuItem.parentId = trashId;
           } else if (action.key === this.modalActions.emptyTrash.key && newName.toUpperCase() === 'DELETE') {
             if (this.loadedProject !== undefined) {
               const trashId = this.getTrashId();
-              this.loadedProject.content = this.loadedProject?.content.filter((item) => item.parentId !== trashId);
+              this.loadedProject.content = this.loadedProject?.content.filter((item: any) => item.parentId !== trashId);
             }
           }
         }

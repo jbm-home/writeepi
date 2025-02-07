@@ -69,7 +69,7 @@ const ES = {
     "settings.totalwords": "Número total de palabras",
     "settings.editorsettings": "Configuración del editor",
     "settings.dashConf": "Reemplazar guiones dobles \"-\" por un guion largo \"—\".",
-    "settings.quoteConf": "Reemplazar las comillas por comillas de apertura y cierre.",
+    "settings.quoteConf": "Reemplaza los dobles \"<<\" y \">>\" por comillas de apertura y cierre.",
     "settings.spaceConf": "Reemplazar dobles espacios por un punto y un espacio.",
     "settings.backupsettings": "Configuración de copia de seguridad",
     "settings.backupOnChange": "Guardar los cambios en caso de navegación (Recomendado).",

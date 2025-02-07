@@ -1,23 +1,23 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ElectronService } from './services/electron.service';
-import { EditorService } from './services/editor.service';
+import { ElectronService } from './services/electron.service.js';
+import { EditorService } from './services/editor.service.js';
 import { MatDialog } from '@angular/material/dialog';
-import { I18nService } from './services/i18n.service';
-import { I18nPipe } from './pipes/i18n.pipe';
+import { I18nService } from './services/i18n.service.js';
+import { I18nPipe } from './pipes/i18n.pipe.js';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LogindialogComponent } from './dialogs/logindialog/logindialog.component';
-import { LogoutdialogComponent } from './dialogs/logoutdialog/logoutdialog.component';
-import { SessionService } from './services/session.service';
-import { User } from '../../../server/src/types/user';
+import { LogindialogComponent } from './dialogs/logindialog/logindialog.component.js';
+import { LogoutdialogComponent } from './dialogs/logoutdialog/logoutdialog.component.js';
+import { SessionService } from './services/session.service.js';
+import { User } from '../../../server/src/types/user.js';
+import { SharedModule } from './shared.module.js';
+import { TreeItemComponent } from './tree-item/tree-item.component.js';
 
 @Component({
   selector: 'app-root',
+  imports: [SharedModule, TreeItemComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-
-// TODO: mode hors ligne utilise uniquement electron avec le json (projet hors ligne
-// TODO: reprise du login sans perdre le contenu en ligne (projet en ligne)
 
 export class AppComponent implements OnInit, OnDestroy {
   public static CLOUDMODE = false;

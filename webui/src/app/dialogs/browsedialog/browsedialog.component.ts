@@ -3,16 +3,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { MatSelectionList } from '@angular/material/list';
 import { MatTabGroup } from '@angular/material/tabs';
-import { Failover } from '../../utils/failover';
-import { AppComponent } from '../../app.component';
+import { Failover } from '../../utils/failover.js';
+import { AppComponent } from '../../app.component.js';
+import { SharedModule } from '../../shared.module.js';
 
 @Component({
   selector: 'app-browsedialog',
+  imports: [SharedModule],
   templateUrl: './browsedialog.component.html',
   styleUrl: './browsedialog.component.scss'
 })
 export class BrowsedialogComponent implements OnInit {
-  @ViewChild('tabgroup', {static: true}) tabgroup!: MatTabGroup;
+  @ViewChild('tabgroup', { static: true }) tabgroup!: MatTabGroup;
 
   recovery: any[] = [];
   selectedProject: string[] = [];

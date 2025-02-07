@@ -65,7 +65,7 @@ const FR = {
     "settings.totalwords": "Nombre de mots",
     "settings.editorsettings": "Paramètres de l'éditeur",
     "settings.dashConf": "Remplacer les doubles tirets \"-\" par un long tiret \"—\".",
-    "settings.quoteConf": "Remplacer les guillemets classiques par des guillemets ouvrants et fermants.",
+    "settings.quoteConf": "Remplacer les doubles \"<<\" et \">>\" par des guillemets ouvrants et fermants.",
     "settings.spaceConf": "Remplacer les doubles espaces par un point et un espace.",
     "settings.backupsettings": "Paramètres de sauvegarde",
     "settings.backupOnChange": "Sauvegarder les modifications en cas de navigation (Recommandé).",

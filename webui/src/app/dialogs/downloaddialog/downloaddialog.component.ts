@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ElectronService } from '../../services/electron.service';
-import { AppComponent } from '../../app.component';
+import { ElectronService } from '../../services/electron.service.js';
+import { AppComponent } from '../../app.component.js';
+import { SharedModule } from '../../shared.module.js';
 
 @Component({
   selector: 'app-downloaddialog',
+  imports: [SharedModule],
   templateUrl: './downloaddialog.component.html',
   styleUrl: './downloaddialog.component.scss'
 })

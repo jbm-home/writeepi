@@ -1,5 +1,5 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
-import { I18nService } from '../services/i18n.service';
+import { I18nService } from '../services/i18n.service.js';
 
 @Injectable({
     providedIn: 'root'

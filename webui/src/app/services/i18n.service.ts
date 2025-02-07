@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import EN from '../i18n/en';
-import FR from '../i18n/fr';
-import DE from '../i18n/de';
-import ES from '../i18n/es';
-import IT from '../i18n/it';
-import { AppComponent } from '../app.component';
-import { ElectronService } from './electron.service';
+import EN from '../i18n/en.js';
+import FR from '../i18n/fr.js';
+import DE from '../i18n/de.js';
+import ES from '../i18n/es.js';
+import IT from '../i18n/it.js';
+import { AppComponent } from '../app.component.js';
+import { ElectronService } from './electron.service.js';
 
 @Injectable({
   providedIn: 'root'

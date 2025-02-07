@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as Electron from 'electron';
-import { UserProject } from '../types/userproject';
 
 export interface ElectronWindow extends Window {
   require(module: string): Electron.BrowserWindow;

@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import proxy from 'express-http-proxy';
 import cookieParser from "cookie-parser";
 import sessions from 'express-session';
 import { config } from './config.js';
@@ -52,7 +53,14 @@ app.use(cookieParser());
 app.use('/api/session', SessionController);
 app.use('/api/export', ExportController);
 app.use('/api/content', BackupController);
-app.use('/', express.static(webpath));
+if (process.env['PROFILE']?.trim() === 'DEV') {
+    log.warn("Starting in dev mode");
+    app.use('/', proxy('http://localhost:4200'));
+} else {
+    log.info("Starting in normal mode");
+    app.use('/', express.static(webpath));
+}
+
 app.all('*', UnknownRoutesHandler);
 app.use(ExceptionsHandler);
 

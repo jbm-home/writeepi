@@ -69,7 +69,7 @@ const DE = {
     "settings.totalwords": "Gesamtanzahl Wörter",
     "settings.editorsettings": "Editor-Einstellungen",
     "settings.dashConf": "Doppelte Bindestriche \"-\" durch einen langen Bindestrich \"—\" ersetzen.",
-    "settings.quoteConf": "Anführungszeichen durch öffnende und schließende Anführungszeichen ersetzen.",
+    "settings.quoteConf": "Ersetze die doppelten \"<<\" und \">>\" durch öffnende und schließende Anführungszeichen.",
     "settings.spaceConf": "Doppelte Leerzeichen durch einen Punkt und ein Leerzeichen ersetzen.",
     "settings.backupsettings": "Backup-Einstellungen",
     "settings.backupOnChange": "Änderungen beim Navigieren speichern (Empfohlen).",

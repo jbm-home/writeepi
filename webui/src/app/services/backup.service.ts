@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { UserProject } from '../types/userproject';
-import { AppComponent } from '../app.component';
-import { ElectronService } from './electron.service';
+import { UserProject } from '../types/userproject.js';
+import { AppComponent } from '../app.component.js';
+import { ElectronService } from './electron.service.js';
 
 @Injectable({
     providedIn: 'root'

@@ -4,8 +4,8 @@ import Store from 'electron-store';
 import { UserProject } from "../../../webui/src/app/types/userproject.js";
 import { DefaultProject } from "../../../webui/src/app/types/defaultproject.js"
 import { existsSync, writeFileSync } from 'original-fs';
-import { uuidv7 } from "uuidv7"
 import { createHash } from "crypto"
+import { UuidUtils } from "../../../server/src/utils/uuidutils.js";
 
 export class Project {
   desktop: WriteepiDesktop;
@@ -143,7 +143,7 @@ export class Project {
   }
 
   handleNewGuid = async (event: any) => {
-    return { guid: uuidv7() };
+    return { guid: UuidUtils.v7() };
   }
 
   private async backupIntegrity(backup: UserProject) {

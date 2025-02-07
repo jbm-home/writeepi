@@ -1,8 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SharedModule } from '../../shared.module.js';
 
 @Component({
   selector: 'app-logoutdialog',
+  imports: [SharedModule],
   templateUrl: './logoutdialog.component.html',
   styleUrl: './logoutdialog.component.scss'
 })

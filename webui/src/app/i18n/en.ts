@@ -65,7 +65,7 @@ const EN = {
     "settings.totalwords": "Total Words",
     "settings.editorsettings": "Editor Settings",
     "settings.dashConf": "Replace double dashes \"-\" by a long dash \"—\".",
-    "settings.quoteConf": "Replace quotation marks with opening and closing.",
+    "settings.quoteConf": "Replace the double \"<<\" and \">>\" with opening and closing quotation marks.",
     "settings.spaceConf": "Replace double spaces with a dot and a space.",
     "settings.backupsettings": "Backup Settings",
     "settings.backupOnChange": "Save changes in case of navigation (Recommanded).",

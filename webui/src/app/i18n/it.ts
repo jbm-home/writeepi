@@ -69,7 +69,7 @@ const IT = {
     "settings.totalwords": "Numero totale di parole",
     "settings.editorsettings": "Impostazioni dell'editor",
     "settings.dashConf": "Sostituisci i doppi trattini \"-\" con un trattino lungo \"—\".",
-    "settings.quoteConf": "Sostituisci le virgolette con virgolette di apertura e chiusura.",
+    "settings.quoteConf": "Sostituisci i doppi \"<<\" e \">>\" con virgolette di apertura e chiusura.",
     "settings.spaceConf": "Sostituisci i doppi spazi con un punto e uno spazio.",
     "settings.backupsettings": "Impostazioni di backup",
     "settings.backupOnChange": "Salva le modifiche in caso di navigazione (Consigliato).",

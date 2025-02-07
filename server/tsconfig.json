@@ -3,9 +3,9 @@
 		"outDir": "./dist",
 		"module": "NodeNext",
 		"moduleResolution": "nodenext",
-		"target": "ESNext",
+		"target": "ES2024",
 		"lib": [
-			"ESNext"
+			"ES2024"
 		],
 		"allowJs": true,
 		"resolveJsonModule": false,
