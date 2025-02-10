@@ -5,6 +5,7 @@ import { AppComponent } from '../../app.component.js';
 import { SharedModule } from '../../shared.module.js';
 import { ExportService } from '../../services/export.service.js';
 import { Buffer } from 'buffer';
+import { BackupService } from '../../services/backup.service.js';
 
 @Component({
   selector: 'app-downloaddialog',
@@ -17,6 +18,7 @@ export class DownloaddialogComponent implements OnInit {
     private electronService: ElectronService,
     public dialogRef: MatDialogRef<any>,
     private exportService: ExportService,
+    private backupService: BackupService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
@@ -79,6 +81,23 @@ export class DownloaddialogComponent implements OnInit {
     setTimeout(() => {
       window.URL.revokeObjectURL(data);
     }, 400)
+  }
+
+  async downloadJson() {
+    this.error = false;
+    this.ready = false;
+    this.started = true;
+    const exportResult = await this.backupService.loadBackup(this.data.uuid);
+    if (AppComponent.CLOUDMODE) {
+      const blob = new Blob([JSON.stringify(exportResult)], {
+        type: 'application/json'
+      });
+      this.saveFile(blob, this.data.uuid + ".json");
+      this.error = false;
+    } else {
+      this.error = exportResult;
+    }
+    this.ready = true;
   }
 
   ok(): void {
