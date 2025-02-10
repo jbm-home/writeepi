@@ -72,7 +72,7 @@ Server is running on port **8337**
 - "build:desktop": Build Desktop app
 - "install:desktop": Install node modules for desktop app
 - "install:server": Install node modules for server
-- "build:all": Build webui and desktop
+- **"build:all": Build webui and desktop**
 - **"install:all": Install node modules for all projects**
 - "start:desktop": Start desktop application
 - **"start:desktop:buildfront": Build webui and start desktop app**
@@ -80,5 +80,7 @@ Server is running on port **8337**
 - "start:server:dev:win": Start server in dev mode for windows (run the npm run start of webui before)
 - "start:server:dev:linux": Start server in dev mode for linux (run the npm run start of webui before)
 - **"start:server:buildfront": Start server after building front**
+- "setversion:linux --VER=1.2.3": Globally set bump version on linux
+- "setversion:windows --VER=1.2.3": Globally set bump version on windows
 ## Contribute
 You can help improve Writeepi by [reporting issues](https://github.com/jbm-home/writeepi/issues)

@@ -1,29 +1,26 @@
 {
     "name": "writeepi",
-    "version": "1.2.1",
+    "version": "25.2.10",
     "author": "Writeepi",
     "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
     "scripts": {
-      "build:webui": "cd webui && npm run buildprod",
-      "install:webui": "cd webui && npm i",
-
-      "build:desktop": "cd desktop && npm run make",
-      "install:desktop": "cd desktop && npm i",
-
-      "install:server": "cd server && npm i",
-
-      "build:all": "npm run build:webui && npm run build:desktop",
-      "install:all": "npm run install:webui && npm run install:desktop && npm run install:server",
-      
-      "start:desktop": "cd desktop && npm run start",
-      "start:desktop:buildfront": "cd desktop && npm run start:buildfront",
-      "start:server": "cd server && npm run start",
-      "start:server:dev:win": "cd server && npm run startdevwin",
-      "start:server:dev:linux": "cd server && npm run startdevlinux",
-      "start:server:buildfront": "cd server && npm run fullbuildandstart"
+        "build:webui": "cd webui && npm run buildprod",
+        "install:webui": "cd webui && npm i",
+        "build:desktop": "cd desktop && npm run make",
+        "install:desktop": "cd desktop && npm i",
+        "install:server": "cd server && npm i",
+        "build:all": "npm run build:webui && npm run build:desktop",
+        "install:all": "npm run install:webui && npm run install:desktop && npm run install:server",
+        "start:desktop": "cd desktop && npm run start",
+        "start:desktop:buildfront": "cd desktop && npm run start:buildfront",
+        "start:server": "cd server && npm run start",
+        "start:server:dev:win": "cd server && npm run startdevwin",
+        "start:server:dev:linux": "cd server && npm run startdevlinux",
+        "start:server:buildfront": "cd server && npm run fullbuildandstart",
+        "setversion:windows": "npm version %NPM_CONFIG_VER% && cd webui && npm version %NPM_CONFIG_VER% && cd ../server && npm version %NPM_CONFIG_VER% && cd ../desktop && npm version %NPM_CONFIG_VER% && cd .. && npm run install:all",
+        "setversion:linux": "npm version ${NPM_CONFIG_VER} && cd webui && npm version ${NPM_CONFIG_VER} && cd ../server && npm version ${NPM_CONFIG_VER} && cd ../desktop && npm version ${NPM_CONFIG_VER} && cd .. && npm run install:all"
     },
     "license": "GPL-3.0",
-    "devDependencies": { },
-    "dependencies": { }
-  }
-  
+    "devDependencies": {},
+    "dependencies": {}
+}
