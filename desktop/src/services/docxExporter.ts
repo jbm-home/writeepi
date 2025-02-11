@@ -9,7 +9,6 @@ export class DocxExporter {
 
     constructor(desktop: WriteepiDesktop) {
         this.desktop = desktop;
-        console.log(desktop !== undefined);
     }
 
     handleBuildDocx = async (event: any, id: string) => {

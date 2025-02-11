@@ -38,6 +38,11 @@ $angular-dark-theme: mat.m2-define-dark-theme(
   @include mat.all-component-colors($angular-dark-theme);
 }
 
+$btn-color: rgb(0, 150, 136);
+.btn-outline-info {
+    @include button-outline-variant($btn-color, #fafafa, lighten($btn-color,5%), $btn-color);
+}
+
 :root {
     --sidebarwidth: 15rem;
     --sidebarsmalldeviceswidth: 15rem;

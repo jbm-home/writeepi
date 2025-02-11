@@ -3,7 +3,7 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
 <div class="modal-body">
-    <form>
+    <form (submit)="activeModal.close(inputContent)">
         <div class="mb-3">
             <!-- <label for="inputContent">{{inputTitle}}</label> -->
             <div class="alert alert-warning" role="alert" *ngIf="extraMessage.length > 0">
@@ -17,6 +17,6 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.dismiss()">Cancel</button>
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close(inputContent)">{{confirmLabel}}</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-outline-info" (click)="activeModal.close(inputContent)">{{confirmLabel}}</button>
 </div>
