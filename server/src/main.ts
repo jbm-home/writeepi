@@ -16,6 +16,7 @@ import { Scheduler } from './utils/scheduler.js';
 import { BackupController } from './resources/backup/backup.controller.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { CaptchaController } from './resources/captcha/captcha.controller.js';
 
 const log = bunyan.createLogger({ name: "Writeepi:Start", level: "debug" });
 log.level(bunyan.DEBUG);
@@ -57,6 +58,7 @@ app.use(cookieParser());
 app.use('/api/session', SessionController);
 app.use('/api/export', ExportController);
 app.use('/api/content', BackupController);
+app.use('/api/captcha', CaptchaController);
 if (process.env['PROFILE']?.trim() === 'DEV') {
     log.warn("Starting in dev mode");
     app.use('/', proxy('http://localhost:4200'));

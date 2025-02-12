@@ -21,4 +21,8 @@ export class LogindialogComponent {
   cancel(): void {
     this.dialogRef.close({ validated: false });
   }
+
+  register(): void {
+    this.dialogRef.close({ validated: true, register: true });
+  }
 }

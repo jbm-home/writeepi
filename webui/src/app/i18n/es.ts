@@ -58,7 +58,12 @@ const ES = {
     "dialog.exportready": "Su exportación está lista",
     "dialog.exportprogress": "Exportación en curso",
     "dialog.storelocation": "Abrir una nueva ubicación de almacenamiento",
-
+    "dialog.login": "Utilizar una cuenta existente",
+    "dialog.firstname": "Nombre",
+    "dialog.lastname": "Apellido",
+    "dialog.captcha": "Código de seguridad",
+    "dialog.reloadcaptcha": "Renovar el código",
+    "dialog.accountcreated": "La cuenta ha sido creada",
     // settings
     "settings.projectsettings": "Configuración del proyecto",
     "settings.projectname": "Nombre del proyecto",

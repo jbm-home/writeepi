@@ -33,7 +33,7 @@ export class SessionService {
                     }
                 } catch (err: any) {
                     this.log.error('Login critical error: ' + err);
-                    return { error: 'Login critical error' };
+                    return { error: 'server error' };
                 }
             }
             this.log.debug(`Failed connection attempt from ${req.body.email} '${IpUtils.getIp(req)}' (bad login or password)`);
@@ -118,11 +118,11 @@ export class SessionService {
         if (req.body.firstname !== undefined
             && req.body.lastname !== undefined
             && req.body.email !== undefined
-            && req.body.phone !== undefined
+            && req.body.captcha !== undefined
             && req.body.password !== undefined
             && req.body.password.length > 3) {
             const email = req.body.email.toLowerCase();
-            const phone = req.body.phone;
+            const phone = 'none'; //req.body.phone;
             const regexNames = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
             const regexPhone = /^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/u;
             const emailValidated = email.match(
@@ -133,12 +133,15 @@ export class SessionService {
             if (!emailValidated) {
                 this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (email not valid)`);
                 return { error: 'Invalid email' };
-            } else if (!phoneValidated) {
-                this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (phone number not valid)`);
-                return { error: 'Invalid phone number' };
+            // } else if (!phoneValidated) {
+            //     this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (phone number not valid)`);
+            //     return { error: 'Invalid phone number' };
             } else if (!namesValidated) {
                 this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (first or lastname invalid)`);
                 return { error: 'Invalid firstname or lastname' };
+            } else if (req.session.captcha !== undefined && Capitalize.from(req.session.captcha) !== Capitalize.from(req.body.captcha)) {
+                this.log.debug(`Failed registration from '${IpUtils.getIp(req)}' (invalid captcha)`);
+                return { error: 'Invalid captcha' };
             } else {
                 const firstName = Capitalize.from(req.body.firstname);
                 const lastName = Capitalize.from(req.body.lastname);

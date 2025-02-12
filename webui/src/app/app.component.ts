@@ -11,6 +11,7 @@ import { SessionService } from './services/session.service.js';
 import { User } from '../../../server/src/types/user.js';
 import { SharedModule } from './shared.module.js';
 import { TreeItemComponent } from './tree-item/tree-item.component.js';
+import { RegisterdialogComponent } from './dialogs/registerdialog/registerdialog.component.js';
 
 @Component({
   selector: 'app-root',
@@ -127,9 +128,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   loginUser(login: string, password: string) {
     this.sessionService.loginUser(login, password).then((data: any) => {
-      localStorage.setItem('authToken', data.access_token);
-      localStorage.setItem('refreshToken', data.refresh_token);
-      this.loadUser();
+      if (data?.error !== undefined) {
+        this.openLoginModal();
+        this.snackBar.open(`Login error: ${data.error}`, 'Close', { duration: 2000 });
+      } else {
+        localStorage.setItem('authToken', data.access_token);
+        localStorage.setItem('refreshToken', data.refresh_token);
+        this.loadUser();
+      }
     }, (error: any) => {
       this.openLoginModal();
       this.snackBar.open(`Login error`, 'Close', { duration: 2000 });
@@ -167,7 +173,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined && result.validated) {
-        if (result.data !== undefined && result.data !== undefined) {
+        if (result.register === true) {
+          this.openRegisterModal();
+          return;
+        } else if (result.data !== undefined) {
           if (result.data.login !== undefined && result.data.password !== undefined) {
             const login = String(result.data.login);
             const password = String(result.data.password);
@@ -180,6 +189,25 @@ export class AppComponent implements OnInit, OnDestroy {
         this.snackBar.open(`Cannot login`, 'Close', { duration: 2000 });
       }
       this.openLoginModal();
+    });
+  }
+
+  openRegisterModal() {
+    const dialogRef = this.dialog.open(RegisterdialogComponent, {
+      width: '450px',
+      enterAnimationDuration: 250,
+      exitAnimationDuration: 250,
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result.validated) {
+        if (result.login === true) {
+          this.openLoginModal();
+          return;
+        }
+        this.snackBar.open(`Cannot register`, 'Close', { duration: 2000 });
+      }
     });
   }
 

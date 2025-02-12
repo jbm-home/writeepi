@@ -1,5 +1,5 @@
 <h2 align="center" mat-dialog-title>
-    Login
+    Register
     <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" version="1.1">
         <g transform="scale(0.5)">
             <circle cx="32" cy="32" r="30" fill="#e4d1c1" />
@@ -16,6 +16,14 @@
     <div class="dialog-container">
         <p>&nbsp;</p>
         <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>{{ 'dialog.firstname' | i18n }}</mat-label>
+            <input matInput [(ngModel)]="data.firstname" placeholder="{{ 'dialog.firstname' | i18n }}" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>{{ 'dialog.lastname' | i18n }}</mat-label>
+            <input matInput [(ngModel)]="data.lastname" placeholder="{{ 'dialog.lastname' | i18n }}" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>{{ 'dialog.email' | i18n }}</mat-label>
             <input matInput [(ngModel)]="data.login" placeholder="{{ 'dialog.email' | i18n }}" required>
         </mat-form-field>
@@ -23,10 +31,24 @@
             <mat-label>{{ 'dialog.password' | i18n }}</mat-label>
             <input matInput [(ngModel)]="data.password" type="password" placeholder="{{ 'dialog.password' | i18n }}" required>
         </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>{{ 'dialog.password' | i18n }}</mat-label>
+            <input matInput [(ngModel)]="data.repassword" type="password" placeholder="{{ 'dialog.password' | i18n }}" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>{{ 'dialog.captcha' | i18n }}</mat-label>
+            <input matInput [(ngModel)]="data.captcha" placeholder="{{ 'dialog.captcha' | i18n }}" required>
+        </mat-form-field>
+        <div>
+            <div><img src="{{captchaLink}}" alt="captcha"></div>
+            <div>
+                <button mat-button (click)="reloadCaptcha()">{{ 'dialog.reloadcaptcha' | i18n }}</button>
+            </div>
+        </div>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="center">
-    <button mat-button (click)="register()">{{ 'dialog.registernew' | i18n }}</button>
+    <button mat-button (click)="login()">{{ 'dialog.login' | i18n }}</button>
 </mat-dialog-actions>
 
 <mat-dialog-actions align="end">

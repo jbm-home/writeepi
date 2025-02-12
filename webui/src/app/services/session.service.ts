@@ -62,8 +62,8 @@ export class SessionService {
         return axios.post('/api/session/password', { email, token, password });
     }
 
-    register(firstname: string, lastname: string, email: string, phone: string, password: string) {
-        return axios.post('/api/session/register', { firstname, lastname, email, password, phone });
+    register(firstname: string, lastname: string, email: string, password: string, captcha: string) {
+        return axios.post('/api/session/register', { firstname, lastname, email, password, captcha });
     }
 
     simpleToken() {
