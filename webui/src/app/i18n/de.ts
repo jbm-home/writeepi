@@ -14,7 +14,7 @@ const DE = {
     "menu.darkmode": "Dunkler Modus",
     "menu.login": "Anmelden",
     "menu.logout": "Abmelden",
-    
+
     // tree
     "tree.rename": "Umbenennen",
     "tree.addchapter": "Kapitel hinzufügen",
@@ -28,7 +28,7 @@ const DE = {
     "tree.addeditorafter": "Editor danach hinzufügen",
     "tree.delete": "Löschen",
     "tree.emptytrash": "Papierkorb leeren",
-    
+
     // characters
     "character.age": "Alter",
     "character.location": "Ort",
@@ -38,7 +38,7 @@ const DE = {
     "character.personality": "Aussehen",
     "character.appearance": "Hintergrund",
     "character.notes": "Notizen",
-    
+
     // dialogs
     "dialog.email": "E-Mail-Adresse",
     "dialog.password": "Passwort",
@@ -58,7 +58,7 @@ const DE = {
     "dialog.exportready": "Ihr Export ist bereit",
     "dialog.exportprogress": "Export läuft",
     "dialog.storelocation": "Neuen Speicherort öffnen",
-    
+
     // settings
     "settings.projectsettings": "Projekteinstellungen",
     "settings.projectname": "Projektname",
@@ -75,7 +75,8 @@ const DE = {
     "settings.backupOnChange": "Änderungen beim Navigieren speichern (Empfohlen).",
     "settings.backupInterval": "Alle 2 Minuten automatisch speichern (Empfohlen).",
     "settings.backupAutoDisplayMessage": "Bestätigungsnachricht beim automatischen Speichern anzeigen.",
-    
+    "settings.about": "Über",
+
     // tree nodes (structure)
     treeNodes: {
         "SUMMARY|I18N": "Zusammenfassung",

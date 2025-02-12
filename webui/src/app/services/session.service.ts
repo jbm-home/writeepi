@@ -69,4 +69,8 @@ export class SessionService {
     simpleToken() {
         return axios.get('/api/session/token');
     }
+
+    version(): any {
+        return axios.get('/api/version');
+    }
 }

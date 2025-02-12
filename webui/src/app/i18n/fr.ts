@@ -71,6 +71,8 @@ const FR = {
     "settings.backupOnChange": "Sauvegarder les modifications en cas de navigation (Recommandé).",
     "settings.backupInterval": "Sauvegarder les modifications périodiquement toutes les 2 minutes (recommandé).",
     "settings.backupAutoDisplayMessage": "Afficher un message de confirmation lors de l'enregistrement automatique.",
+    "settings.about": "A propos",
+
     // tree
     treeNodes: {
         "SUMMARY|I18N": "Résumé",

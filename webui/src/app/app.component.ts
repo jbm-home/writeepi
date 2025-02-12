@@ -24,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   notifications = [];
   darkMode = false;
+  fullversion: string = '';
 
   @HostListener("click") onClick(event: any) {
     this.editorService.closeAllContexts();
@@ -55,6 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadStorageLang();
+    this.setFullVersion().then((value) => { this.fullversion = value; });
 
     if (AppComponent.CLOUDMODE) {
       this.loadUser();
@@ -93,6 +95,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     // TODO: fix me on cloud version
     //this.switchDarkMode(this.darkMode ? 'light' : 'dark');
+  }
+
+  async setFullVersion(): Promise<string> {
+    if (!AppComponent.CLOUDMODE) {
+      return 'Writeepi Desktop ' + await this.electronService.api.version();
+    } else {
+      const version: string = await this.sessionService.version();
+      return 'Writeepi Cloud ' + version;
+    }
   }
 
   loadStorageLang() {

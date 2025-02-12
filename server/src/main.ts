@@ -40,6 +40,10 @@ scheduler.Schedule(
     ONEMINUTE
 );
 
+const tmpVer = process.env['npm_package_version'];
+const regexSemver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/u;
+const version = tmpVer !== undefined && tmpVer != null && tmpVer.match(regexSemver) ? tmpVer : '';
+
 app.use(express.json({ limit: 104857600 }));
 app.use(cors());
 app.use(sessions({
@@ -60,6 +64,10 @@ if (process.env['PROFILE']?.trim() === 'DEV') {
     log.info("Starting in normal mode");
     app.use('/', express.static(webpath));
 }
+app.get('/api/version', (req, res) => {
+    res.send(version);
+})
+log.info("Server version: " + version);
 
 app.all('*', UnknownRoutesHandler);
 app.use(ExceptionsHandler);

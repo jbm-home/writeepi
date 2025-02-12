@@ -201,6 +201,10 @@
         <mat-slide-toggle [(ngModel)]="editorService.loadedProject.settings.backupAutoDisplayMessage">{{
           'settings.backupAutoDisplayMessage' | i18n }}</mat-slide-toggle>
       </div>
+      <h3 class="pt-3 pb-3">{{ 'settings.about' | i18n }}</h3>
+      <div class="mb-3">
+        {{ fullversion }}
+      </div>
     </div>
     }
     @else if (editorService.isCharacterContext() && editorService.editorEnable) {
