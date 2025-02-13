@@ -45,7 +45,7 @@ export class EditorService {
   notes: string = '';
 
   currentSelectedInTree?: string = undefined; // keep me
-  currentBackupUuid?: string = undefined; // keep me
+  currentBackupUuid: string = ''; // keep me
 
   globalWordsCount: number = 0;
 
@@ -141,6 +141,20 @@ export class EditorService {
     }
   }
 
+  getEditorText() {
+    return this.quill !== undefined ? this.quill.getText() : '';
+  }
+
+  getSelectedTextOrUndefined() {
+    if (this.quill !== undefined) {
+      const range = this.quill.getSelection();
+      if (range != null && range !== undefined) {
+        return this.quill.getText(range);
+      }
+    }
+    return undefined;
+  }
+
   checkCharacterForReplace(character: string, position: number) {
     if (this.loadedProject?.settings.dashConf && character === "-") {
       if (position > 0 && this.quill?.getText(position - 1, 1) === '-') {
@@ -178,7 +192,7 @@ export class EditorService {
 
   resetAll() {
     this.currentSelectedInTree = undefined;
-    this.currentBackupUuid = undefined;
+    this.currentBackupUuid = '';
     this.loadedProject = undefined;
     this.editorEnable = false;
   }
@@ -310,7 +324,7 @@ export class EditorService {
 
   loadRecovery(data: any) {
     this.loadedProject = data;
-    this.currentBackupUuid = undefined;
+    this.currentBackupUuid = '';
     this.updateGlobalWordsCount();
     this.checkMandatorySettings();
     this.openSettings();

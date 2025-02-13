@@ -14,6 +14,7 @@ const ES = {
     "menu.darkmode": "Modo oscuro",
     "menu.login": "Iniciar sesión",
     "menu.logout": "Cerrar sesión",
+    "menu.speech": "Síntesis de voz",
 
     // tree
     "tree.rename": "Renombrar",

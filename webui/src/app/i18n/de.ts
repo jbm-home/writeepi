@@ -14,6 +14,7 @@ const DE = {
     "menu.darkmode": "Dunkler Modus",
     "menu.login": "Anmelden",
     "menu.logout": "Abmelden",
+    "menu.speech": "Sprachsynthese",
 
     // tree
     "tree.rename": "Umbenennen",

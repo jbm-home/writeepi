@@ -61,7 +61,7 @@ export class BackupService {
             const id = await MariaDb.escape(req.body.id);
             // TODO: backup previous entry
             await MariaDb.request(`UPDATE \`user_content\` SET \`lang\` = ${lang}, \`title\` = ${title}, \`author\` = ${author}, \`description\` = ${description}, \`settings\` = ${settings}, \`content\` = ${content}, \`updatedAt\` = current_timestamp() WHERE \`id\` = ${id} AND \`userId\` = ${uid} LIMIT 1;`);
-            return httpRes.status(200).json({ uuid: req.body.uuid });
+            return httpRes.status(200).json(req.body.id);
         }
         return httpRes.status(400).json('Bad request');
     }

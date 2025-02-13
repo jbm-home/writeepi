@@ -12,6 +12,8 @@ import { User } from '../../../server/src/types/user.js';
 import { SharedModule } from './shared.module.js';
 import { TreeItemComponent } from './tree-item/tree-item.component.js';
 import { RegisterdialogComponent } from './dialogs/registerdialog/registerdialog.component.js';
+import { TextToSpeechService } from './services/textToSpeech.service.js';
+import { SpeechdialogComponent } from './dialogs/speechdialog/speechdialog.component.js';
 
 @Component({
   selector: 'app-root',
@@ -50,7 +52,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public editorService: EditorService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    public sessionService: SessionService) {
+    public sessionService: SessionService,
+    public tts: TextToSpeechService) {
     AppComponent.CLOUDMODE = !this.electronService.isElectronApp;
     this.setThemeMode();
   }
@@ -58,6 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadStorageLang();
     this.setFullVersion().then((value) => { this.fullversion = value; });
+    this.tts.listAllVoices();
 
     if (AppComponent.CLOUDMODE) {
       this.loadUser();
@@ -96,6 +100,26 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     // TODO: fix me on cloud version
     //this.switchDarkMode(this.darkMode ? 'light' : 'dark');
+  }
+
+  speech() {
+    if (this.tts.isSpeaking()) {
+      this.tts.stop();
+    } else {
+      const dialogRef = this.dialog.open(SpeechdialogComponent, {
+        width: '450px',
+        enterAnimationDuration: 250,
+        exitAnimationDuration: 250,
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (!!result) {
+          const selectedText = this.editorService.getSelectedTextOrUndefined();
+          this.tts.start(selectedText !== undefined ? selectedText : this.editorService.getEditorText());
+        }
+      });
+    }
   }
 
   async setFullVersion(): Promise<string> {

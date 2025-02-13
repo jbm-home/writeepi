@@ -14,6 +14,7 @@ const EN = {
     "menu.darkmode": "Dark mode",
     "menu.login": "Login",
     "menu.logout": "Logout",
+    "menu.speech": "Speech synthesis",
     // tree
     "tree.rename": "Rename",
     "tree.addchapter": "Add chapter",

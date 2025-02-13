@@ -14,6 +14,7 @@ const IT = {
     "menu.darkmode": "Modalità scura",
     "menu.login": "Accedi",
     "menu.logout": "Disconnetti",
+    "menu.speech": "Sintesi vocale",
 
     // tree
     "tree.rename": "Rinomina",

@@ -1,10 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ElectronService } from '../../services/electron.service.js';
 import { AppComponent } from '../../app.component.js';
 import { SharedModule } from '../../shared.module.js';
 import { ExportService } from '../../services/export.service.js';
-import { Buffer } from 'buffer';
 import { BackupService } from '../../services/backup.service.js';
 
 @Component({
@@ -15,7 +13,6 @@ import { BackupService } from '../../services/backup.service.js';
 })
 export class DownloaddialogComponent implements OnInit {
   constructor(
-    private electronService: ElectronService,
     public dialogRef: MatDialogRef<any>,
     private exportService: ExportService,
     private backupService: BackupService,

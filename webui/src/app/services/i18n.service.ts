@@ -14,17 +14,19 @@ import { ElectronService } from './electron.service.js';
 export class I18nService {
 
   data: any = {};
-  supportedLanguages: any[] = [
-    { code: "en", name: "English", data: EN },
-    { code: "fr", name: "Français", data: FR },
-    { code: "de", name: "Deutsch", data: DE },
-    { code: "es", name: "Español", data: ES },
-    { code: "it", name: "Italiano", data: IT },
+  supportedLanguages: LangData[] = [
+    { code: "en", name: "English", data: EN, iso: "en-US" },
+    { code: "fr", name: "Français", data: FR, iso: "fr-FR" },
+    { code: "de", name: "Deutsch", data: DE, iso: "de-DE" },
+    { code: "es", name: "Español", data: ES, iso: "es-ES" },
+    { code: "it", name: "Italiano", data: IT, iso: "it-IT" },
   ];
   selectedLang: string;
+  currentLangFullData: LangData;
 
   constructor(private electronService: ElectronService) {
-    this.selectedLang = this.getDefaultLang().code;
+    this.currentLangFullData = this.getDefaultLang();
+    this.selectedLang = this.currentLangFullData.code;
   }
 
   getSupportedLanguages() {
@@ -43,8 +45,10 @@ export class I18nService {
     const found: any = this.supportedLanguages.find((sl: any) => sl.code === lang);
     if (found === undefined) {
       this.data = this.supportedLanguages[0].data;
+      this.currentLangFullData = this.supportedLanguages[0];
     } else {
       this.data = found.data;
+      this.currentLangFullData = found;
     }
   }
 
@@ -59,4 +63,11 @@ export class I18nService {
       this.electronService.api.setLang(lang);
     }
   }
+}
+
+export interface LangData {
+  code: string;
+  name: string;
+  data: any;
+  iso: string;
 }

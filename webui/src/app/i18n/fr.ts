@@ -14,6 +14,7 @@ const FR = {
     "menu.darkmode": "Mode sombre",
     "menu.login": "S'identifier",
     "menu.logout": "Se déconnecter",
+    "menu.speech": "Synthèse vocale",
     // tree
     "tree.rename": "Renommer",
     "tree.addchapter": "Ajouter un chapitre",

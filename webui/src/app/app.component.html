@@ -38,20 +38,26 @@
   </div>
   <div class="app-header-menu">
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.savenow' | i18n }}"
-      (click)="editorService.backup()" *ngIf="editorService.loadedProject !== undefined"><i
-        class="bi bi-floppy"></i></div>
+      (click)="editorService.backup()" *ngIf="editorService.loadedProject !== undefined"><i class="bi bi-floppy"></i>
+    </div>
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.openorcreate' | i18n }}"
       (click)="editorService.listAllProjects()"><i class="bi bi-folder2-open"></i>
     </div>
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.export' | i18n }}"
-      (click)="editorService.exportEpub()"
-      *ngIf="editorService.loadedProject !== undefined"><i class="bi bi-box-arrow-up"></i>
+      (click)="editorService.exportEpub()" *ngIf="editorService.loadedProject !== undefined"><i
+        class="bi bi-box-arrow-up"></i>
     </div>
-    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.darkmode' | i18n }}" (click)="toggleDarkMode()"><i class="bi bi-highlights"></i></div>
+    @if (!cloudMode) {
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.darkmode' | i18n }}"
+      (click)="toggleDarkMode()"><i class="bi bi-highlights"></i></div>
+    }
+    @if (editorService.editorEnable && editorService.loadedProject !== undefined && !editorService.isCharacterContext()) {
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.speech' | i18n }}" (click)="speech()"><i
+        class="bi" [class]="tts.isSpeaking() ? 'bi-stop-circle' : 'bi-voicemail'"></i></div>
+    }
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'main.settings' | i18n }}"
       (click)="editorService.openSettings()"><i class="bi bi-gear"></i></div>
-    <div class="app-header-button me-3" placement="left"
-      ngbTooltip="{{sessionService.userInfo.fullname}}"
+    <div class="app-header-button me-3" placement="left" ngbTooltip="{{sessionService.userInfo.fullname}}"
       *ngIf="!!cloudMode && sessionService.connected" (click)="openLogoutModal()"><i class="bi bi-person-check"
         style="color: green;"></i></div>
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.login' | i18n }}"
@@ -89,8 +95,7 @@
         <li>
           <div class="app-separator"></div>
         </li>
-        <li class="nav-item app-only-on-small-device"
-          *ngIf="editorService.loadedProject !== undefined">
+        <li class="nav-item app-only-on-small-device" *ngIf="editorService.loadedProject !== undefined">
           <button type="button" class="btn app-nav-item" (click)="editorService.backup()">
             <div class="bi bi-floppy ms-2 me-1">&nbsp; {{ 'menu.savenow' | i18n }}</div>
           </button>
@@ -100,8 +105,7 @@
             <div class="bi bi-folder2-open ms-2 me-1">&nbsp; {{ 'menu.openorcreate' | i18n }}</div>
           </button>
         </li>
-        <li class="nav-item app-only-on-small-device"
-          *ngIf="editorService.loadedProject !== undefined">
+        <li class="nav-item app-only-on-small-device" *ngIf="editorService.loadedProject !== undefined">
           <button type="button" class="btn app-nav-item" (click)="editorService.exportEpub()">
             <div class="bi bi-box-arrow-up ms-2 me-1">&nbsp; {{ 'menu.export' | i18n }}</div>
           </button>
