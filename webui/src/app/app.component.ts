@@ -116,7 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (!!result) {
           const selectedText = this.editorService.getSelectedTextOrUndefined();
-          this.tts.start(selectedText !== undefined ? selectedText : this.editorService.getEditorText());
+          this.tts.start(selectedText !== undefined && selectedText.length > 0 ? selectedText : this.editorService.getEditorText());
         }
       });
     }

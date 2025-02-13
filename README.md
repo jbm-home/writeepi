@@ -4,6 +4,18 @@ Main site: https://www.writeepi.com
 Simple, accessible but powerful all-in-one word-processing and organization app for writers
 
 ![screenshot](assets/capture.png)
+## Community
+Join our community to share ideas, ask questions and more on the [Reddit r/Writeepi](https://www.reddit.com/r/Writeepi/)
+## Features
+- **Organize chapters** with an intuitive structure to easily navigate and reorder your story.
+- **Add contextual notes** or use a **dedicated note section** to keep track of ideas and research.
+- **Manage and organize characters** to maintain consistency and detail throughout your writing.
+- **Handle and track locations** with dedicated tools for setting development.
+- **Multi-language support** (French, English, Italian, German, and Spanish) for a flexible writing environment.
+- **Export your project** in multiple formats, including **PDF, EPUB, DOCX**, and the native **JSON** format for backup or later import.
+- **Text-to-speech integration** to listen to your text for better proofreading and accessibility.
+- **Word count tracker** and global writing goals to help you meet your objectives.
+- **More features coming soon** to enhance your writing experience even further.
 ## Story
 ### Looking for a simple yet powerful writing tool that keeps your work organized and secure?
 This project was born from my own need to store writing projects in a safe, easy-to-manage format, with handy features like chapter and scene organization, location and character tracking, and context-based note-taking.
@@ -11,7 +23,7 @@ This project was born from my own need to store writing projects in a safe, easy
 To help you share and preview your work, you can also export to PDF, DOCX or EPUB3, making it easier than ever to create editor-ready files. Although I originally envisioned an "all-cloud" solution, I shifted to a desktop application for full offline control and made it open source so the community could help improve and adapt it quickly.
 
 ### Exciting news:
-I’ve now restored the cloud version, so you can run your own server and enjoy a more flexible workflow—whether that means collaborating online or simply keeping your writing accessible from anywhere. And because your content is priceless, robust backup management is at the heart of the project.
+I’ve now restored the cloud version, so you can try on https://app.writeepi.com or run your own server and enjoy a more flexible workflow, whether that means collaborating online or simply keeping your writing accessible from anywhere. And because your content is priceless, robust backup management is at the heart of the project.
 
 By gathering user feedback and embracing open-source contributions, this software will continue to evolve, helping authors create with confidence. If you’re looking for a writing tool that’s both convenient and secure, give it a try and help shape its future!
 ## Support the project
