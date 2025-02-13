@@ -1,6 +1,6 @@
 {
   "name": "writeepi",
-  "version": "25.2.11",
+  "version": "25.2.13",
   "author": "Writeepi",
   "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
   "exports": "./dist/desktop/src/main.js",

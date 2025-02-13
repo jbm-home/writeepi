@@ -110,11 +110,22 @@
             <div class="bi bi-box-arrow-up ms-2 me-1">&nbsp; {{ 'menu.export' | i18n }}</div>
           </button>
         </li>
+        @if (!cloudMode) {
         <li class="nav-item app-only-on-small-device">
           <button type="button" class="btn app-nav-item" (click)="toggleDarkMode()">
             <div class="bi bi-highlights ms-2 me-1">&nbsp; {{ 'menu.darkmode' | i18n }}</div>
           </button>
         </li>
+        }
+        @if (editorService.editorEnable && editorService.loadedProject !== undefined &&
+        !editorService.isCharacterContext()) {
+        <li class="nav-item app-only-on-small-device">
+          <button type="button" class="btn app-nav-item" (click)="speech()">
+            <div class="bi ms-2 me-1" [class]="tts.isSpeaking() ? 'bi-stop-circle' : 'bi-voicemail'">&nbsp; {{
+              'menu.speech' | i18n }}</div>
+          </button>
+        </li>
+        }
         <li class="nav-item">
           <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.showSettings"
             (click)="editorService.openSettings()">
