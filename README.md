@@ -5,7 +5,7 @@ Simple, accessible but powerful all-in-one word-processing and organization app 
 
 ![screenshot](assets/capture.png)
 ## Community
-Join our community to share ideas, ask questions and more on the [Reddit r/Writeepi](https://www.reddit.com/r/Writeepi/)
+Join our community to share ideas, ask questions and more on https://community.writeepi.com
 ## Features
 - **Organize chapters** with an intuitive structure to easily navigate and reorder your story.
 - **Add contextual notes** or use a **dedicated note section** to keep track of ideas and research.
