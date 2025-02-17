@@ -70,7 +70,7 @@ export class BackupService {
         const userUid = await MariaDb.escape(req.session.uid);
 
         if (UuidUtils.isValidUuid(req.session.uid)) {
-            const project: UserProject = DefaultProject.DEFAULT_PROJECT;
+            const project: UserProject = DefaultProject.buildDefaultProject();
             project.userId = userUid;
             await MariaDb.request(`INSERT INTO \`user_content\` (\`id\`, \`userId\`, \`lang\`, \`title\`, \`author\`, \`description\`, \`settings\`, \`content\`) VALUES(
                     ${await MariaDb.escape(project.id)},

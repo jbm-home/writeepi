@@ -114,13 +114,13 @@ export class Project {
     try {
       let backup = this.desktop.mainstore.get('current') as any[];
       if (backup === undefined || backup.length === 0) {
-        return DefaultProject.DEFAULT_PROJECT;
+        return DefaultProject.buildDefaultProject();
       } else {
         const candidate = backup.find((elem) => elem.id === id)
-        return candidate !== undefined ? candidate : DefaultProject.DEFAULT_PROJECT;
+        return candidate !== undefined ? candidate : DefaultProject.buildDefaultProject();
       }
     } catch (e) {
-      return DefaultProject.DEFAULT_PROJECT;
+      return DefaultProject.buildDefaultProject();
     }
   }
 
@@ -142,7 +142,7 @@ export class Project {
   }
 
   handleCreateProject = async (event: any, data: UserProject) => {
-    return DefaultProject.DEFAULT_PROJECT;
+    return DefaultProject.buildDefaultProject();
   }
 
   handleNewGuid = async (event: any) => {

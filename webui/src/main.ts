@@ -43,8 +43,8 @@ bootstrapApplication(AppComponent, {
                     [{ 'script': 'sub' }, { 'script': 'super' }],
                     [{ 'align': [] }],
                     [{ 'indent': '-1' }, { 'indent': '+1' }],
-                    [{ 'color': [] }, { 'background': [] }],
-                    ['link', 'image']
+                    // [{ 'color': [] }, { 'background': [] }],
+                    // ['link', 'image']
                 ]
             },
             placeholder: '',
