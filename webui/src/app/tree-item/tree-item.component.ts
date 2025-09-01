@@ -15,10 +15,14 @@ export class TreeItemComponent implements OnInit {
   @Input() level: number = 0;
 
   constructor(public editorService: EditorService,
-    private i18n: I18nService) { }
+    private i18n: I18nService) {
+    }
 
   ngOnInit(): void {
-    //
+  }
+
+  nextLevel() {
+    return this.level + 1;
   }
 
   translate(name: string) {

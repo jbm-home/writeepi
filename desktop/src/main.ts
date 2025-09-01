@@ -87,6 +87,7 @@ export class WriteepiDesktop {
       e.preventDefault();
       this.mainWindow?.destroy();
     });
+    // this.mainWindow.webContents.openDevTools();
   }
 
   onWindowAllClosed = () => {
