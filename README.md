@@ -5,7 +5,7 @@ Simple, accessible but powerful all-in-one word-processing and organization app 
 
 ![screenshot](assets/capture.png)
 ## Community
-Join our community to share ideas, ask questions and more on https://community.writeepi.com
+Join our community to share ideas, ask questions and more on https://miscaf.com/m/Writeepi
 ## Features
 - **Organize chapters** with an intuitive structure to easily navigate and reorder your story.
 - **Add contextual notes** or use a **dedicated note section** to keep track of ideas and research.
@@ -28,7 +28,7 @@ I’ve now restored the cloud version, so you can try on https://app.writeepi.co
 By gathering user feedback and embracing open-source contributions, this software will continue to evolve, helping authors create with confidence. If you’re looking for a writing tool that’s both convenient and secure, give it a try and help shape its future!
 ## Support the project
 Writeepi is free and open source, but I don't mind a little "coffee"! If you'd like to support me and contribute to the costs of hosting the site, the forum and the infrastructure needed to develop the project. I'm not giving up hope on the cloud version (which was the first version) and developing a free and secure structure thanks to you!
-You can buy me a coffee (or two!) right here: buymeacoffee.com/writeepi
+You can buy me a coffee (or two!) right here: https://buymeacoffee.com/jeremieb
 
 Your support goes a long way toward ensuring Writeepi remains a robust, community-driven tool for all writers. Thank you!
 ## Download
