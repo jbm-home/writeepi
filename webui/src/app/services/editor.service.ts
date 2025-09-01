@@ -50,6 +50,7 @@ export class EditorService {
   currentBackupUuid: string = ''; // keep me
 
   globalWordsCount: number = 0;
+  globalWordsPct: number = 0;
 
   showSettings = false;
   hasOpenningQuote = false;
@@ -356,6 +357,8 @@ export class EditorService {
 
   updateGlobalWordsCount() {
     this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: { isBook: any; }) => p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
+    const objective = this.loadedProject?.settings?.totalWords ?? 0;
+    this.globalWordsPct = objective > 0 ? Math.round(100 * this.globalWordsCount / objective) : 0;
   }
 
   disableEditor() {

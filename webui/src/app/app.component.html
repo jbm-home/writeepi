@@ -33,7 +33,7 @@
     </div>
     @if (editorService.loadedProject !== undefined && editorService.loadedProject.settings !== undefined) {
     <div>{{ 'counter.total' | i18n }} {{editorService.globalWordsCount}} /
-      {{editorService.loadedProject.settings.totalWords}}</div>
+      {{editorService.loadedProject.settings.totalWords}} ({{editorService.globalWordsPct}}%)</div>
     }
   </div>
   <div class="app-header-menu">
