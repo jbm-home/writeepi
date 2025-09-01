@@ -26,6 +26,8 @@ const EN = {
     "tree.addfolderafter": "Add folder after",
     "tree.addeditorbefore": "Add editor before",
     "tree.addeditorafter": "Add editor after",
+    "tree.movetop": "Move top",
+    "tree.movebottom": "Move bottom",
     "tree.delete": "Delete",
     "tree.emptytrash": "Empty Trash",
     // characters

@@ -26,6 +26,8 @@ const FR = {
     "tree.addfolderafter": "Ajouter un dossier après",
     "tree.addeditorbefore": "Ajouter un éditeur avant",
     "tree.addeditorafter": "Ajouter un éditeur après",
+    "tree.movetop": "Monter",
+    "tree.movebottom": "Descendre",
     "tree.delete": "Supprimer",
     "tree.emptytrash": "Vider la corbeille",
     // characters

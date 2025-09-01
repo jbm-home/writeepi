@@ -268,3 +268,9 @@ mwlResizable {
     margin: 3px 5px;
     text-align: center;
 }
+
+.bigger-textarea {
+  min-height: 200px;
+  overflow-y: scroll;
+  resize: vertical;
+}

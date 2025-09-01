@@ -21,7 +21,6 @@
     "declaration": false,
     "experimentalDecorators": true,
     "importHelpers": true,
-
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {

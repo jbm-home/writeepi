@@ -27,6 +27,8 @@ const IT = {
     "tree.addfolderafter": "Aggiungi cartella dopo",
     "tree.addeditorbefore": "Aggiungi editor prima",
     "tree.addeditorafter": "Aggiungi editor dopo",
+    "tree.movetop": "Move top",
+    "tree.movebottom": "Move bottom",
     "tree.delete": "Elimina",
     "tree.emptytrash": "Svuota il cestino",
 

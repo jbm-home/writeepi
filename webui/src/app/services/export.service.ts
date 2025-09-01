@@ -22,7 +22,7 @@ export class ExportService {
 
     async exportDocx(id: string) {
         if (AppComponent.CLOUDMODE) {
-            const docx: Buffer = await axios.get('/api/export/docx/' + id, {
+            const docx: any = await axios.get('/api/export/docx/' + id, {
                 responseType: "arraybuffer",
             });
             return new Blob([docx], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
@@ -33,7 +33,7 @@ export class ExportService {
 
     async exportEpub(id: string) {
         if (AppComponent.CLOUDMODE) {
-            const epub: Buffer = await axios.get('/api/export/epub/' + id, {
+            const epub: any = await axios.get('/api/export/epub/' + id, {
                 responseType: "arraybuffer",
             });
             return new Blob([epub], { type: 'application/epub+zip' });

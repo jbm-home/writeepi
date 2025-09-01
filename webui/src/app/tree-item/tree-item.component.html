@@ -28,6 +28,8 @@
     <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addFolderAfter(menuItem)" *ngIf="level < 3">{{ 'tree.addfolderafter' | i18n }}</div>
     <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addEditorBefore(menuItem)" *ngIf="level > 0">{{ 'tree.addeditorbefore' | i18n }}</div>
     <div ngbDropdownItem (click)="$event.preventDefault(); editorService.addEditorAfter(menuItem)" *ngIf="level > 0">{{ 'tree.addeditorafter' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.moveTop(menuItem)" *ngIf="level > 0">{{ 'tree.movetop' | i18n }}</div>
+    <div ngbDropdownItem (click)="$event.preventDefault(); editorService.moveBottom(menuItem)" *ngIf="level > 0">{{ 'tree.movebottom' | i18n }}</div>
     }
     <div ngbDropdownItem (click)="$event.preventDefault(); editorService.deleteItem(menuItem)"
         *ngIf="!menuItem.isTrash && !editorService.isTrashChild(menuItem)"

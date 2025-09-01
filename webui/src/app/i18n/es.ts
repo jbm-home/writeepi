@@ -27,6 +27,8 @@ const ES = {
     "tree.addfolderafter": "Agregar carpeta después",
     "tree.addeditorbefore": "Agregar editor antes",
     "tree.addeditorafter": "Agregar editor después",
+    "tree.movetop": "Move top",
+    "tree.movebottom": "Move bottom",
     "tree.delete": "Eliminar",
     "tree.emptytrash": "Vaciar la papelera",
 

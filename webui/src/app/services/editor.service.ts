@@ -28,6 +28,8 @@ export class ModalActions {
   addEditorBefore = { key: 'ADDEDITORBEFORE', description: 'Add an editor before' };
   delete = { key: 'DELETE', description: 'Delete this element' };
   emptyTrash = { key: 'EMPTYTRASH', description: 'Empty trash' };
+  moveTop = { key: 'MOVETOP', description: 'Move top' };
+  moveBottom = { key: 'MOVEBOTTOM', description: 'Move bottom' };
 }
 
 @Injectable({
@@ -446,6 +448,10 @@ export class EditorService {
     return this.getChildren(id).length > 0;
   }
 
+  getMaxOrderId(): number {
+    return this.loadedProject !== undefined ? Math.max(...this.loadedProject.content.map((arr: { orderId: any; }) => arr.orderId)) : 0;
+  }
+
   getNewMaxOrder(): number {
     if (this.loadedProject !== undefined) {
       let maxOrderId = Math.max(...this.loadedProject.content.map((arr: { orderId: any; }) => arr.orderId));
@@ -579,6 +585,44 @@ export class EditorService {
     this.openModal(menuItem, this.modalActions.emptyTrash);
   }
 
+  private getSiblingsSorted(menuItem: any): any[] {
+    const parentId = menuItem.parentId ?? undefined;
+    const siblings = (this.loadedProject?.content ?? []).filter(it => it.parentId === parentId);
+    return this.sortBy(siblings, (t: any) => t.orderId);
+  }
+
+  private swapWithinSiblings(menuItem: any, direction: 1 | -1): void {
+    const siblings = this.getSiblingsSorted(menuItem);
+    if (!siblings.length) return;
+
+    const idx = siblings.findIndex(it => it.id === menuItem.id);
+    if (idx < 0) return;
+
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= siblings.length) return;
+
+    const neighbor = siblings[targetIdx];
+    const tmp = neighbor.orderId;
+    neighbor.orderId = menuItem.orderId;
+    menuItem.orderId = tmp;
+  }
+
+  moveTop(menuItem: any) {
+    this.closeAllContexts();
+    this.swapWithinSiblings(menuItem, -1);
+    if (this.loadedProject?.settings.backupOnChange) {
+      this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
+    }
+  }
+
+  moveBottom(menuItem: any) {
+    this.closeAllContexts();
+    this.swapWithinSiblings(menuItem, +1);
+    if (this.loadedProject?.settings.backupOnChange) {
+      this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
+    }
+  }
+
   toggleContextualMenu(event: any, item: any) {
     event.preventDefault();
     this.loadedProject?.content.forEach((element: { context: boolean; }) => {
@@ -653,6 +697,8 @@ export class EditorService {
             menuItem.expanded = true;
             this.loadedProject?.content.push({
               id: UuidUtils.v7(),
+              chapter: '',
+              notes: '',
               parentId: menuItem.id,
               orderId: this.getNewMaxOrder(),
               name: newName.toString(),
@@ -707,6 +753,8 @@ export class EditorService {
             this.increaseOrderIdsFrom(refOrder + 1);
             this.loadedProject?.content.push({
               id: UuidUtils.v7(),
+              chapter: '',
+              notes: '',
               parentId: menuItem.parentId,
               orderId: refOrder + 1,
               name: newName.toString(),
@@ -725,6 +773,8 @@ export class EditorService {
             this.increaseOrderIdsFrom(refOrder);
             this.loadedProject?.content.push({
               id: UuidUtils.v7(),
+              chapter: '',
+              notes: '',
               parentId: menuItem.parentId,
               orderId: refOrder,
               name: newName.toString(),

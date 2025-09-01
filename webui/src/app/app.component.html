@@ -51,7 +51,8 @@
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.darkmode' | i18n }}"
       (click)="toggleDarkMode()"><i class="bi bi-highlights"></i></div>
     }
-    @if (editorService.editorEnable && editorService.loadedProject !== undefined && !editorService.isCharacterContext()) {
+    @if (editorService.editorEnable && editorService.loadedProject !== undefined && !editorService.isCharacterContext())
+    {
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.speech' | i18n }}" (click)="speech()"><i
         class="bi" [class]="tts.isSpeaking() ? 'bi-stop-circle' : 'bi-voicemail'"></i></div>
     }
@@ -236,8 +237,10 @@
           [(ngModel)]="editorService.currentCharacterData.location">
       </div>
       <div class="form-group mb-3">
-        <label for="details" class="form-text text-muted">{{ 'character.details' | i18n }}</label>
-        <textarea class="form-control" id="details" placeholder="{{ 'character.details' | i18n }}"
+        <label for="details" class="form-text text-muted">
+          {{ 'character.details' | i18n }}
+        </label>
+        <textarea class="form-control bigger-textarea" id="details" placeholder="{{ 'character.details' | i18n }}"
           [(ngModel)]="editorService.currentCharacterData.details"></textarea>
       </div>
       <div class="form-group mb-3">
