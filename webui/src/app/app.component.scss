@@ -10,6 +10,10 @@ $editor-margin: 0.5rem;
     position: fixed;
 }
 
+::ng-deep .ql-editor p {
+  margin: 0 0 0.75rem;
+}
+
 .app-header {
     width: 100vw;
     height: $header-height;
