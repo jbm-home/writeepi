@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, screen, nativeTheme } from 'electron';
 import Store from 'electron-store';
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
 import contextMenu from 'electron-context-menu';
 import { Project } from './services/project.js';
@@ -79,7 +79,8 @@ export class WriteepiDesktop {
       },
       icon: path.join(__dirname, 'favicon.png')
     });
-    const url = new URL(path.join('file:', __dirname, '../../webui/browser/index.html'));
+    const indexPath = path.join(__dirname, '../../webui/browser/index.html');
+    const url = pathToFileURL(indexPath);
     this.mainWindow.loadURL(url.href);
     this.mainWindow.setMenu(null);
     this.mainWindow.on('close', (e) => {
