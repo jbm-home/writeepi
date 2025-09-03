@@ -1,6 +1,11 @@
 <div class="ws-card">
   <div class="ws-header">
     <h3 class="ws-title">{{ title }}</h3>
+    <div class="ws-actions">
+      <button type="button" class="ws-refresh" (click)="buildTable()" title="Refresh">
+        Refresh &#x21bb;
+      </button>
+    </div>
     <div class="ws-metrics">
       <div class="ws-metric">
         <div class="ws-metric-label">{{ labelForAvg() }}</div>

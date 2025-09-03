@@ -238,7 +238,7 @@
     }
     @else if (editorService.showStats) {
     <div class="app-settings">
-      <app-word-stats-table [stats]="editorService.loadedProject.wordStats" [period]="'day'" [limit]="365"
+      <app-word-stats-table [period]="'day'" [limit]="365"
         [includeZeros]="true" title="Daily stats"></app-word-stats-table>
     </div>
     }

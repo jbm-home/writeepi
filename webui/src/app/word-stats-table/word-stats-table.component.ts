@@ -1,30 +1,25 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Period, WordStats } from '../types/userproject.js';
+import { AfterViewInit, Component, inject, Input } from '@angular/core';
+import { Period } from '../types/userproject.js';
+import { EditorService } from '../services/editor.service.js';
+import { SharedModule } from '../shared.module.js';
 
 @Component({
-  standalone: true,
   selector: 'app-word-stats-table',
-  imports: [CommonModule],
+  imports: [SharedModule],
   templateUrl: './word-stats-table.component.html',
   styleUrls: ['./word-stats-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WordStatsTableComponent {
+export class WordStatsTableComponent implements AfterViewInit {
+  private editor = inject(EditorService);
 
-  private _stats: WordStats | undefined;
-  @Input() set stats(v: WordStats | undefined) {
-    if (v !== this._stats) {
-      this._stats = v;
-      this.refresh();
-    }
+  ngAfterViewInit(): void {
+    this.buildTable();
   }
 
   private _period: Period = 'day';
   @Input() set period(p: Period) {
     if (p !== this._period) {
       this._period = p;
-      this.refresh();
     }
   }
 
@@ -33,7 +28,6 @@ export class WordStatsTableComponent {
     const clamped = Math.min(Math.max(1, Math.floor(n || 1)), 365);
     if (clamped !== this._limit) {
       this._limit = clamped;
-      this.buildRows();
     }
   }
 
@@ -46,24 +40,10 @@ export class WordStatsTableComponent {
   total = 0;
 
   private aggregated: Record<string, number> = {};
-  private loading = false;
 
-  private async refresh() {
-    if (!this._stats) {
-      this.aggregated = {};
-      this.buildRows();
-      return;
-    }
-    this.loading = true;
-    try {
-      this.aggregated = this._stats.daily;
-      console.log(this.aggregated);
-    } catch {
-      this.aggregated = {};
-    } finally {
-      this.loading = false;
-      this.buildRows();
-    }
+  public buildTable() {
+    this.aggregated = { ...(this.editor.loadedProject?.wordStats?.daily ?? {}) };
+    this.buildRows();
   }
 
   private buildRows() {
@@ -88,8 +68,4 @@ export class WordStatsTableComponent {
     if (this._period === 'week') return 'Average / week';
     return 'Average / month';
   }
-
-  get period(): Period { return this._period; }
-  get limit(): number { return this._limit; }
-  get stats(): WordStats | undefined { return this._stats; }
 }
