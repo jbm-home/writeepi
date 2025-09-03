@@ -84,6 +84,7 @@ const ES = {
     "settings.backupInterval": "Guardar cambios periódicamente cada 2 minutos (Recomendado).",
     "settings.backupAutoDisplayMessage": "Mostrar un mensaje de confirmación al guardar automáticamente.",
     "settings.about": "Acerca de",
+    "settings.buymecoffee": "¿Te gusta Writeepi? Apoya el desarrollo en",
 
     // tree nodes (structure)
     treeNodes: {

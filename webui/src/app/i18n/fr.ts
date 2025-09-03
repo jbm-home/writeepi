@@ -81,6 +81,7 @@ const FR = {
     "settings.backupInterval": "Sauvegarder les modifications périodiquement toutes les 2 minutes (recommandé).",
     "settings.backupAutoDisplayMessage": "Afficher un message de confirmation lors de l'enregistrement automatique.",
     "settings.about": "A propos",
+    "settings.buymecoffee": "Vous aimez Writeepi ? Soutenez le développement sur",
 
     // tree
     treeNodes: {

@@ -8,6 +8,7 @@ import { PdfExporter } from './services/pdfExporter.js';
 import { EpubExporter } from './services/epubExporter.js';
 import { DocxExporter } from './services/docxExporter.js';
 import { Thes } from './services/thes.js';
+import { APP_VERSION } from './version.js';
 
 export class WriteepiDesktop {
   mainWindow: BrowserWindow | null = null;
@@ -21,18 +22,7 @@ export class WriteepiDesktop {
   mainstore: Store = new Store({ name: 'writeepi', cwd: this.project.loadCustomConfig() });
   backstore: Store = new Store({ name: 'writeepi-backup', cwd: this.project.loadCustomConfig() });
 
-  version: string = '';
-
   init() {
-    const tmpVer = process.env['npm_package_version'];
-    const regexSemver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/u;
-    if (tmpVer !== undefined && tmpVer != null && tmpVer.match(regexSemver)) {
-      this.version = tmpVer;
-      console.log('Starting dekstop version: ' + this.version);
-    } else {
-      console.log('No desktop version found');
-    }
-
     app.on('ready', this.createWindow);
     app.on('window-all-closed', this.onWindowAllClosed);
 
@@ -102,7 +92,7 @@ export class WriteepiDesktop {
   }
 
   handleVersion = (event: any) => {
-    return this.version;
+    return APP_VERSION;
   }
 }
 

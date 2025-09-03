@@ -47,8 +47,7 @@
     </div>
     @if (editorService.loadedProject !== undefined) {
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.export' | i18n }}"
-      (click)="editorService.exportEpub()"><i
-        class="bi bi-box-arrow-up"></i>
+      (click)="editorService.exportEpub()"><i class="bi bi-box-arrow-up"></i>
     </div>
     }
     @if (!cloudMode) {
@@ -222,6 +221,9 @@
           'settings.backupAutoDisplayMessage' | i18n }}</mat-slide-toggle>
       </div>
       <h3 class="pt-3 pb-3">{{ 'settings.about' | i18n }}</h3>
+      <div class="mb-3">
+        {{ 'settings.buymecoffee' | i18n }} <a href="https://buymeacoffee.com/jeremieb" target="_blank">https://buymeacoffee.com/jeremieb</a>
+      </div>
       <div class="mb-3">
         {{ fullversion }}
       </div>

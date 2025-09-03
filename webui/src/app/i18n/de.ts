@@ -84,6 +84,7 @@ const DE = {
     "settings.backupInterval": "Alle 2 Minuten automatisch speichern (Empfohlen).",
     "settings.backupAutoDisplayMessage": "Bestätigungsnachricht beim automatischen Speichern anzeigen.",
     "settings.about": "Über",
+    "settings.buymecoffee": "Mögen Sie Writeepi? Unterstützen Sie die Entwicklung auf",
 
     // tree nodes (structure)
     treeNodes: {
