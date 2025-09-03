@@ -2,6 +2,7 @@ const FR = {
     // main page and components
     "main.notloaded": "Project non chargé",
     "main.settings": "Paramètres",
+    "main.stats": "Statistiques",
     "main.doubletap": "Double tap pour ouvrir le menu contextuel",
     "main.contextnotes": "Notes de contexte",
     "counter.current": "Document:",

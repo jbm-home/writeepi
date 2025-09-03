@@ -1,0 +1,15 @@
+.ws-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; background: #fff; }
+.ws-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.ws-title { margin: 0; font-size: 18px; font-weight: 600; }
+.ws-metrics { display: flex; gap: 16px; align-items: baseline; }
+.ws-metric { text-align: right; }
+.ws-metric-label { font-size: 12px; color: #6b7280; }
+.ws-metric-value { font-size: 16px; font-weight: 600; }
+.ws-muted .ws-metric-value { font-weight: 500; color: #6b7280; }
+
+.ws-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ws-table th, .ws-table td { border-top: 1px solid #f3f4f6; padding: 8px 6px; }
+.ws-table thead th { border-top: none; text-align: left; font-weight: 600; color: #374151; background: #fafafa; }
+.ws-right { text-align: right; }
+.ws-empty { color: #6b7280; font-size: 14px; padding: 8px 0; }
+.ws-footnote { display: flex; gap: 8px; margin-top: 8px; font-size: 12px; color: #6b7280; }

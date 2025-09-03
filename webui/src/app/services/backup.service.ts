@@ -1,48 +1,56 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { UserProject } from '../types/userproject.js';
+import { Period, UserProject, WordStats } from '../types/userproject.js';
 import { AppComponent } from '../app.component.js';
 import { ElectronService } from './electron.service.js';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class BackupService {
-    constructor(private electronService: ElectronService) { }
+  constructor(private electronService: ElectronService) { }
 
-    async saveBackup(project: UserProject) {
-        if (AppComponent.CLOUDMODE) {
-            return await axios.post('/api/content', project);
-        } else {
-            return await this.electronService.api.saveBackup(project);
-        }
+  async saveBackup(project: UserProject) {
+    if (AppComponent.CLOUDMODE) {
+      return await axios.post('/api/content', project);
+    } else {
+      return await this.electronService.api.saveBackup(project);
     }
+  }
 
-    async loadBackup(id: string) {
-        if (AppComponent.CLOUDMODE) {
-            return await axios.get('/api/content/' + id);
-        } else {
-            return await this.electronService.api.loadBackup(id);
-        }
+  async loadBackup(id: string) {
+    if (AppComponent.CLOUDMODE) {
+      return await axios.get('/api/content/' + id);
+    } else {
+      return await this.electronService.api.loadBackup(id);
     }
+  }
 
-    async listBackup() {
-        if (AppComponent.CLOUDMODE) {
-            return await axios.get('/api/content');
-        } else {
-            return await this.electronService.api.listBackup();
-        }
+  async getStats(stats: WordStats, period: Period) {
+    if (AppComponent.CLOUDMODE) {
+      return {};
+    } else {
+      return await this.electronService.api.getStats(stats, period);
     }
+  }
 
-    async createProject() {
-        if (AppComponent.CLOUDMODE) {
-            return await axios.post('/api/content/create');
-        } else {
-            return await this.electronService.api.createProject();
-        }
+  async listBackup() {
+    if (AppComponent.CLOUDMODE) {
+      return await axios.get('/api/content');
+    } else {
+      return await this.electronService.api.listBackup();
     }
+  }
 
-    async openStoreLocation() {
-        return await this.electronService.api.storeLocation();
+  async createProject() {
+    if (AppComponent.CLOUDMODE) {
+      return await axios.post('/api/content/create');
+    } else {
+      return await this.electronService.api.createProject();
     }
+  }
+
+  async openStoreLocation() {
+    return await this.electronService.api.storeLocation();
+  }
 }

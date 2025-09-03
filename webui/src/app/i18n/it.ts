@@ -2,6 +2,7 @@ const IT = {
     // main page and components
     "main.notloaded": "Progetto non caricato",
     "main.settings": "Impostazioni",
+    "main.stats": "Statistiche",
     "main.doubletap": "Tocca due volte per aprire il menu contestuale",
     "main.contextnotes": "Note contestuali",
     "counter.current": "Attuale:",

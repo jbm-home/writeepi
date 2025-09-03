@@ -2,6 +2,7 @@ const ES = {
     // main page and components
     "main.notloaded": "Proyecto no cargado",
     "main.settings": "Configuración",
+    "main.stats": "Estadísticas",
     "main.doubletap": "Toca dos veces para abrir el menú contextual",
     "main.contextnotes": "Notas contextuales",
     "counter.current": "Actual:",

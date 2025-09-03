@@ -2,6 +2,7 @@ const EN = {
     // main page and components
     "main.notloaded": "Project not loaded",
     "main.settings": "Settings",
+    "main.stats": "Statistics",
     "main.doubletap": "Double tap to open context menu",
     "main.contextnotes": "Context notes",
     "counter.current": "Current:",

@@ -78,6 +78,12 @@
         <app-tree-item [menuItem]="menuItem" [level]="0"></app-tree-item>
       </li>
       <li class="nav-item">
+        <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.showStats"
+          (click)="editorService.openStats()">
+          <div class="bi bi-clock-history ms-2 me-1">&nbsp; {{ 'main.stats' | i18n }}</div>
+        </button>
+      </li>
+      <li class="nav-item">
         <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.showSettings"
           (click)="editorService.openSettings()">
           <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'main.settings' | i18n }}</div>
@@ -222,11 +228,18 @@
       </div>
       <h3 class="pt-3 pb-3">{{ 'settings.about' | i18n }}</h3>
       <div class="mb-3">
-        {{ 'settings.buymecoffee' | i18n }} <a href="https://buymeacoffee.com/jeremieb" target="_blank">https://buymeacoffee.com/jeremieb</a>
+        {{ 'settings.buymecoffee' | i18n }} <a href="https://buymeacoffee.com/jeremieb"
+          target="_blank">https://buymeacoffee.com/jeremieb</a>
       </div>
       <div class="mb-3">
         {{ fullversion }}
       </div>
+    </div>
+    }
+    @else if (editorService.showStats) {
+    <div class="app-settings">
+      <app-word-stats-table [stats]="editorService.loadedProject.wordStats" [period]="'day'" [limit]="365"
+        [includeZeros]="true" title="Daily stats"></app-word-stats-table>
     </div>
     }
     @else if (editorService.isCharacterContext() && editorService.editorEnable) {

@@ -2,6 +2,7 @@ const DE = {
     // main page and components
     "main.notloaded": "Projekt nicht geladen",
     "main.settings": "Einstellungen",
+    "main.stats": "Statistiken",
     "main.doubletap": "Doppelt tippen, um das Kontextmenü zu öffnen",
     "main.contextnotes": "Kontextnotizen",
     "counter.current": "Aktuell:",

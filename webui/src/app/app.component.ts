@@ -14,10 +14,11 @@ import { TreeItemComponent } from './tree-item/tree-item.component.js';
 import { RegisterdialogComponent } from './dialogs/registerdialog/registerdialog.component.js';
 import { TextToSpeechService } from './services/textToSpeech.service.js';
 import { SpeechdialogComponent } from './dialogs/speechdialog/speechdialog.component.js';
+import { WordStatsTableComponent } from './word-stats-table/word-stats-table.component.js';
 
 @Component({
   selector: 'app-root',
-  imports: [SharedModule, TreeItemComponent],
+  imports: [SharedModule, TreeItemComponent, WordStatsTableComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

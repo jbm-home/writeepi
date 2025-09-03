@@ -1,0 +1,44 @@
+<div class="ws-card">
+  <div class="ws-header">
+    <h3 class="ws-title">{{ title }}</h3>
+    <div class="ws-metrics">
+      <div class="ws-metric">
+        <div class="ws-metric-label">{{ labelForAvg() }}</div>
+        <div class="ws-metric-value">{{ avgValue }}</div>
+      </div>
+      <div class="ws-metric">
+        <div class="ws-metric-label">Total</div>
+        <div class="ws-metric-value">{{ total }}</div>
+      </div>
+      <div class="ws-metric ws-muted">
+        <div class="ws-metric-label">Entrie</div>
+        <div class="ws-metric-value">{{ rows.length }}</div>
+      </div>
+    </div>
+  </div>
+
+  <table class="ws-table" *ngIf="rows.length; else empty">
+    <thead>
+      <tr>
+        <th>{{ period === 'day' ? 'Date' : (period === 'week' ? 'Semaine' : 'Mois') }}</th>
+        <th>Words</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of rows">
+        <td>{{ r.key }}</td>
+        <td class="ws-right">{{ r.words }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #empty>
+    <div class="ws-empty">No data.</div>
+  </ng-template>
+
+  <div class="ws-footnote">
+    <span *ngIf="period==='day'">Timezone:&nbsp;{{ timeZone }}</span>
+    <span *ngIf="period==='day'">•</span>
+    <span>Average calculated {{ includeZeros ? 'including' : 'without' }} zeros.</span>
+  </div>
+</div>

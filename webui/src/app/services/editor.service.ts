@@ -53,6 +53,7 @@ export class EditorService {
   globalWordsPct: number = 0;
 
   showSettings = false;
+  showStats = false;
   hasOpenningQuote = false;
   lastBackupAt = 0;
 
@@ -207,6 +208,13 @@ export class EditorService {
   openSettings() {
     this.changeSelection();
     this.showSettings = true;
+    this.showStats = false;
+  }
+
+  openStats() {
+    this.changeSelection();
+    this.showStats = true;
+    this.showSettings = false;
   }
 
   async backup(message: boolean = true) {
@@ -380,6 +388,7 @@ export class EditorService {
     }
     if (!checked) {
       this.showSettings = true;
+      this.showStats = false;
       this.snackBar.open(`Please fill in the basic information`, 'Ok', { duration: 2000 });
     }
     return checked;
@@ -416,6 +425,7 @@ export class EditorService {
     }
     this.updateGlobalWordsCount();
     this.showSettings = false;
+    this.showStats = false;
     this.saveCurrentToProject();
     this.currentCharacterData = this.DEFAULT_CHARACTER_DATA;
     this.currentSelectedInTree = menuItem?.id;
