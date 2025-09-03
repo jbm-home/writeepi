@@ -7,7 +7,7 @@ $editor-margin: 0.5rem;
 
 // styles
 .context-menu {
-    position: fixed;
+  position: fixed;
 }
 
 ::ng-deep .ql-editor p {
@@ -15,262 +15,283 @@ $editor-margin: 0.5rem;
 }
 
 .app-header {
-    width: 100vw;
-    height: $header-height;
-    background-color: var(--header-bg);
-    border-bottom: 1px solid var(--content-bg);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    z-index: 1000;
-    justify-content: space-between;
+  width: 100vw;
+  height: $header-height;
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--content-bg);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1000;
+  justify-content: space-between;
 }
 
 .app-logo {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: left;
-    width: var(--headerlogowidth);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  width: var(--headerlogowidth);
 }
 
 .app-title-font {
-    font-family: "Lato", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 24px;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 24px;
 }
 
 .app-header-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: "Lato", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 11px;
-    line-height: 110%;
-    width: var(--headerinfowidth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 11px;
+  line-height: 110%;
+  width: var(--headerinfowidth);
 }
 
 .app-header-book-title {
-    width: 100%;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 3px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    text-align: center;
+  width: 100%;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
 }
 
 .app-header-menu {
-    width: var(--headermenuwidth);
-    display: flex;
-    align-items: right;
-    justify-content: right;
-    word-spacing: 30rem;
+  width: var(--headermenuwidth);
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  word-spacing: 30rem;
 }
 
 .app-header-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 2px 3px rgba(4, 4, 7, .2);
-    margin: 0px;
-    padding: 11px !important;
-    text-align: center;
-    height: 32px;
-    width: 32px;
-    font-size: 1rem;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 3px rgba(4, 4, 7, .2);
+  margin: 0px;
+  padding: 11px !important;
+  text-align: center;
+  height: 32px;
+  width: 32px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .app-header-button:hover {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 .app-page {
-    background-color: var(--main-bg);
-    height: calc(100vh - $header-height);
-    display: flex;
-    margin: 0;
-    padding: 0;
+  background-color: var(--main-bg);
+  height: calc(100vh - $header-height);
+  display: flex;
+  margin: 0;
+  padding: 0;
 }
 
 .app-sidebar {
-    background-color: var(--menu-bg);
-    height: calc(100vh - $header-height);
-    width: var(--sidebarwidth);
+  background-color: var(--menu-bg);
+  height: calc(100vh - $header-height);
+  width: var(--sidebarwidth);
+  overflow-y: scroll;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.app-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.app-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .app-sidebar-small-devices {
-    width: var(--sidebarsmalldeviceswidth);
+  width: var(--sidebarsmalldeviceswidth);
 }
 
 .app-content {
-    position: relative;
-    background-color: var(--content-bg);
-    width: calc(100vw - var(--sidebarwidth) - var(--rightbarwidth));
+  position: relative;
+  background-color: var(--content-bg);
+  width: calc(100vw - var(--sidebarwidth) - var(--rightbarwidth));
 }
 
 .app-editor {
-    background-color: var(--main-bg);
-    width: calc(100% - (2 * $editor-margin));
-    height: calc(100% - (2 * $editor-margin));
-    margin: $editor-margin;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  background-color: var(--main-bg);
+  width: calc(100% - (2 * $editor-margin));
+  height: calc(100% - (2 * $editor-margin));
+  margin: $editor-margin;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 mwlResizable {
-    box-sizing: border-box; // required for the enableGhostResize option to work
+  box-sizing: border-box; // required for the enableGhostResize option to work
 }
 
 .resize-handle-left,
 .resize-handle-right {
-    position: absolute;
-    height: 100%;
-    cursor: col-resize;
-    width: 0.33rem;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 40%, rgba(153, 153, 153, 1) 50%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0) 100%);
-    z-index: 999;
+  position: absolute;
+  height: 100%;
+  cursor: col-resize;
+  width: 0.33rem;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 40%, rgba(153, 153, 153, 1) 50%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0) 100%);
+  z-index: 999;
 }
 
 .resize-handle-left {
-    top: 0;
-    left: 0;
+  top: 0;
+  left: 0;
 }
 
 .resize-handle-right {
-    top: 0;
-    right: 0;
+  top: 0;
+  right: 0;
 }
 
 .app-rightbar {
-    width: var(--rightbarwidth);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+  width: var(--rightbarwidth);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .app-rightbar-menu {
-    width: 100%;
-    border-bottom: 1px solid var(--content-bg);
-    font-family: "Lato", sans-serif;
-    font-style: normal;
-    font-size: 14px;
+  width: 100%;
+  border-bottom: 1px solid var(--content-bg);
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-size: 14px;
 }
 
 .app-rightbar-textbox {
-    background-color: var(--textarea-bg);
-    width: 100%;
-    min-height: 10rem;
-    outline: 1px solid var(--content-bg);
-    border: none;
-    max-height: 95%;
-    overflow-y: scroll;
+  background-color: var(--textarea-bg);
+  width: 100%;
+  min-height: 10rem;
+  outline: 1px solid var(--content-bg);
+  border: none;
+  max-height: 95%;
+  overflow-y: scroll;
 }
 
 .app-rightbar-textbox:focus {
-    outline: 2px solid var(--content-bg);
+  outline: 2px solid var(--content-bg);
 }
 
 .app-rightbar-textbox::-webkit-scrollbar {
-    width: 12px;
-    cursor: pointer;
+  width: 12px;
+  cursor: pointer;
 }
 
 .app-rightbar-textbox::-webkit-scrollbar-track {
-    background: var(--editorscroll-bg);
+  background: var(--editorscroll-bg);
 }
 
 .app-rightbar-textbox::-webkit-scrollbar-thumb {
-    background-color: var(--editortool-bg);
-    border-radius: 20px;
-    border: 3px solid #eee;
+  background-color: var(--editortool-bg);
+  border-radius: 20px;
+  border: 3px solid #eee;
 }
 
 .nav-item {
-    width: 100%;
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 .app-nav-item {
-    display: flex;
-    align-items: left;
-    justify-content: space-between;
-    width: 100%;
-    font-family: "Lato", sans-serif;
-    font-style: normal;
-    font-size: 14px;
+  display: flex;
+  align-items: left;
+  justify-content: space-between;
+  width: 100%;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-size: 14px;
 }
 
 .app-nav-submenu {
-    width: 100%;
-    font-family: "Lato", sans-serif;
-    font-style: normal;
-    font-size: 14px;
+  width: 100%;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-size: 14px;
 }
 
 .app-nav-subitem {
-    font-family: "Lato", sans-serif;
-    font-style: normal;
-    font-size: 13px;
-    margin-top: -10px;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  margin-top: -10px;
 }
 
 .app-nav-selected {
-    background: #238a7d;
-    // background: linear-gradient(180deg, #238a7d 0%, lighten(#238a7d, 5%) 35%, lighten(#238a7d, 15%) 100%);
-    color: #fff;
+  background: #238a7d;
+  // background: linear-gradient(180deg, #238a7d 0%, lighten(#238a7d, 5%) 35%, lighten(#238a7d, 15%) 100%);
+  color: #fff;
 }
 
 .app-settings {
-    background-color: var(--main-bg);
-    padding: 20px;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
+  background-color: var(--main-bg);
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .app-settings::-webkit-scrollbar {
-    width: 12px;
-    cursor: pointer;
+  width: 12px;
+  cursor: pointer;
 }
 
 .app-settings::-webkit-scrollbar-track {
-    background: var(--editorscroll-bg);
+  background: var(--editorscroll-bg);
 }
 
 .app-settings::-webkit-scrollbar-thumb {
-    background-color: var(--editortool-bg);
-    border-radius: 20px;
-    border: 3px solid #eee;
+  background-color: var(--editortool-bg);
+  border-radius: 20px;
+  border: 3px solid #eee;
 }
 
 .app-separator {
-    background-image: url(../assets/separator.svg);
-    background-size: 60px 15px;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    width: 100%;
-    height: 15px;
+  background-image: url(../assets/separator.svg);
+  background-size: 60px 15px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  width: 100%;
+  height: 15px;
 }
 
 .app-small-italic {
-    font-size: 85%;
-    font-weight: 200;
-    font-style: italic;
-    margin: 3px 5px;
-    text-align: center;
+  font-size: 85%;
+  font-weight: 200;
+  font-style: italic;
+  margin: 3px 5px;
+  text-align: center;
 }
 
 .bigger-textarea {

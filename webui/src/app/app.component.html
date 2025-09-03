@@ -37,16 +37,20 @@
     }
   </div>
   <div class="app-header-menu">
+    @if (editorService.loadedProject !== undefined) {
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.savenow' | i18n }}"
-      (click)="editorService.backup()" *ngIf="editorService.loadedProject !== undefined"><i class="bi bi-floppy"></i>
+      (click)="editorService.backup()"><i class="bi bi-floppy"></i>
     </div>
+    }
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.openorcreate' | i18n }}"
       (click)="editorService.listAllProjects()"><i class="bi bi-folder2-open"></i>
     </div>
+    @if (editorService.loadedProject !== undefined) {
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.export' | i18n }}"
-      (click)="editorService.exportEpub()" *ngIf="editorService.loadedProject !== undefined"><i
+      (click)="editorService.exportEpub()"><i
         class="bi bi-box-arrow-up"></i>
     </div>
+    }
     @if (!cloudMode) {
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.darkmode' | i18n }}"
       (click)="toggleDarkMode()"><i class="bi bi-highlights"></i></div>

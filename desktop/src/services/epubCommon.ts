@@ -9,12 +9,12 @@ export class EpubCommon {
             title: userContent.title,
             author: userContent.author,
             prependChapterTitles: true,
-            css: "body { margin-left: .5em; margin-right: .5em; text-align: justify; }\n"
-                + "p { font-family: serif; font-size: 16pt; text-align: justify; text-indent: 1em; margin-top: 0px; margin-bottom: 1ex; }\n"
+            css: "body { margin-left: .5em; margin-right: .5em; text-align: left; }\n"
+                + "p { font-family: serif; font-size: 16pt; text-align: left; text-indent: 1em; margin-top: 0px; margin-bottom: 1ex; word-break: normal; overflow-wrap: normal; white-space: normal; hyphens: none; }\n"
                 + "h1, h2 { font-family: sans-serif; font-style: normal; text-align: center; color: black; width: 100%; }\n"
                 + "h1, h2 { margin-bottom: 50px; }\n"
                 + ".index-title { text-align: center; margin-top: 5em; margin-bottom: 5em; width: 100%; }\n"
-                + ".index-content { margin-top: 3em; text-align: justify; width: 100%; }\n"
+                + ".index-content { margin-top: 3em; text-align: left; width: 100%; }\n"
         };
         const content: Chapter[] = [];
         content.push({
@@ -36,7 +36,7 @@ export class EpubCommon {
         });
         userContent.content.forEach((c) => {
             if (c !== undefined && c.isBook && !c.isFolder) {
-                content.push({ title: c.name, content: c.chapter !== undefined && c.chapter != null ? c.chapter : '' });
+                content.push({ title: c.name, content: (c.chapter ?? '').replace(/&nbsp;/g, " ") });
             }
         });
         const epub = new EPub(options, content);
