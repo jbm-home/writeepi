@@ -25,6 +25,7 @@ export class WriteepiDesktop {
   init() {
     app.on('ready', this.createWindow);
     app.on('window-all-closed', this.onWindowAllClosed);
+    app.on('activate', this.onActivate);
 
     ipcMain.handle('save-backup', this.project.handleSaveBackup);
     ipcMain.handle('load-backup', this.project.handleLoadBackup);
@@ -76,6 +77,7 @@ export class WriteepiDesktop {
     this.mainWindow.on('close', (e) => {
       e.preventDefault();
       this.mainWindow?.destroy();
+      this.mainWindow = null;
     });
     // this.mainWindow.webContents.openDevTools();
   }
@@ -83,6 +85,14 @@ export class WriteepiDesktop {
   onWindowAllClosed = () => {
     if (process.platform !== 'darwin') {
       app.quit();
+    }
+  }
+
+  onActivate = () => {
+    if (this.mainWindow) {
+      this.mainWindow.show();
+    } else {
+      this.createWindow();
     }
   }
 

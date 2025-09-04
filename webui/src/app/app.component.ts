@@ -46,6 +46,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.editorService.backup(true);
   }
 
+  @HostListener('document:keydown.meta.s', ['$event']) onCmdS(event: KeyboardEvent) {
+    event.preventDefault();
+    this.editorService.backup(true);
+  }
+
   constructor(
     public i18n: I18nService,
     private i18nPipe: I18nPipe,
