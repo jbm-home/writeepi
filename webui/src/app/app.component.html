@@ -158,7 +158,7 @@
 
   <!-- /end responsive -->
 
-  <div class="app-content" mwlResizable [enableGhostResize]="true">
+  <div class="app-content" mwlResizable [enableGhostResize]="true" (resizeEnd)="onResizeEnd($event)">
     <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
     @if (editorService.loadedProject === undefined || editorService.loadedProject.settings === undefined) {
     <div class="app-settings">

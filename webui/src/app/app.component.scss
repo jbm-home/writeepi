@@ -190,10 +190,11 @@ mwlResizable {
 .app-rightbar-textbox {
   background-color: var(--textarea-bg);
   width: 100%;
+  height: 98%;
   min-height: 10rem;
   outline: 1px solid var(--content-bg);
   border: none;
-  max-height: 95%;
+  max-height: 98%;
   overflow-y: scroll;
 }
 

@@ -56,4 +56,6 @@ export interface Settings {
   backupInterval: boolean;
   backupAutoDisplayMessage: boolean;
   totalWords: number;
+  leftbar?: number;
+  rightbar?: number;
 }

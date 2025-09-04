@@ -254,4 +254,31 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  onResizeEnd(event: any) {
+    const root = document.documentElement;
+
+    const currentSidebar = parseFloat(
+      getComputedStyle(root).getPropertyValue('--sidebarwidth')
+    );
+    const currentRightbar = parseFloat(
+      getComputedStyle(root).getPropertyValue('--rightbarwidth')
+    );
+
+    if (event?.edges?.left !== undefined) {
+      const newSidebar = currentSidebar + event.edges.left;
+      root.style.setProperty('--sidebarwidth', `${newSidebar > 20 ? newSidebar : 20}px`);
+      if (this.editorService.loadedProject?.settings) {
+        this.editorService.loadedProject.settings.leftbar = newSidebar;
+      }
+    }
+
+    if (event?.edges?.right !== undefined) {
+      const newRightbar = currentRightbar - event.edges.right;
+      root.style.setProperty('--rightbarwidth', `${newRightbar > 20 ? newRightbar : 20}px`);
+      if (this.editorService.loadedProject?.settings) {
+        this.editorService.loadedProject.settings.rightbar = newRightbar;
+      }
+    }
+  }
 }

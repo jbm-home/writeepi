@@ -198,6 +198,7 @@ export class EditorService {
     this.currentSelectedInTree = undefined;
     this.currentBackupUuid = '';
     this.loadedProject = undefined;
+    this.setSidebarSize();
     this.editorEnable = false;
   }
 
@@ -299,6 +300,7 @@ export class EditorService {
     });
     this.currentBackupUuid = project.id;
     this.loadedProject = project;
+    this.setSidebarSize();
     if (this.loadedProject !== undefined && !this.i18n.isSupportedLanguage(this.loadedProject.lang)) {
       if (this.i18n.isSupportedLanguage(this.i18n.selectedLang)) {
         this.loadedProject.lang = this.i18n.selectedLang;
@@ -328,6 +330,7 @@ export class EditorService {
     });
     this.currentBackupUuid = project.id;
     this.loadedProject = project;
+    this.setSidebarSize();
     this.i18n.setLang(project.lang);
     this.updateGlobalWordsCount();
     this.checkMandatorySettings();
@@ -335,10 +338,21 @@ export class EditorService {
 
   loadRecovery(data: any) {
     this.loadedProject = data;
+    this.setSidebarSize();
     this.currentBackupUuid = '';
     this.updateGlobalWordsCount();
     this.checkMandatorySettings();
     this.openSettings();
+  }
+
+  setSidebarSize() {
+    try {
+      const root = document.documentElement;
+      root.style.setProperty('--sidebarwidth', `${this.loadedProject?.settings.leftbar ?? 240}px`);
+      root.style.setProperty('--rightbarwidth', `${this.loadedProject?.settings.rightbar ?? 240}px`);
+    } catch (e) {
+      //
+    }
   }
 
   backupLocalStorage() {
