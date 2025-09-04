@@ -99,9 +99,10 @@ export class EditorService {
     const count = words.filter((w: string) => /[A-Za-zÀ-ÖØ-öø-ÿ0-9]/i.test(w)).length;
     const uc = this.getCurrentSelectedUserContent();
     if (uc !== undefined) {
-      uc.words = count;
+      uc.words = !uc.isFolder && !uc.isCharacter ? count : 0;
+      return uc.words;
     }
-    return count;
+    return 0;
   }
 
   initialize(quill: any) {
