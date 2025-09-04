@@ -42,8 +42,10 @@
   </ng-template>
 
   <div class="ws-footnote">
-    <span *ngIf="period==='day'">Timezone:&nbsp;{{ timeZone }}</span>
-    <span *ngIf="period==='day'">•</span>
-    <span>Average calculated {{ includeZeros ? 'including' : 'without' }} zeros.</span>
+    <label class="ws-checkbox">
+      <input type="checkbox" [(ngModel)]="includeZeros" (change)="buildTable()" />
+      Average calculated including zeros.
+    </label>
+    <span *ngIf="period==='day'">• Timezone:&nbsp;{{ timeZone }}</span>
   </div>
 </div>

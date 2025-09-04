@@ -31,10 +31,10 @@ export class WordStatsTableComponent implements AfterViewInit {
     }
   }
 
-  @Input() includeZeros = true;
   @Input() title = 'Word statistics';
   @Input() timeZone = 'Europe/Paris'; // TODO
 
+  includeZeros = true;
   rows: Array<{ key: string; words: number }> = [];
   avgValue = 0;
   total = 0;

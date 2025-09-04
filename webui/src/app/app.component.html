@@ -239,7 +239,7 @@
     @else if (editorService.showStats) {
     <div class="app-settings">
       <app-word-stats-table [period]="'day'" [limit]="365"
-        [includeZeros]="true" title="Daily stats"></app-word-stats-table>
+        title="Daily stats"></app-word-stats-table>
     </div>
     }
     @else if (editorService.isCharacterContext() && editorService.editorEnable) {
