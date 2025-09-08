@@ -139,9 +139,8 @@ $editor-margin: 0.5rem;
 
 .app-editor {
   background-color: var(--main-bg);
-  width: calc(100% - (2 * $editor-margin));
-  height: calc(100% - (2 * $editor-margin));
-  margin: $editor-margin;
+  width: 100%;
+  height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -149,8 +148,9 @@ $editor-margin: 0.5rem;
 
 .editor-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - (2 * $editor-margin));
+  height: calc(100% - (2 * $editor-margin));
+  margin: $editor-margin;
 
   .search-toggle {
     position: absolute;
