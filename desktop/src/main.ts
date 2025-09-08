@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen, nativeTheme } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, nativeTheme, dialog } from 'electron';
 import Store from 'electron-store';
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
@@ -9,6 +9,7 @@ import { EpubExporter } from './services/epubExporter.js';
 import { DocxExporter } from './services/docxExporter.js';
 import { Thes } from './services/thes.js';
 import { APP_VERSION } from './version.js';
+import squirrelStartup from 'electron-squirrel-startup';
 
 export class WriteepiDesktop {
   mainWindow: BrowserWindow | null = null;
@@ -22,7 +23,18 @@ export class WriteepiDesktop {
   mainstore: Store = new Store({ name: 'writeepi', cwd: this.project.loadCustomConfig() });
   backstore: Store = new Store({ name: 'writeepi-backup', cwd: this.project.loadCustomConfig() });
 
+  isFirstRun = process.argv.includes('--squirrel-firstrun');
+
   init() {
+    if (process.platform === 'win32' && squirrelStartup) {
+      app.quit();
+      return;
+    }
+    else if (this.isFirstRun) {
+      app.on('ready', this.createInstallationConfirmationWindow);
+      app.on('window-all-closed', this.onFirstRunDone);
+      return;
+    }
     app.on('ready', this.createWindow);
     app.on('window-all-closed', this.onWindowAllClosed);
     app.on('activate', this.onActivate);
@@ -82,10 +94,30 @@ export class WriteepiDesktop {
     // this.mainWindow.webContents.openDevTools();
   }
 
+  createInstallationConfirmationWindow = async () => {
+    const mainWindow = new BrowserWindow({
+      width: 0,
+      height: 0,
+      show: false,
+    });
+    await dialog.showMessageBox(mainWindow!, {
+      type: 'info',
+      buttons: ['OK'],
+      defaultId: 0,
+      title: 'Installation Successful',
+      message: 'Writeepi has been installed successfully.',
+    });
+    app.emit('window-all-closed');
+  }
+
   onWindowAllClosed = () => {
     if (process.platform !== 'darwin') {
       app.quit();
     }
+  }
+
+  onFirstRunDone = () => {
+    app.quit();
   }
 
   onActivate = () => {

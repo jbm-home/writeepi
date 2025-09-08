@@ -10,10 +10,15 @@ const config: ForgeConfig = {
     icon: 'dist/desktop/src/favicon'
   },
   makers: [
-    new MakerSquirrel({}, ['win32']),
+    new MakerSquirrel({
+      setupIcon: 'dist/desktop/src/favicon.ico',
+      loadingGif: 'dist/desktop/src/installing.gif',
+    }, ['win32']),
     new MakerZIP({}, ['darwin','linux','win32']),
     new MakerDeb({}, ['linux']),
-    new MakerDMG(),
+    new MakerDMG({
+      icon: 'dist/desktop/src/favicon.icns'
+    }),
   ]
 };
 export default config;
