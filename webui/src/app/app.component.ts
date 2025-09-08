@@ -29,6 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
   notifications = [];
   darkMode = false;
   fullversion: string = '';
+  showSearch = false;
+  searchInput = '';
 
   @HostListener("click") onClick(event: any) {
     this.editorService.closeAllContexts();
@@ -49,6 +51,16 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown.meta.s', ['$event']) onCmdS(event: KeyboardEvent) {
     event.preventDefault();
     this.editorService.backup(true);
+  }
+
+  @HostListener('document:keydown.control.f', ['$event']) onCtrlF(event: KeyboardEvent) {
+    event.preventDefault();
+    !this.showSearch && this.toggleSearch();
+  }
+
+  @HostListener('document:keydown.meta.f', ['$event']) onCmdF(event: KeyboardEvent) {
+    event.preventDefault();
+    !this.showSearch && this.toggleSearch();
   }
 
   constructor(
@@ -285,5 +297,15 @@ export class AppComponent implements OnInit, OnDestroy {
         this.editorService.loadedProject.settings.rightbar = newRightbar;
       }
     }
+  }
+
+  toggleSearch() {
+    this.searchInput = '';
+    this.editorService.searchModule?.removeStyle();
+    this.showSearch = !this.showSearch;
+  }
+
+  searchInEditor() {
+    this.editorService.searchModule?.search(this.searchInput);
   }
 }

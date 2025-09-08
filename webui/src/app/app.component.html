@@ -238,8 +238,7 @@
     }
     @else if (editorService.showStats) {
     <div class="app-settings">
-      <app-word-stats-table [period]="'day'" [limit]="365"
-        title="Daily stats"></app-word-stats-table>
+      <app-word-stats-table [period]="'day'" [limit]="365" title="Daily stats"></app-word-stats-table>
     </div>
     }
     @else if (editorService.isCharacterContext() && editorService.editorEnable) {
@@ -290,9 +289,30 @@
     </div>
     }
     @else {
-    <quill-editor class="app-editor" [(ngModel)]="editorService.editor" *ngIf="editorService.editorEnable"
-      (onEditorCreated)="editorService.initialize($event)"
-      (onContentChanged)="editorService.contentChanged($event)"></quill-editor>
+    <div class="editor-container position-relative">
+      <!-- editor -->
+      <quill-editor class="app-editor" [(ngModel)]="editorService.editor" *ngIf="editorService.editorEnable"
+        (onEditorCreated)="editorService.initialize($event)"
+        (onContentChanged)="editorService.contentChanged($event)"></quill-editor>
+
+      <!-- search button -->
+      <button class="btn btn-light btn-sm search-toggle" (click)="toggleSearch()" title="Rechercher">
+        <i class="bi bi-search"></i>
+      </button>
+
+      <!-- search field -->
+      @if (showSearch) {
+      <div class="search-box card p-2 shadow">
+        <div class="input-group input-group-sm">
+          <input type="text" class="form-control" placeholder="Rechercher..."
+            [(ngModel)]="searchInput" (keyup.enter)="searchInEditor()" (keyup.escape)="showSearch && toggleSearch()">
+          <button class="btn btn-primary" (click)="searchInEditor()">
+            <i class="bi bi-arrow-return-left"></i>
+          </button>
+        </div>
+      </div>
+      }
+    </div>
     }
     <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
   </div>

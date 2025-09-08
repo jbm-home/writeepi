@@ -12,6 +12,7 @@ import { BrowsedialogComponent } from '../dialogs/browsedialog/browsedialog.comp
 import { Failover } from '../utils/failover.js';
 import { I18nService } from './i18n.service.js';
 import { BackupService } from './backup.service.js';
+import Searcher from '../quill-plugins/searcher.js';
 
 export class ModalAction {
   key: string = '';
@@ -42,6 +43,7 @@ export class EditorService {
 
   quill?: Quill = undefined;
   editorEnable: boolean = false;
+  searchModule?: Searcher = undefined;
 
   editor: string = '';
   notes: string = '';
@@ -107,6 +109,7 @@ export class EditorService {
 
   initialize(quill: any) {
     this.quill = quill;
+    this.searchModule = this.quill?.getModule('Searcher') as Searcher;
     quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node: any, delta: any) => {
       delta.forEach((e: any) => {
         if (e.insert?.image !== undefined) {
