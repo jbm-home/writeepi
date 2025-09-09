@@ -27,8 +27,8 @@ import Searcher from './app/quill-plugins/searcher.js';
 import SearchedStringBlot from './app/quill-plugins/searchBlot.js';
 
 export function setupI18nFactory(
-    service: I18nService): Function {
-    return () => service.use('en');
+  service: I18nService): Function {
+  return () => service.use('en');
 }
 
 Quill.register('modules/Searcher', Searcher);
@@ -37,9 +37,18 @@ Quill.register(SearchedStringBlot);
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
-      BrowserModule, // tu peux le laisser si tu ne veux rien casser maintenant
+      BrowserModule,
       AppRoutingModule, FormsModule,
-      QuillModule.forRoot({ modules:{ syntax:false, toolbar:false, Searcher: true }, placeholder:'', theme:'snow' }),
+      QuillModule.forRoot({
+        formats: [],
+        modules: {
+          syntax: false, toolbar: false, Searcher: true, keyboard: {
+            bindings: {
+              'list autofill': null
+            }
+          }
+        }, placeholder: '', theme: 'snow'
+      }),
       NgbModule, NgbCollapseModule, NgbDropdownModule, NgbModalModule,
       MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule,
       MatCheckboxModule, MatBadgeModule, MatSnackBarModule, MatListModule,
