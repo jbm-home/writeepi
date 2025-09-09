@@ -29,10 +29,18 @@ class Searcher {
         );
 
         if (indices.length > 0) {
-          // this.quill.setSelection(indices[0], length, 'user');
-          const firstIndex = indices[0];
-          const bounds = this.quill.getBounds(firstIndex, length);
-          this.quill.root.scrollTop = bounds.top;
+          const container = (this.quill.scrollingContainer || this.quill.root) as HTMLElement;
+          requestAnimationFrame(() => {
+            const bounds = this.quill.getBounds(indices[0], length);
+            const margin = 16;
+            const targetTop =
+              container.scrollTop +
+              bounds.top -
+              (container.clientHeight - bounds.height) / 2 -
+              margin;
+
+            container.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
+          });
         }
       } else {
         Searcher.occurrencesIndices = null;

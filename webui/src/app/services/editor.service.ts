@@ -13,6 +13,7 @@ import { Failover } from '../utils/failover.js';
 import { I18nService } from './i18n.service.js';
 import { BackupService } from './backup.service.js';
 import Searcher from '../quill-plugins/searcher.js';
+import { cleanQuillHtmlToParagraphs } from '../utils/cleanQuill.js';
 
 export class ModalAction {
   key: string = '';
@@ -416,7 +417,7 @@ export class EditorService {
     const selected = this.getCurrentSelectedUserContent();
     if (selected !== undefined) {
       selected.isBook = this.isBookRootChild(selected);
-      selected.chapter = this.isCharacterContext() ? this.saveCharacter() : this.editor;
+      selected.chapter = this.isCharacterContext() ? this.saveCharacter() : cleanQuillHtmlToParagraphs(this.editor);
       selected.notes = this.notes;
     }
   }

@@ -304,7 +304,7 @@
       @if (showSearch) {
       <div class="search-box card p-2 shadow">
         <div class="input-group input-group-sm">
-          <input type="text" class="form-control" placeholder="Rechercher..." [(ngModel)]="searchInput"
+          <input #searchInputRef type="text" class="form-control" placeholder="Rechercher..." [(ngModel)]="searchInput"
             (keyup.enter)="searchInEditor()" (keyup.escape)="showSearch && toggleSearch()">
           <button class="btn btn-primary" (click)="searchInEditor()">
             <i class="bi bi-arrow-return-left"></i>

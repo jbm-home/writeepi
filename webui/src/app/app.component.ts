@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ElectronService } from './services/electron.service.js';
 import { EditorService } from './services/editor.service.js';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,6 +24,7 @@ import { WordStatsTableComponent } from './word-stats-table/word-stats-table.com
 })
 
 export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild('searchInputRef') searchInputRef!: ElementRef<HTMLInputElement>;
   public static CLOUDMODE = false;
 
   notifications = [];
@@ -303,6 +304,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.searchInput = '';
     this.editorService.searchModule?.removeStyle();
     this.showSearch = !this.showSearch;
+    if (this.showSearch) {
+      setTimeout(() => {
+        this.searchInputRef?.nativeElement.focus();
+      });
+    }
   }
 
   searchInEditor() {
