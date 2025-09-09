@@ -213,6 +213,14 @@
         <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.spaceConf">{{ 'settings.spaceConf' |
           i18n }}</mat-slide-toggle>
       </div>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.apostropheConf">{{ 'settings.apostropheConf' |
+          i18n }}</mat-slide-toggle>
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.ellipsisConf">{{ 'settings.ellipsisConf' |
+          i18n }}</mat-slide-toggle>
+      </div>
       <h3 class="pt-3 pb-3">{{ 'settings.backupsettings' | i18n }}</h3>
       <div class="mb-3">
         <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.backupOnChange">{{

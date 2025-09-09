@@ -165,32 +165,51 @@ export class EditorService {
   }
 
   checkCharacterForReplace(character: string, position: number) {
+    const q = this.quill;
+    if (!q) return;
+  
     if (this.loadedProject?.settings.dashConf && character === "-") {
-      if (position > 0 && this.quill?.getText(position - 1, 1) === '-') {
+      if (position > 0 && q.getText(position - 1, 1) === '-') {
         // @ts-ignore
         const delta = new Delta();
         const ops = delta.retain(position - 1).insert('— ').delete(2);
-        this.quill?.updateContents(ops);
+        q.updateContents(ops);
       }
     } else if (this.loadedProject?.settings.spaceConf && character === " ") {
-      if (position > 0 && this.quill?.getText(position - 1, 1) === ' ') {
+      if (position > 0 && q.getText(position - 1, 1) === ' ') {
         // @ts-ignore
         const delta = new Delta();
         const ops = delta.retain(position - 1).insert('. ').delete(2);
-        this.quill?.updateContents(ops);
+        q.updateContents(ops);
+      }
+    } else if (this.loadedProject?.settings.apostropheConf && character === "'") {
+      if (position >= 0 && q) {
+        // @ts-ignore
+        const delta = new Delta();
+        const ops = delta.retain(position).insert('’').delete(1);
+        q.updateContents(ops);
+      }
+    } else if (this.loadedProject?.settings.ellipsisConf && character === ".") {
+      if (position > 1 && q.getText(position - 2, 2) === '..') {
+        // @ts-ignore
+        const delta = new Delta();
+        const ops = delta.retain(position - 2).insert('…').delete(3);
+        q.updateContents(ops);
+        q.once('editor-change', () => {
+          q.setSelection(position - 1, 0);
+        });
       }
     } else if (this.loadedProject?.settings.quoteConf) {
-      if (character === "<" && position > 0 && this.quill?.getText(position - 1, 1) === '<') {
+      if (character === "<" && position > 0 && q.getText(position - 1, 1) === '<') {
         // @ts-ignore
         const delta = new Delta();
         const ops = delta.retain(position - 1).insert('« ').delete(2);
-        this.quill?.updateContents(ops);
-      }
-      if (character === ">" && position > 0 && this.quill?.getText(position - 1, 1) === '>') {
+        q.updateContents(ops);
+      } else if (character === ">" && position > 0 && q.getText(position - 1, 1) === '>') {
         // @ts-ignore
         const delta = new Delta();
         const ops = delta.retain(position - 1).insert('» ').delete(2);
-        this.quill?.updateContents(ops);
+        q.updateContents(ops);
       }
     }
   }

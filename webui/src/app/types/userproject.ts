@@ -52,6 +52,8 @@ export interface Settings {
   dashConf: boolean;
   quoteConf: boolean;
   spaceConf: boolean;
+  apostropheConf: boolean;
+  ellipsisConf: boolean;
   backupOnChange: boolean;
   backupInterval: boolean;
   backupAutoDisplayMessage: boolean;
