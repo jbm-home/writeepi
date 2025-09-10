@@ -16,7 +16,7 @@
         <div class="ws-metric-value">{{ total }}</div>
       </div>
       <div class="ws-metric ws-muted">
-        <div class="ws-metric-label">Entrie</div>
+        <div class="ws-metric-label">Entries</div>
         <div class="ws-metric-value">{{ rows.length }}</div>
       </div>
     </div>
@@ -25,7 +25,7 @@
   <table class="ws-table" *ngIf="rows.length; else empty">
     <thead>
       <tr>
-        <th>{{ period === 'day' ? 'Date' : (period === 'week' ? 'Semaine' : 'Mois') }}</th>
+        <th>{{ period === 'day' ? 'Date' : (period === 'week' ? 'Week' : 'Month') }}</th>
         <th>Words</th>
       </tr>
     </thead>
