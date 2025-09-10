@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "25.9.9",
+  "version": "25.9.10",
   "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
   "main": "main.ts",
   "type": "module",

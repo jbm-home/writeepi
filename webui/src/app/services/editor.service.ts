@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModaleComponent } from '../modal/modal.component.js';
-import { Content, UserProject } from "../types/userproject.js";
+import { Content, UserProject, WordStats } from "../types/userproject.js";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DownloaddialogComponent } from '../dialogs/downloaddialog/downloaddialog.component.js';
@@ -167,7 +167,7 @@ export class EditorService {
   checkCharacterForReplace(character: string, position: number) {
     const q = this.quill;
     if (!q) return;
-  
+
     if (this.loadedProject?.settings.dashConf && character === "-") {
       if (position > 0 && q.getText(position - 1, 1) === '-') {
         // @ts-ignore
@@ -246,10 +246,22 @@ export class EditorService {
     if (!this.hasMandatoryInfos()) {
       return;
     }
-    this.updateGlobalWordsCount();
+    const wordsCount = this.updateGlobalWordsCount();
     this.saveCurrentToProject();
 
     if (this.loadedProject !== undefined) {
+      // stats
+      const baseStats: WordStats = this.loadedProject.wordStats
+        ? { daily: { ...this.loadedProject.wordStats.daily } }
+        : { daily: {} };
+
+      const delta = wordsCount.new - wordsCount.old;
+      const dayKey = this.getTZDayKey();
+      baseStats.daily[dayKey] = (baseStats.daily[dayKey] ?? 0) + delta;
+
+      this.loadedProject.wordStats = baseStats;
+      // end stats
+
       const data = await this.backupService.saveBackup(this.loadedProject);
 
       if (data !== undefined) {
@@ -267,6 +279,17 @@ export class EditorService {
 
     }
     this.backupLocalStorage();
+  }
+
+  private getTZDayKey(d: Date = new Date()): string {
+    // TODO: Format ISO YYYY-MM-DD avec timezone Europe/Paris
+    const fmt = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Paris',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    return fmt.format(d); // ex: "2025-09-03"
   }
 
   openProjectsModal(data: any) {
@@ -402,9 +425,11 @@ export class EditorService {
   }
 
   updateGlobalWordsCount() {
-    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: { isBook: any; }) => p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
+    const oldCount = this.globalWordsCount;
+    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: Content) => !p.isFolder && !p.isTrash && p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
     const objective = this.loadedProject?.settings?.totalWords ?? 0;
     this.globalWordsPct = objective > 0 ? Math.round(100 * this.globalWordsCount / objective) : 0;
+    return { old: oldCount, new: this.globalWordsCount };
   }
 
   disableEditor() {

@@ -1,7 +1,7 @@
 import { app, dialog } from "electron";
 import { WriteepiDesktop } from "../main.js";
 import Store from 'electron-store';
-import { Content, UserProject, WordStats } from "../../../webui/src/app/types/userproject.js";
+import { UserProject } from "../../../webui/src/app/types/userproject.js";
 import { DefaultProject } from "../../../webui/src/app/types/defaultproject.js"
 import { existsSync, writeFileSync } from 'original-fs';
 import { createHash } from "crypto"
@@ -13,7 +13,6 @@ export class Project {
   constructor(desktop: WriteepiDesktop) {
     this.desktop = desktop;
   }
-
 
   handleChangeStoreLocation = async (event: any) => {
     if (this.desktop.mainWindow != null) {
@@ -53,21 +52,6 @@ export class Project {
       const previousBackup = backup.find((elem) => elem.id === data.id);
       backup = backup.filter((elem) => elem.id !== data.id);
 
-      // stats
-      const baseStats: WordStats = previousBackup?.wordStats
-        ? { daily: { ...previousBackup.wordStats.daily } }
-        : { daily: {} };
-
-      const delta = this.computeWordsDelta(previousBackup, data);
-
-      if (delta !== 0) {
-        const dayKey = this.getTZDayKey();
-        baseStats.daily[dayKey] = (baseStats.daily[dayKey] ?? 0) + delta;
-      }
-
-      data.wordStats = baseStats;
-
-      // save normal backup
       data.updatedAt = (new Date()).toISOString();
       data.updatedTimestamp = Date.now();
       backup.push(data);
@@ -104,32 +88,6 @@ export class Project {
     } catch (e: any) {
       return undefined;
     }
-  }
-
-  private getTZDayKey(d: Date = new Date()): string {
-    // TODO: Format ISO YYYY-MM-DD avec timezone Europe/Paris
-    const fmt = new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'Europe/Paris',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-    return fmt.format(d); // ex: "2025-09-03"
-  }
-
-  private sumWords(contents: Content[] | undefined): number {
-    if (!contents || contents.length === 0) return 0;
-    let sum = 0;
-    for (const c of contents) {
-      if (!c.isFolder && !c.isTrash && c.isBook) sum += (typeof c.words === 'number' ? c.words : 0);
-    }
-    return sum;
-  }
-
-  private computeWordsDelta(prevProj: UserProject | undefined, newProj: UserProject): number {
-    const prevSum = this.sumWords(prevProj?.content);
-    const newSum = this.sumWords(newProj.content);
-    return newSum - prevSum;
   }
 
   handleListBackup = async (event: any) => {
