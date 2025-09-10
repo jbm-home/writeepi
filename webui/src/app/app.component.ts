@@ -64,6 +64,16 @@ export class AppComponent implements OnInit, OnDestroy {
     !this.showSearch && this.toggleSearch();
   }
 
+  @HostListener('document:keydown.control.j', ['$event']) onCtrlJ(event: KeyboardEvent) {
+    event.preventDefault();
+    this.editorService.exportJEFormat();
+  }
+
+  @HostListener('document:keydown.meta.j', ['$event']) onCmdJ(event: KeyboardEvent) {
+    event.preventDefault();
+    this.editorService.exportJEFormat();
+  }
+
   constructor(
     public i18n: I18nService,
     private i18nPipe: I18nPipe,

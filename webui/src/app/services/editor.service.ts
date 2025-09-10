@@ -466,6 +466,30 @@ export class EditorService {
     }
   }
 
+  exportJEFormat() {
+    const chapter = cleanQuillHtmlToParagraphs(this.editor);
+
+    const formattedParagraphs = chapter.replaceAll(
+      /<p>(.*?)<\/p>/gs,
+      `<p style="line-height:20px; text-align: justify;">\n$1\n</p>`
+    );
+
+    const finalHtml = `
+<div style="text-indent: 15px; padding: 2%; width: 90%; font-family: 'Times New Roman'; font-size: 16px;">
+${formattedParagraphs}
+</div>`.trim();
+
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(finalHtml).catch(err => {
+        this.snackBar.open(`Cannot copy to clipboard`, 'Ok', { duration: 3000 });
+      });
+    } else {
+      this.snackBar.open(`No clipboard available`, 'Ok', { duration: 3000 });
+    }
+
+    this.snackBar.open(`Text copied to clipboard`, 'Ok', { duration: 3000 });
+  }
+
   loadDefaultEditorContent(menuItem: Content | undefined) {
     if (menuItem === undefined) {
       return '';
