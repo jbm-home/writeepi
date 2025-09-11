@@ -40,7 +40,7 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       AppRoutingModule, FormsModule,
       QuillModule.forRoot({
-        formats: [],
+        formats: ['SearchedString'],
         modules: {
           syntax: false, toolbar: false, Searcher: true, keyboard: {
             bindings: {
