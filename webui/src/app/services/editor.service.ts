@@ -53,6 +53,7 @@ export class EditorService {
   currentBackupUuid: string = ''; // keep me
 
   globalWordsCount: number = 0;
+  globalCharsCount: number = 0;
   globalWordsPct: number = 0;
 
   showSettings = false;
@@ -429,7 +430,22 @@ export class EditorService {
     this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: Content) => !p.isFolder && !p.isTrash && p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
     const objective = this.loadedProject?.settings?.totalWords ?? 0;
     this.globalWordsPct = objective > 0 ? Math.round(100 * this.globalWordsCount / objective) : 0;
+    this.updateCharsCount();
     return { old: oldCount, new: this.globalWordsCount };
+  }
+
+  async updateCharsCount() {
+    let totalChars = 0;
+
+    this.loadedProject?.content
+      .filter((p: Content) => !p.isFolder && !p.isTrash && p.isBook)
+      .forEach((p: any) => {
+        const text = p.chapter ?? "";
+        const clean = text.replace(/<\/?p>/gi, "");
+        totalChars += clean.length;
+      });
+
+    this.globalCharsCount = totalChars;
   }
 
   disableEditor() {

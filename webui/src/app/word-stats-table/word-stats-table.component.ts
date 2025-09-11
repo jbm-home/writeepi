@@ -38,6 +38,7 @@ export class WordStatsTableComponent implements AfterViewInit {
   rows: Array<{ key: string; words: number }> = [];
   avgValue = 0;
   total = 0;
+  globalCharsCount = this.editor.globalCharsCount;
 
   private aggregated: Record<string, number> = {};
 
