@@ -467,15 +467,20 @@ export class EditorService {
   }
 
   exportJEFormat() {
+    const selected = this.getCurrentSelectedUserContent();
+    if (!selected || !this.isBookRootChild(selected)) return;
+
+    const title = `<p style="line-height:20px; text-align: center; font-weight: bold; margin: 0 0 32px 0; font-size: 18px;">${selected.name}</p>`;
     const chapter = cleanQuillHtmlToParagraphs(this.editor);
 
     const formattedParagraphs = chapter.replaceAll(
       /<p>(.*?)<\/p>/gs,
-      `<p style="line-height:20px; text-align: justify;">\n$1\n</p>`
+      `<p style="line-height:20px; text-align: justify; margin: 0 0 5px 0;">\n$1\n</p>`
     );
 
     const finalHtml = `
 <div style="text-indent: 15px; padding: 2%; width: 90%; font-family: 'Times New Roman'; font-size: 16px;">
+${title}
 ${formattedParagraphs}
 </div>`.trim();
 
