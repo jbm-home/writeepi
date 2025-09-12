@@ -2,76 +2,69 @@ import Quill from 'quill';
 
 class Searcher {
   private quill: any;
-
-  // Propriétés statiques pour gérer l’état
-  static occurrencesIndices: number[] | null = [];
-  static currentIndex = 0;
-  static SearchedStringLength = 0;
+  private overlay: HTMLElement;
 
   constructor(quill: Quill, options: any) {
     this.quill = quill;
+
+    const container = (this.quill.root as HTMLElement).parentElement;
+    this.overlay = document.createElement("div");
+    this.overlay.className = "search-overlay";
+    container?.appendChild(this.overlay);
+
+    this.quill.root.addEventListener("scroll", () => {
+      this.overlay.style.transform = `translateY(${-this.quill.root.scrollTop}px)`;
+    });
   }
 
   search(searched: string) {
     this.removeStyle();
 
-    if (searched.length > 0) {
-      const totalText = this.quill.getText();
-      const re = new RegExp(searched, 'gi');
-      const match = re.test(totalText);
+    const text = this.quill.getText();
+    const regex = new RegExp(searched, "gi");
+    let match;
+    const bounds: any[] = [];
 
-      if (match) {
-        const indices = (Searcher.occurrencesIndices = totalText.getIndicesOf(searched));
-        const length = (Searcher.SearchedStringLength = searched.length);
-
-        indices.forEach((index: any) =>
-          this.quill.formatText(index, length, 'SearchedString', true)
-        );
-
-        if (indices.length > 0) {
-          const container = (this.quill.scrollingContainer || this.quill.root) as HTMLElement;
-          requestAnimationFrame(() => {
-            const bounds = this.quill.getBounds(indices[0], length);
-            const margin = 16;
-            const targetTop =
-              container.scrollTop +
-              bounds.top -
-              (container.clientHeight - bounds.height) / 2 -
-              margin;
-
-            container.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
-          });
-        }
-      } else {
-        Searcher.occurrencesIndices = null;
-        Searcher.currentIndex = 0;
-      }
+    while ((match = regex.exec(text)) !== null) {
+      const index = match.index;
+      const length = match[0].length;
+      bounds.push(this.quill.getBounds(index, length));
     }
+
+    bounds.forEach(bound => {
+      const highlight = document.createElement("div");
+      highlight.className = "search-highlight";
+      highlight.style.top = bound.top + "px";
+      highlight.style.left = bound.left + "px";
+      highlight.style.width = bound.width + "px";
+      highlight.style.height = bound.height + "px";
+
+      this.overlay.appendChild(highlight);
+    });
+
+    const container = this.quill.root as HTMLElement;
+    if (bounds.length > 0 && container) {
+      requestAnimationFrame(() => {
+        const margin = 16;
+        const targetTop =
+          container.scrollTop +
+          bounds[0].top -
+          (container.clientHeight - bounds[0].height) / 2 -
+          margin;
+
+        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
+      });
+    }
+
+    // setTimeout(() => {
+    //   this.removeStyle();
+    // }, 1000);
   }
 
   removeStyle() {
-    this.quill.formatText(0, this.quill.getText().length, 'SearchedString', false);
+    if (!this.overlay) return;
+    this.overlay.innerHTML = '';
   }
 }
-
-declare global {
-  interface String {
-    getIndicesOf(searchStr: string): number[];
-  }
-}
-
-String.prototype.getIndicesOf = function (searchStr: string): number[] {
-  const searchStrLen = searchStr.length;
-  let startIndex = 0;
-  let index;
-  const indices: number[] = [];
-
-  while ((index = this.toLowerCase().indexOf(searchStr.toLowerCase(), startIndex)) > -1) {
-    indices.push(index);
-    startIndex = index + searchStrLen;
-  }
-
-  return indices;
-};
 
 export default Searcher;

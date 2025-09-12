@@ -24,7 +24,6 @@ import { ResizableDirective } from 'angular-resizable-element';
 import { AppComponent } from './app/app.component.js';
 import Quill from 'quill';
 import Searcher from './app/quill-plugins/searcher.js';
-import SearchedStringBlot from './app/quill-plugins/searchBlot.js';
 
 export function setupI18nFactory(
   service: I18nService): Function {
@@ -32,7 +31,6 @@ export function setupI18nFactory(
 }
 
 Quill.register('modules/Searcher', Searcher);
-Quill.register(SearchedStringBlot);
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -40,7 +38,7 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       AppRoutingModule, FormsModule,
       QuillModule.forRoot({
-        formats: ['SearchedString'],
+        formats: [],
         modules: {
           syntax: false, toolbar: false, Searcher: true, keyboard: {
             bindings: {

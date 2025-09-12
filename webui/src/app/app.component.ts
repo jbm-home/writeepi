@@ -55,15 +55,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.editorService.backup(true);
   }
 
-  @HostListener('document:keydown.control.f', ['$event']) onCtrlF(event: KeyboardEvent) {
-    event.preventDefault();
-    !this.showSearch && this.toggleSearch();
-  }
+  // @HostListener('document:keydown.control.f', ['$event']) onCtrlF(event: KeyboardEvent) {
+  //   event.preventDefault();
+  //   !this.showSearch && this.toggleSearch();
+  // }
 
-  @HostListener('document:keydown.meta.f', ['$event']) onCmdF(event: KeyboardEvent) {
-    event.preventDefault();
-    !this.showSearch && this.toggleSearch();
-  }
+  // @HostListener('document:keydown.meta.f', ['$event']) onCmdF(event: KeyboardEvent) {
+  //   event.preventDefault();
+  //   !this.showSearch && this.toggleSearch();
+  // }
 
   @HostListener('document:keydown.control.j', ['$event']) onCtrlJ(event: KeyboardEvent) {
     event.preventDefault();
@@ -319,18 +319,18 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleSearch() {
-    this.searchInput = '';
-    this.editorService.searchModule?.removeStyle();
-    this.showSearch = !this.showSearch;
-    if (this.showSearch) {
-      setTimeout(() => {
-        this.searchInputRef?.nativeElement.focus();
-      });
-    }
-  }
+  // toggleSearch() {
+  //   this.searchInput = '';
+  //   this.editorService.searchModule?.removeStyle();
+  //   this.showSearch = !this.showSearch;
+  //   if (this.showSearch) {
+  //     setTimeout(() => {
+  //       this.searchInputRef?.nativeElement.focus();
+  //     });
+  //   }
+  // }
 
-  searchInEditor() {
-    this.editorService.searchModule?.search(this.searchInput);
-  }
+  // searchInEditor() {
+  //   this.editorService.searchModule?.search(this.searchInput);
+  // }
 }
