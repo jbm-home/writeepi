@@ -531,7 +531,6 @@ ${formattedParagraphs}
     if (!this.checkMandatorySettings()) {
       return;
     }
-    this.updateGlobalWordsCount();
     this.showSettings = false;
     this.showStats = false;
     this.saveCurrentToProject();
