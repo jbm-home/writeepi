@@ -427,7 +427,7 @@ export class EditorService {
 
   updateGlobalWordsCount() {
     const oldCount = this.globalWordsCount;
-    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: Content) => !p.isFolder && !p.isTrash && p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
+    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
     const objective = this.loadedProject?.settings?.totalWords ?? 0;
     this.globalWordsPct = objective > 0 ? Math.round(100 * this.globalWordsCount / objective) : 0;
     this.updateCharsCount();
@@ -438,7 +438,7 @@ export class EditorService {
     let totalChars = 0;
 
     this.loadedProject?.content
-      .filter((p: Content) => !p.isFolder && !p.isTrash && p.isBook)
+      .filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook)
       .forEach((p: any) => {
         const text = p.chapter ?? "";
         const clean = text.replace(/<\/?p>/gi, "");

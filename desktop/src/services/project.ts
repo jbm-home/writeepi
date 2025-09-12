@@ -67,9 +67,6 @@ export class Project {
         const elem2Ts = elem2.updatedTimestamp !== undefined ? elem2.updatedTimestamp : 0;
         return elem2Ts - elem1Ts;
       }).find((elem) => elem.id === data.id);
-      if (optBackup === undefined) {
-        optBackup = [];
-      }
       if (previousBackup !== undefined) {
         if (lastBackup === undefined || lastBackup.updatedTimestamp === undefined || Date.now() > lastBackup.updatedTimestamp + 600000) {
           optBackup.push(previousBackup);
