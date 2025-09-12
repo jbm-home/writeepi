@@ -6,14 +6,14 @@ export function cleanQuillHtmlToParagraphs(html: string): string {
       .replace(/\u00a0/g, " ")         // NBSP -> space
       .replace(/\s+/g, " ")            // multiple spaces -> only one
       .trim();
-    return textOnly ? `<p>${escapeHtml(textOnly)}</p>` : "";
+    return textOnly ? `<p>${textOnly}</p>` : "";
   }
 
   const container = doc.createElement("div");
   container.innerHTML = html ?? "";
 
   const blocks = container.querySelectorAll(
-    "p, li, div, h1, h2, h3, h4, h5, h6, blockquote, pre"
+    "p, li, h1, h2, h3, h4, h5, h6, blockquote, pre"
   );
 
   const paras: string[] = [];
@@ -22,7 +22,7 @@ export function cleanQuillHtmlToParagraphs(html: string): string {
       .replace(/\u00a0/g, " ") // NBSP -> space
       .replace(/\s+/g, " ")    // compress spaces + newlines
       .trim();
-    if (clean) paras.push(`<p>${escapeHtml(clean)}</p>`);
+    if (clean) paras.push(`<p>${clean}</p>`);
   };
 
   if (blocks.length === 0) {
@@ -32,13 +32,4 @@ export function cleanQuillHtmlToParagraphs(html: string): string {
   }
 
   return paras.join("");
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
