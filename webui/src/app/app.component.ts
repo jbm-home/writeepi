@@ -319,7 +319,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  // toggleSearch() {
+  toggleSearch() {
   //   this.searchInput = '';
   //   this.editorService.searchModule?.removeStyle();
   //   this.showSearch = !this.showSearch;
@@ -328,9 +328,9 @@ export class AppComponent implements OnInit, OnDestroy {
   //       this.searchInputRef?.nativeElement.focus();
   //     });
   //   }
-  // }
+  }
 
-  // searchInEditor() {
+  searchInEditor() {
   //   this.editorService.searchModule?.search(this.searchInput);
-  // }
+  }
 }
