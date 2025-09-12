@@ -37,8 +37,8 @@ export class WordStatsTableComponent implements AfterViewInit {
   includeZeros = true;
   rows: Array<{ key: string; words: number }> = [];
   avgValue = 0;
-  total = 0;
   globalCharsCount = this.editor.globalCharsCount;
+  globalWordsCount = this.editor.globalWordsCount;
 
   private aggregated: Record<string, number> = {};
 
@@ -54,14 +54,14 @@ export class WordStatsTableComponent implements AfterViewInit {
     const limited = entries.slice(0, this._limit);
     this.rows = limited.map(([key, words]) => ({ key, words }));
 
-    this.total = this.rows.reduce((s, r) => s + r.words, 0);
+    const total = this.rows.reduce((s, r) => s + r.words, 0);
 
     const denom =
       this.includeZeros
         ? (this.rows.length || 1)
         : (this.rows.filter(r => r.words !== 0).length || 1);
 
-    this.avgValue = Math.round((this.total / denom) * 100) / 100;
+    this.avgValue = Math.round((total / denom) * 100) / 100;
   }
 
   labelForAvg(): string {

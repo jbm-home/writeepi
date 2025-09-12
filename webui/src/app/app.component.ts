@@ -15,6 +15,7 @@ import { RegisterdialogComponent } from './dialogs/registerdialog/registerdialog
 import { TextToSpeechService } from './services/textToSpeech.service.js';
 import { SpeechdialogComponent } from './dialogs/speechdialog/speechdialog.component.js';
 import { WordStatsTableComponent } from './word-stats-table/word-stats-table.component.js';
+import { AntidoteService } from './services/antidote.service.js';
 
 @Component({
   selector: 'app-root',
@@ -82,6 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     public sessionService: SessionService,
+    private antidote: AntidoteService,
     public tts: TextToSpeechService) {
     AppComponent.CLOUDMODE = !this.electronService.isElectronApp;
     this.setThemeMode();
@@ -103,6 +105,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   get cloudMode() {
     return AppComponent.CLOUDMODE;
+  }
+
+  // TODO
+  checkText(text: string) {
+    this.antidote.getCorrections(text)
+      .then(resp => console.log('From antidote', resp))
+      .catch(err => console.error('Error', err));
   }
 
   setThemeMode() {
