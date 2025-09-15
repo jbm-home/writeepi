@@ -1,6 +1,6 @@
 {
     "name": "writeepi",
-    "version": "25.9.12",
+    "version": "25.9.15",
     "author": "Writeepi",
     "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
     "scripts": {
@@ -9,8 +9,12 @@
         "build:desktop": "cd desktop && npm run make",
         "install:desktop": "cd desktop && npm i",
         "install:server": "cd server && npm i",
+        "auditfix:webui": "cd webui && npm audit fix",
+        "auditfix:desktop": "cd desktop && npm audit fix",
+        "auditfix:server": "cd server && npm audit fix",
         "build:all": "npm run build:webui && npm run build:desktop",
         "install:all": "npm run install:webui && npm run install:desktop && npm run install:server",
+        "auditfix:all": "npm run auditfix:webui && npm run auditfix:desktop && npm run auditfix:server",
         "start:desktop": "cd desktop && npm run start",
         "start:desktop:buildfront": "cd desktop && npm run start:buildfront",
         "start:server": "cd server && npm run start",

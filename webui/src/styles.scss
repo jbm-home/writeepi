@@ -397,20 +397,8 @@ body {
   border: 3px solid #eee;
 }
 
-.search-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.search-highlight {
-  position: absolute;
-  background: red;
-  opacity: 0.4;
-  pointer-events: none;
+::highlight(search-hit) {
+  background-color: rgba(255, 235, 59, 0.9);
 }
 
 html,

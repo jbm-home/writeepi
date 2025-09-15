@@ -1,70 +1,47 @@
-import Quill from 'quill';
+type AnyRange = globalThis.Range;
 
-class Searcher {
-  private quill: any;
-  private overlay: HTMLElement;
+export default class Searcher {
+  constructor(private quill: any) { }
 
-  constructor(quill: Quill, options: any) {
-    this.quill = quill;
-
-    const container = (this.quill.root as HTMLElement).parentElement;
-    this.overlay = document.createElement("div");
-    this.overlay.className = "search-overlay";
-    container?.appendChild(this.overlay);
-
-    this.quill.root.addEventListener("scroll", () => {
-      this.overlay.style.transform = `translateY(${-this.quill.root.scrollTop}px)`;
-    });
+  clear() {
+    (CSS as any).highlights?.delete('search-hit');
   }
 
-  search(searched: string) {
-    this.removeStyle();
+  highlight(term: string) {
+    this.clear();
+    if (!term) return;
+
+    const api = (CSS as any).highlights;
+    if (!api) {
+      // highlight api not available
+      // TODO: fallback
+      return;
+    }
 
     const text = this.quill.getText();
-    const regex = new RegExp(searched, "gi");
-    let match;
-    const bounds: any[] = [];
+    const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
-    while ((match = regex.exec(text)) !== null) {
-      const index = match.index;
-      const length = match[0].length;
-      bounds.push(this.quill.getBounds(index, length));
+    const ranges: AnyRange[] = [];
+    for (let m; (m = re.exec(text));) {
+      const start = m.index;
+      const len = m[0].length;
+      const domRange = this.indexToRange(start, len);
+      if (domRange) ranges.push(domRange);
     }
 
-    bounds.forEach(bound => {
-      const highlight = document.createElement("div");
-      highlight.className = "search-highlight";
-      highlight.style.top = bound.top + "px";
-      highlight.style.left = bound.left + "px";
-      highlight.style.width = bound.width + "px";
-      highlight.style.height = bound.height + "px";
-
-      this.overlay.appendChild(highlight);
-    });
-
-    const container = this.quill.root as HTMLElement;
-    if (bounds.length > 0 && container) {
-      requestAnimationFrame(() => {
-        const margin = 16;
-        const targetTop =
-          container.scrollTop +
-          bounds[0].top -
-          (container.clientHeight - bounds[0].height) / 2 -
-          margin;
-
-        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
-      });
+    if (ranges.length) {
+      const highlight = new (window as any).Highlight(...ranges);
+      api.set('search-hit', highlight);
     }
-
-    // setTimeout(() => {
-    //   this.removeStyle();
-    // }, 1000);
   }
 
-  removeStyle() {
-    if (!this.overlay) return;
-    this.overlay.innerHTML = '';
+  private indexToRange(index: number, length: number): Range {
+    const [startLeaf, startOffset] = this.quill.getLeaf(index);
+    const [endLeaf, endOffset] = this.quill.getLeaf(index + length);
+
+    const r = new Range();
+    r.setStart(startLeaf.domNode, startOffset);
+    r.setEnd(endLeaf.domNode, endOffset);
+    return r;
   }
 }
-
-export default Searcher;
