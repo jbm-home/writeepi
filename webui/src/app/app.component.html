@@ -214,11 +214,13 @@
           i18n }}</mat-slide-toggle>
       </div>
       <div class="mb-3">
-        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.apostropheConf">{{ 'settings.apostropheConf' |
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.apostropheConf">{{
+          'settings.apostropheConf' |
           i18n }}</mat-slide-toggle>
       </div>
       <div class="mb-3">
-        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.ellipsisConf">{{ 'settings.ellipsisConf' |
+        <mat-slide-toggle checked [(ngModel)]="editorService.loadedProject.settings.ellipsisConf">{{
+          'settings.ellipsisConf' |
           i18n }}</mat-slide-toggle>
       </div>
       <h3 class="pt-3 pb-3">{{ 'settings.backupsettings' | i18n }}</h3>
@@ -317,6 +319,9 @@
           <button class="btn btn-primary" (click)="searchInEditor()">
             <i class="bi bi-arrow-return-left"></i>
           </button>
+        </div>
+        <div>
+          {{searchResults}} result(s)
         </div>
       </div>
       }

@@ -7,15 +7,15 @@ export default class Searcher {
     (CSS as any).highlights?.delete('search-hit');
   }
 
-  highlight(term: string) {
+  highlight(term: string): number {
     this.clear();
-    if (!term) return;
+    if (!term) return 0;
 
     const api = (CSS as any).highlights;
     if (!api) {
       // highlight api not available
       // TODO: fallback
-      return;
+      return 0;
     }
 
     const text = this.quill.getText();
@@ -29,9 +29,34 @@ export default class Searcher {
       if (domRange) ranges.push(domRange);
     }
 
-    if (ranges.length) {
+    if (ranges.length > 0) {
       const highlight = new (window as any).Highlight(...ranges);
       api.set('search-hit', highlight);
+
+      this.goToFirst(ranges);
+      return ranges.length;
+    }
+    return 0;
+  }
+
+  private goToFirst(ranges: Range[]) {
+    const container = this.quill.root as HTMLElement;
+
+    if (ranges.length > 0 && container) {
+      requestAnimationFrame(() => {
+        const rect = ranges[0].getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        const margin = 16;
+        const relativeTop = rect.top - containerRect.top + container.scrollTop;
+
+        const targetTop =
+          relativeTop -
+          (container.clientHeight - rect.height) / 2 -
+          margin;
+
+        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
+      });
     }
   }
 

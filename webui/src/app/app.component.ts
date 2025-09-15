@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   fullversion: string = '';
   showSearch = false;
   searchInput = '';
+  searchResults = 0;
 
   @HostListener("click") onClick(event: any) {
     this.editorService.closeAllContexts();
@@ -321,6 +322,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toggleSearch() {
     this.searchInput = '';
+    this.searchResults = 0;
     this.editorService.searchModule?.clear();
     this.showSearch = !this.showSearch;
     if (this.showSearch) {
@@ -331,6 +333,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   searchInEditor() {
-    this.editorService.searchModule?.highlight(this.searchInput);
+    this.searchResults = this.editorService.searchModule?.highlight(this.searchInput) ?? 0;
   }
 }
