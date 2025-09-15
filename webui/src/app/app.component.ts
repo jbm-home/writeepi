@@ -76,6 +76,21 @@ export class AppComponent implements OnInit, OnDestroy {
     this.editorService.exportJEFormat();
   }
 
+  @HostListener('document:keydown', ['$event'])
+  onShortcut(event: KeyboardEvent) {
+    if (
+      (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'c') ||
+      (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'c')
+    ) {
+      event.preventDefault();
+      if (this.antidote.available()) {
+        this.checkText("Je fais une ou deux fauttes.");
+      } else {
+        this.snackBar.open('Antidote is not available', 'Close', { duration: 2000 });
+      }
+    }
+  }
+
   constructor(
     public i18n: I18nService,
     private i18nPipe: I18nPipe,
@@ -111,7 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
   // TODO
   checkText(text: string) {
     this.antidote.getCorrections(text)
-      .then(resp => console.log('From antidote', resp))
+      .then(resp => console.log(`[RESULT] ${JSON.stringify(resp)}`))
       .catch(err => console.error('Error', err));
   }
 

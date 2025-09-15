@@ -24,6 +24,7 @@ import { ResizableDirective } from 'angular-resizable-element';
 import { AppComponent } from './app/app.component.js';
 import Quill from 'quill';
 import Searcher from './app/quill-plugins/searcher.js';
+import { ANTIDOTE_AUTO_CONNECT } from './app/services/antidote.service.js';
 
 export function setupI18nFactory(
   service: I18nService): Function {
@@ -55,6 +56,7 @@ bootstrapApplication(AppComponent, {
     I18nService,
     provideAppInitializer(() => inject(I18nService).use('en')),
     I18nPipe,
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: ANTIDOTE_AUTO_CONNECT, useValue: false }
   ]
 }).catch(err => console.error(err));
