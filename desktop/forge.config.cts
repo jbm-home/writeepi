@@ -7,14 +7,22 @@ import { MakerDMG } from '@electron-forge/maker-dmg';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    icon: 'dist/desktop/src/favicon'
+    icon: 'dist/desktop/src/favicon',
+    ignore: [
+      /^\/out/,
+      /^\/release/,
+      /\.map$/,
+      /^\/test($|\/)/,
+      /^\/docs($|\/)/,
+      /\.git/
+    ]
   },
   makers: [
     new MakerSquirrel({
       setupIcon: 'dist/desktop/src/favicon.ico',
       loadingGif: 'dist/desktop/src/installing.gif',
     }, ['win32']),
-    new MakerZIP({}, ['darwin','linux','win32']),
+    new MakerZIP({}, ['darwin', 'linux', 'win32']),
     new MakerDeb({}, ['linux']),
     new MakerDMG({
       icon: 'dist/desktop/src/favicon.icns'
