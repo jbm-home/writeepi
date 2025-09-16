@@ -2,7 +2,7 @@ export const config = {
     SITE_URL: 'https://www.writeepi.com',
     API_PORT: 8337,
     DB_HOST: '127.0.0.1',
-    DB_PORT: 3306,
+    DB_PORT: 5432,
     DB_NAME: 'writeepi',
     DB_USER: 'writeepi',
     DB_PASSWORD: 'database_password',

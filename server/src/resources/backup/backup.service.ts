@@ -1,45 +1,54 @@
-import { MariaDb } from "../../database/mariadb.js";
+import { Postgres } from '../../database/postgres.js';
 import bunyan from "bunyan";
 import { UuidUtils } from '../../utils/uuidutils.js';
-import { UserProject } from "../../../../webui/src/app/types/userproject.js"
-import { DefaultProject } from "../../../../webui/src/app/types/defaultproject.js"
+import { UserProject } from "../../../../webui/src/app/types/userproject.js";
+import { DefaultProject } from "../../../../webui/src/app/types/defaultproject.js";
 
 export class BackupService {
     log = bunyan.createLogger({ name: "Writeepi:Backup", level: "debug" });
 
     async getbackuplist(req: any, httpRes: any) {
-        const userUid = await MariaDb.escape(req.session.uid);
+        const userUid = req.session.uid;
 
-        if (UuidUtils.isValidUuid(req.session.uid)) {
-            const res = await MariaDb.request(`SELECT * FROM \`user_content\` WHERE \`userId\` = ${userUid} ORDER BY \`updatedAt\` DESC;`);
-            if (res.length > 0) {
-                const result: any = res.map((uc: UserProject) => { return { id: uc.id, userId: uc.userId, updatedAt: uc.updatedAt, lang: uc.lang, title: uc.title } });
-                return httpRes.status(200).json(result);
-            } else {
-                return httpRes.status(200).json([]);
-            }
+        if (UuidUtils.isValidUuid(userUid)) {
+            const res = await Postgres.query<UserProject>(
+                `SELECT id, "userId", "updatedAt", lang, title
+                   FROM user_content
+                  WHERE "userId" = $1
+                  ORDER BY "updatedAt" DESC`,
+                [userUid],
+            );
+
+            return httpRes.status(200).json(res ?? []);
         }
         return httpRes.status(400).json('Bad request');
     }
 
     async getbackup(req: any, httpRes: any) {
-        const contentUid = await MariaDb.escape(req.params.uid);
-        const userUid = await MariaDb.escape(req.session.uid);
+        const contentUid = req.params.uid;
+        const userUid = req.session.uid;
 
-        if (UuidUtils.isValidUuid(req.params.uid) && UuidUtils.isValidUuid(req.session.uid)) {
-            const res = await MariaDb.request(`SELECT * FROM \`user_content\` WHERE \`id\` = ${contentUid} AND \`userId\` = ${userUid} ORDER BY \`updatedAt\` DESC;`);
-            if (res.length > 0) {
+        if (UuidUtils.isValidUuid(contentUid) && UuidUtils.isValidUuid(userUid)) {
+            const row = await Postgres.queryOne<UserProject>(
+                `SELECT *
+                   FROM user_content
+                  WHERE id = $1 AND "userId" = $2
+                  ORDER BY "updatedAt" DESC
+                  LIMIT 1`,
+                [contentUid, userUid],
+            );
+            if (row) {
                 const result: UserProject = {
-                    id: res[0].id,
-                    userId: res[0].userId,
-                    lang: res[0].lang,
-                    title: res[0].title,
-                    description: res[0].description,
-                    author: res[0].author,
-                    settings: JSON.parse(res[0].settings),
-                    content: JSON.parse(res[0].content),
-                    createdAt: res[0].createdAt,
-                    updatedAt: res[0].updatedAt,
+                    id: row.id,
+                    userId: row.userId,
+                    lang: row.lang,
+                    title: row.title,
+                    description: row.description,
+                    author: row.author,
+                    settings: row.settings,
+                    content: row.content,
+                    createdAt: row.createdAt,
+                    updatedAt: row.updatedAt,
                 };
                 return httpRes.status(200).json(result);
             }
@@ -48,40 +57,59 @@ export class BackupService {
     }
 
     async savebackup(req: any, httpRes: any) {
-        if (UuidUtils.isValidUuid(req.session.uid) && req.body.id !== undefined && UuidUtils.isValidUuid(req.body.id)) {
-            const lang = await MariaDb.escape(req.body.lang);
-            const title = await MariaDb.escape(req.body.title);
-            const author = await MariaDb.escape(req.body.author);
-            const description = await MariaDb.escape(req.body.description);
+        const userUid = req.session.uid;
+        const contentId = req.body.id;
 
-            const settings = await MariaDb.escape(JSON.stringify(req.body.settings));
-            const content = await MariaDb.escape(JSON.stringify(req.body.content));
-
-            const uid = await MariaDb.escape(req.session.uid);
-            const id = await MariaDb.escape(req.body.id);
-            // TODO: backup previous entry
-            await MariaDb.request(`UPDATE \`user_content\` SET \`lang\` = ${lang}, \`title\` = ${title}, \`author\` = ${author}, \`description\` = ${description}, \`settings\` = ${settings}, \`content\` = ${content}, \`updatedAt\` = current_timestamp() WHERE \`id\` = ${id} AND \`userId\` = ${uid} LIMIT 1;`);
-            return httpRes.status(200).json(req.body.id);
+        if (UuidUtils.isValidUuid(userUid) && UuidUtils.isValidUuid(contentId)) {
+            await Postgres.querySimple(
+                `UPDATE user_content
+                    SET lang = $1,
+                        title = $2,
+                        author = $3,
+                        description = $4,
+                        settings = $5,
+                        content = $6,
+                        "updatedAt" = now()
+                  WHERE id = $7 AND "userId" = $8`,
+                [
+                    req.body.lang,
+                    req.body.title,
+                    req.body.author,
+                    req.body.description,
+                    req.body.settings,
+                    req.body.content,
+                    contentId,
+                    userUid,
+                ],
+            );
+            return httpRes.status(200).json(contentId);
         }
         return httpRes.status(400).json('Bad request');
     }
 
     async createProject(req: any, httpRes: any) {
-        const userUid = await MariaDb.escape(req.session.uid);
+        const userUid = req.session.uid;
 
-        if (UuidUtils.isValidUuid(req.session.uid)) {
+        if (UuidUtils.isValidUuid(userUid)) {
             const project: UserProject = DefaultProject.buildDefaultProject();
             project.userId = userUid;
-            await MariaDb.request(`INSERT INTO \`user_content\` (\`id\`, \`userId\`, \`lang\`, \`title\`, \`author\`, \`description\`, \`settings\`, \`content\`) VALUES(
-                    ${await MariaDb.escape(project.id)},
-                    ${userUid},
-                    ${await MariaDb.escape(project.lang)},
-                    ${await MariaDb.escape(project.title)},
-                    ${await MariaDb.escape(project.author)},
-                    ${await MariaDb.escape(project.description)},
-                    ${await MariaDb.escape(JSON.stringify(project.settings))},
-                    ${await MariaDb.escape(JSON.stringify(project.content))}
-                    );`);
+
+            await Postgres.querySimple(
+                `INSERT INTO user_content
+                    (id, "userId", lang, title, author, description, settings, content)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+                [
+                    project.id,
+                    project.userId,
+                    project.lang,
+                    project.title,
+                    project.author,
+                    project.description,
+                    project.settings,
+                    project.content,
+                ],
+            );
+
             return httpRes.status(200).json(project);
         }
         return httpRes.status(400).json('Bad request');

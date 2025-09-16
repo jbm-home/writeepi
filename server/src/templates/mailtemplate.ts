@@ -1,11 +1,17 @@
-export const mails = {
-    template: (line1: string, line2: string, preHeader: string, buttonLabel: string, buttonLink: string) => `
+export const MailTemplate = {
+  build: (
+    line1: string,
+    line2: string,
+    preHeader: string,
+    buttonLabel: string,
+    buttonLink: string,
+  ) => `
     <!doctype html>
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Writeepi</title>
+        <title>Miscaf</title>
         <style>
     @media only screen and (max-width: 620px) {
       table.body h1 {
@@ -117,7 +123,7 @@ export const mails = {
                         <tr>
                           <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">
                             <div style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px; text-align: center;">
-                              <img src="https://www.writeepi.com/assets/images/titre.png">
+                              <img src="https://www.miscaf.com/assets/images/titre.png">
                             </div>
                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Bonjour,</p>
                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">${line1}</p>
@@ -137,7 +143,7 @@ export const mails = {
                               </tbody>
                             </table>
                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">${line2}</p>
-                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Ceci est un message automatique, merci de ne pas y répondre.</p>
+                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">This is an automated message, please do not reply.</p>
                           </td>
                         </tr>
                       </table>
@@ -153,7 +159,7 @@ export const mails = {
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;" width="100%">
                     <tr>
                       <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; color: #999999; font-size: 12px; text-align: center;" valign="top" align="center">
-                        Writeepi <a href="https://www.writeepi.com" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">https://www.writeepi.com</a>.
+                        Miscaf <a href="https://www.miscaf.com" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">https://www.miscaf.com</a>.
                       </td>
                     </tr>
                   </table>
@@ -167,5 +173,5 @@ export const mails = {
         </table>
       </body>
     </html>
-    `
-}
+    `,
+};

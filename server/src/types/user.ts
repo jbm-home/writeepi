@@ -6,7 +6,7 @@ export interface User {
     email: string;
     phone: string;
     creation?: Date;
-    update?: Date;
+    updatedAt?: Date;
     resetkey?: string;
     resetdate?: Date;
     active: boolean;
