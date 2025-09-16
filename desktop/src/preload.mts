@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     loadBackup: (id: string) => ipcRenderer.invoke('load-backup', id),
     listBackup: () => ipcRenderer.invoke('list-backup'),
     createProject: (data: UserProject) => ipcRenderer.invoke('create-project', data),
-    export: (data: any) => ipcRenderer.invoke('export', data),
+    export: (data: UserProject) => ipcRenderer.invoke('export', data),
     buildPdf: (id: string) => ipcRenderer.invoke('build-pdf', id),
     buildEpub: (id: string) => ipcRenderer.invoke('build-epub', id),
     buildDocx: (id: string) => ipcRenderer.invoke('build-docx', id),

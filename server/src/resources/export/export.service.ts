@@ -1,10 +1,10 @@
-import { Postgres } from '../../database/postgres.js';
+import { Postgres } from "../../database/postgres.js";
 import bunyan from "bunyan";
-import { UuidUtils } from '../../utils/uuidutils.js';
-import { UserProject } from "../../../../webui/src/app/types/userproject.js"
-import { EpubCommon } from '../../../../desktop/src/services/epubCommon.js';
-import { PdfCommon } from '../../../../desktop/src/services/pdfCommon.js';
-import { DocxCommon } from '../../../../desktop/src/services/docxCommon.js';
+import { UuidUtils } from "../../utils/uuidutils.js";
+import { UserProject } from "../../../../webui/src/app/types/userproject.js";
+import { EpubCommon } from "../../../../desktop/src/services/epubCommon.js";
+import { PdfCommon } from "../../../../desktop/src/services/pdfCommon.js";
+import { DocxCommon } from "../../../../desktop/src/services/docxCommon.js";
 
 export class ExportService {
   log = bunyan.createLogger({ name: "Writeepi:Export", level: "debug" });
@@ -12,53 +12,56 @@ export class ExportService {
   async getEpub(req: any, httpRes: any) {
     const backup = await this.getBackup(req);
     if (backup !== undefined) {
-      const buffer: Buffer = await (new EpubCommon()).buildEpub(backup);
+      const buffer: Buffer = await new EpubCommon().buildEpub(backup);
       const mimeType = "application/epub+zip";
-      httpRes.setHeader(
-        "Content-Type",
-        mimeType
-      );
+      httpRes.setHeader("Content-Type", mimeType);
 
-      httpRes.setHeader("Content-Disposition", 'attachment; filename="' + backup + '.epub"');
+      httpRes.setHeader(
+        "Content-Disposition",
+        'attachment; filename="' + backup + '.epub"',
+      );
       return httpRes.send(buffer);
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 
   async getPdf(req: any, httpRes: any) {
     const backup = await this.getBackup(req);
     if (backup !== undefined) {
-      const pdf = (new PdfCommon()).buildPdf(backup);
+      const pdf = new PdfCommon().buildPdf(backup);
       if (pdf === undefined) {
-        return httpRes.status(500).json('Server error');
+        return httpRes.status(500).json("Server error");
       }
       const mimeType = "application/pdf; charset=utf-8";
+      httpRes.setHeader("Content-Type", mimeType);
       httpRes.setHeader(
-        "Content-Type",
-        mimeType
+        "Content-Disposition",
+        'attachment; filename="' + backup + '.pdf"',
       );
-      httpRes.setHeader("Content-Disposition", 'attachment; filename="' + backup + '.pdf"');
       return httpRes.send(pdf);
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 
   async getDocx(req: any, httpRes: any) {
     const backup = await this.getBackup(req);
     if (backup !== undefined) {
-      const buffer: Buffer | undefined = await (new DocxCommon()).buildDocx(backup);
-      if (buffer === undefined) {
-        return httpRes.status(500).json('Server error');
-      }
-      const mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-      httpRes.setHeader(
-        "Content-Type",
-        mimeType
+      const buffer: Buffer | undefined = await new DocxCommon().buildDocx(
+        backup,
       );
-      httpRes.setHeader("Content-Disposition", 'attachment; filename="' + backup + '.docx"');
+      if (buffer === undefined) {
+        return httpRes.status(500).json("Server error");
+      }
+      const mimeType =
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      httpRes.setHeader("Content-Type", mimeType);
+      httpRes.setHeader(
+        "Content-Disposition",
+        'attachment; filename="' + backup + '.docx"',
+      );
       return httpRes.send(buffer);
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 
   private async getBackup(req: any): Promise<UserProject | undefined> {

@@ -7,6 +7,7 @@
   "main": "./dist/desktop/src/main.js",
   "type": "module",
   "scripts": {
+    "lint": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint . --ext .ts --fix",
     "build": "npm run dist && npm run copy-files && npm run copy-app && npm run copy-resources",
     "dist": "npm run build:version && tsc",
     "clean": "rimraf out dist release build node_modules",
@@ -24,21 +25,29 @@
   },
   "license": "GPL-3.0",
   "devDependencies": {
-    "@electron-forge/cli": "^7.8.3",
-    "@electron-forge/maker-deb": "^7.8.3",
-    "@electron-forge/maker-dmg": "^7.8.3",
-    "@electron-forge/maker-squirrel": "^7.8.3",
-    "@electron-forge/maker-zip": "^7.8.3",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.8.3",
-    "@electron-forge/plugin-fuses": "^7.8.3",
-    "@electron/fuses": "^1.8.0",
+    "@electron-forge/cli": "^7.9.0",
+    "@electron-forge/maker-deb": "^7.9.0",
+    "@electron-forge/maker-dmg": "^7.9.0",
+    "@electron-forge/maker-squirrel": "^7.9.0",
+    "@electron-forge/maker-zip": "^7.9.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.9.0",
+    "@electron-forge/plugin-fuses": "^7.9.0",
+    "@types/electron-squirrel-startup": "^1.0.2",
     "@types/html-to-text": "^9.0.4",
     "@types/uuid": "^10.0.0",
-    "@types/electron-squirrel-startup": "^1.0.2",
     "copyfiles": "^2.4.1",
-    "electron": "^37.4.0",
+    "cross-env": "^10.0.0",
+    "electron": "^38.1.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-security": "^3.0.1",
+    "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript-eslint": "^8.44.0"
   },
   "dependencies": {
     "copy-folder-util": "^1.1.5",
@@ -51,7 +60,7 @@
     "html-entities": "^2.6.0",
     "html-to-text": "^9.0.5",
     "jspdf": "^3.0.2",
-    "uuid": "^11.1.0",
+    "uuid": "^13.0.0",
     "uuidv7": "^1.0.2"
   }
 }

@@ -43,7 +43,9 @@ export class WordStatsTableComponent implements AfterViewInit {
   private aggregated: Record<string, number> = {};
 
   public buildTable() {
-    this.aggregated = { ...(this.editor.loadedProject?.wordStats?.daily ?? {}) };
+    this.aggregated = {
+      ...(this.editor.loadedProject?.wordStats?.daily ?? {}),
+    };
     this.buildRows();
   }
 
@@ -56,10 +58,9 @@ export class WordStatsTableComponent implements AfterViewInit {
 
     const total = this.rows.reduce((s, r) => s + r.words, 0);
 
-    const denom =
-      this.includeZeros
-        ? (this.rows.length || 1)
-        : (this.rows.filter(r => r.words !== 0).length || 1);
+    const denom = this.includeZeros
+      ? this.rows.length || 1
+      : this.rows.filter((r) => r.words !== 0).length || 1;
 
     this.avgValue = Math.round((total / denom) * 100) / 100;
   }

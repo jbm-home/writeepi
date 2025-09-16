@@ -1,7 +1,7 @@
 type AnyRange = globalThis.Range;
 
 export default class Searcher {
-  constructor(private quill: any) { }
+  constructor(private quill: any) {}
 
   clear() {
     (CSS as any).highlights?.delete('search-hit');
@@ -22,7 +22,7 @@ export default class Searcher {
     const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
     const ranges: AnyRange[] = [];
-    for (let m; (m = re.exec(text));) {
+    for (let m; (m = re.exec(text)); ) {
       const start = m.index;
       const len = m[0].length;
       const domRange = this.indexToRange(start, len);
@@ -51,9 +51,7 @@ export default class Searcher {
         const relativeTop = rect.top - containerRect.top + container.scrollTop;
 
         const targetTop =
-          relativeTop -
-          (container.clientHeight - rect.height) / 2 -
-          margin;
+          relativeTop - (container.clientHeight - rect.height) / 2 - margin;
 
         container.scrollTo({ top: Math.max(0, targetTop), behavior: 'auto' });
       });

@@ -9,10 +9,9 @@ export interface ElectronWindow extends Window {
 declare let window: ElectronWindow;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ElectronService {
-
   public get api(): any {
     return window.electronAPI;
   }

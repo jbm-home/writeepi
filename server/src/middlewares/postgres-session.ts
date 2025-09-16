@@ -1,6 +1,6 @@
-import session, { SessionData } from 'express-session';
+import session, { SessionData } from "express-session";
 import bunyan from "bunyan";
-import { Postgres } from '../database/postgres.js';
+import { Postgres } from "../database/postgres.js";
 
 const noop = (arg1: any = undefined, arg2: any = undefined) => {};
 
@@ -19,7 +19,7 @@ export class PostgresStore extends session.Store {
         callback(null, null);
       }
     } catch (err: any) {
-      this.log.error('Get session: ' + err);
+      this.log.error("Get session: " + err);
       callback(err);
     }
   }
@@ -36,7 +36,7 @@ export class PostgresStore extends session.Store {
       );
       callback();
     } catch (err: any) {
-      this.log.error('Set session: ' + err);
+      this.log.error("Set session: " + err);
       callback(err);
     }
   }
@@ -46,7 +46,7 @@ export class PostgresStore extends session.Store {
       await Postgres.querySimple(`DELETE FROM sessions WHERE sid = $1;`, [sid]);
       callback();
     } catch (err: any) {
-      this.log.error('Destroy session: ' + err);
+      this.log.error("Destroy session: " + err);
       callback(err);
     }
   }
@@ -56,7 +56,7 @@ export class PostgresStore extends session.Store {
       await Postgres.querySimple(`DELETE FROM sessions`);
       callback();
     } catch (err: any) {
-      this.log.error('Clear sessions: ' + err);
+      this.log.error("Clear sessions: " + err);
       callback(err);
     }
   }
@@ -66,7 +66,7 @@ export class PostgresStore extends session.Store {
       const result = await Postgres.query(`SELECT * FROM sessions`);
       callback(null, result);
     } catch (err: any) {
-      this.log.error('List sessions: ' + err);
+      this.log.error("List sessions: " + err);
       callback(err);
     }
   }
@@ -78,7 +78,7 @@ export class PostgresStore extends session.Store {
       );
       callback(null, result?.count);
     } catch (err: any) {
-      this.log.error('Count sessions: ' + err);
+      this.log.error("Count sessions: " + err);
       callback(err);
     }
   }

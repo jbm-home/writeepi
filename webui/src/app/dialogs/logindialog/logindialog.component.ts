@@ -6,13 +6,13 @@ import { SharedModule } from '../../shared.module.js';
   selector: 'app-logindialog',
   imports: [SharedModule],
   templateUrl: './logindialog.component.html',
-  styleUrl: './logindialog.component.scss'
+  styleUrl: './logindialog.component.scss',
 })
 export class LogindialogComponent {
   constructor(
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {}
 
   ok(): void {
     this.dialogRef.close({ validated: true, data: this.data });

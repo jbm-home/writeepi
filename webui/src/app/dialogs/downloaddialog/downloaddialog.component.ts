@@ -9,7 +9,7 @@ import { BackupService } from '../../services/backup.service.js';
   selector: 'app-downloaddialog',
   imports: [SharedModule],
   templateUrl: './downloaddialog.component.html',
-  styleUrl: './downloaddialog.component.scss'
+  styleUrl: './downloaddialog.component.scss',
 })
 export class DownloaddialogComponent implements OnInit {
   constructor(
@@ -17,7 +17,7 @@ export class DownloaddialogComponent implements OnInit {
     private exportService: ExportService,
     private backupService: BackupService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {}
 
   ready = false;
   error = false;
@@ -34,7 +34,7 @@ export class DownloaddialogComponent implements OnInit {
     const exportResult = await this.exportService.exportPdf(this.data.uuid);
     if (AppComponent.CLOUDMODE) {
       this.error = false;
-      this.saveFile(exportResult, this.data.uuid + ".pdf");
+      this.saveFile(exportResult, this.data.uuid + '.pdf');
     } else {
       this.error = exportResult;
     }
@@ -47,7 +47,7 @@ export class DownloaddialogComponent implements OnInit {
     this.started = true;
     const exportResult = await this.exportService.exportEpub(this.data.uuid);
     if (AppComponent.CLOUDMODE) {
-      this.saveFile(exportResult, this.data.uuid + ".epub");
+      this.saveFile(exportResult, this.data.uuid + '.epub');
       this.error = false;
     } else {
       this.error = exportResult;
@@ -61,7 +61,7 @@ export class DownloaddialogComponent implements OnInit {
     this.started = true;
     const exportResult = await this.exportService.exportDocx(this.data.uuid);
     if (AppComponent.CLOUDMODE) {
-      this.saveFile(exportResult, this.data.uuid + ".docx");
+      this.saveFile(exportResult, this.data.uuid + '.docx');
       this.error = false;
     } else {
       this.error = exportResult;
@@ -71,13 +71,13 @@ export class DownloaddialogComponent implements OnInit {
 
   private saveFile(blob: Blob, filename: string) {
     const data = window.URL.createObjectURL(blob);
-    var link = document.createElement('a');
+    const link = document.createElement('a');
     link.href = data;
     link.download = filename;
     link.click();
     setTimeout(() => {
       window.URL.revokeObjectURL(data);
-    }, 400)
+    }, 400);
   }
 
   async downloadJson() {
@@ -87,9 +87,9 @@ export class DownloaddialogComponent implements OnInit {
     const exportResult = await this.backupService.loadBackup(this.data.uuid);
     if (AppComponent.CLOUDMODE) {
       const blob = new Blob([JSON.stringify(exportResult)], {
-        type: 'application/json'
+        type: 'application/json',
       });
-      this.saveFile(blob, this.data.uuid + ".json");
+      this.saveFile(blob, this.data.uuid + '.json');
       this.error = false;
     } else {
       this.error = exportResult;

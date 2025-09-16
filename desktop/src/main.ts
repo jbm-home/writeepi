@@ -1,15 +1,22 @@
-import { app, BrowserWindow, ipcMain, screen, nativeTheme, dialog } from 'electron';
-import Store from 'electron-store';
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  screen,
+  nativeTheme,
+  dialog,
+} from "electron";
+import Store from "electron-store";
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
-import contextMenu from 'electron-context-menu';
-import { Project } from './services/project.js';
-import { PdfExporter } from './services/pdfExporter.js';
-import { EpubExporter } from './services/epubExporter.js';
-import { DocxExporter } from './services/docxExporter.js';
-import { Thes } from './services/thes.js';
-import { APP_VERSION } from './version.js';
-import squirrelStartup from 'electron-squirrel-startup';
+import contextMenu from "electron-context-menu";
+import { Project } from "./services/project.js";
+import { PdfExporter } from "./services/pdfExporter.js";
+import { EpubExporter } from "./services/epubExporter.js";
+import { DocxExporter } from "./services/docxExporter.js";
+import { Thes } from "./services/thes.js";
+import { APP_VERSION } from "./version.js";
+import squirrelStartup from "electron-squirrel-startup";
 
 export class WriteepiDesktop {
   mainWindow: BrowserWindow | null = null;
@@ -20,38 +27,43 @@ export class WriteepiDesktop {
   docxExporter: DocxExporter = new DocxExporter(this);
   thes: Thes = new Thes(this);
 
-  mainstore: Store = new Store({ name: 'writeepi', cwd: this.project.loadCustomConfig() });
-  backstore: Store = new Store({ name: 'writeepi-backup', cwd: this.project.loadCustomConfig() });
+  mainstore: Store = new Store({
+    name: "writeepi",
+    cwd: this.project.loadCustomConfig(),
+  });
+  backstore: Store = new Store({
+    name: "writeepi-backup",
+    cwd: this.project.loadCustomConfig(),
+  });
 
-  isFirstRun = process.argv.includes('--squirrel-firstrun');
+  isFirstRun = process.argv.includes("--squirrel-firstrun");
 
   init() {
-    if (process.platform === 'win32' && squirrelStartup) {
+    if (process.platform === "win32" && squirrelStartup) {
       app.quit();
       return;
-    }
-    else if (this.isFirstRun) {
-      app.on('ready', this.createInstallationConfirmationWindow);
-      app.on('window-all-closed', this.onFirstRunDone);
+    } else if (this.isFirstRun) {
+      app.on("ready", this.createInstallationConfirmationWindow);
+      app.on("window-all-closed", this.onFirstRunDone);
       return;
     }
-    app.on('ready', this.createWindow);
-    app.on('window-all-closed', this.onWindowAllClosed);
-    app.on('activate', this.onActivate);
+    app.on("ready", this.createWindow);
+    app.on("window-all-closed", this.onWindowAllClosed);
+    app.on("activate", this.onActivate);
 
-    ipcMain.handle('save-backup', this.project.handleSaveBackup);
-    ipcMain.handle('load-backup', this.project.handleLoadBackup);
-    ipcMain.handle('list-backup', this.project.handleListBackup);
-    ipcMain.handle('store-location', this.project.handleChangeStoreLocation);
-    ipcMain.handle('export', this.project.handleExport);
-    ipcMain.handle('new-guid', this.project.handleNewGuid);
-    ipcMain.handle('build-pdf', this.pdfExporter.handleBuildPdf);
-    ipcMain.handle('build-epub', this.epubExporter.handleBuildEpub);
-    ipcMain.handle('build-docx', this.docxExporter.handleBuildDocx);
-    ipcMain.handle('create-project', this.project.handleCreateProject);
-    ipcMain.handle('darkmode-toggle', this.handleDarkModeToggle);
-    ipcMain.handle('set-lang', this.thes.setLang);
-    ipcMain.handle('version', this.handleVersion);
+    ipcMain.handle("save-backup", this.project.handleSaveBackup);
+    ipcMain.handle("load-backup", this.project.handleLoadBackup);
+    ipcMain.handle("list-backup", this.project.handleListBackup);
+    ipcMain.handle("store-location", this.project.handleChangeStoreLocation);
+    ipcMain.handle("export", this.project.handleExport);
+    ipcMain.handle("new-guid", this.project.handleNewGuid);
+    ipcMain.handle("build-pdf", this.pdfExporter.handleBuildPdf);
+    ipcMain.handle("build-epub", this.epubExporter.handleBuildEpub);
+    ipcMain.handle("build-docx", this.docxExporter.handleBuildDocx);
+    ipcMain.handle("create-project", this.project.handleCreateProject);
+    ipcMain.handle("darkmode-toggle", this.handleDarkModeToggle);
+    ipcMain.handle("set-lang", this.thes.setLang);
+    ipcMain.handle("version", this.handleVersion);
   }
 
   createWindow = () => {
@@ -67,9 +79,9 @@ export class WriteepiDesktop {
           visible: parameters.selectionText.trim().length > 0,
           click: () => {
             this.thes.handleSearch({}, parameters.selectionText.trim());
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     this.mainWindow = new BrowserWindow({
       x: 0,
@@ -80,19 +92,19 @@ export class WriteepiDesktop {
         nodeIntegration: true,
         preload: path.join(__dirname, "preload.mjs"),
       },
-      icon: path.join(__dirname, 'favicon.png')
+      icon: path.join(__dirname, "favicon.png"),
     });
-    const indexPath = path.join(__dirname, '../../webui/browser/index.html');
+    const indexPath = path.join(__dirname, "../../webui/browser/index.html");
     const url = pathToFileURL(indexPath);
     this.mainWindow.loadURL(url.href);
     this.mainWindow.setMenu(null);
-    this.mainWindow.on('close', (e) => {
+    this.mainWindow.on("close", (e) => {
       e.preventDefault();
       this.mainWindow?.destroy();
       this.mainWindow = null;
     });
     // this.mainWindow.webContents.openDevTools();
-  }
+  };
 
   createInstallationConfirmationWindow = async () => {
     const mainWindow = new BrowserWindow({
@@ -101,24 +113,24 @@ export class WriteepiDesktop {
       show: false,
     });
     await dialog.showMessageBox(mainWindow!, {
-      type: 'info',
-      buttons: ['OK'],
+      type: "info",
+      buttons: ["OK"],
       defaultId: 0,
-      title: 'Installation Successful',
-      message: 'Writeepi has been installed successfully.',
+      title: "Installation Successful",
+      message: "Writeepi has been installed successfully.",
     });
-    app.emit('window-all-closed');
-  }
+    app.emit("window-all-closed");
+  };
 
   onWindowAllClosed = () => {
-    if (process.platform !== 'darwin') {
+    if (process.platform !== "darwin") {
       app.quit();
     }
-  }
+  };
 
   onFirstRunDone = () => {
     app.quit();
-  }
+  };
 
   onActivate = () => {
     if (this.mainWindow) {
@@ -126,16 +138,16 @@ export class WriteepiDesktop {
     } else {
       this.createWindow();
     }
-  }
+  };
 
   handleDarkModeToggle = (event: any, theme: string) => {
-    nativeTheme.themeSource = theme === 'dark' ? 'dark' : 'light';
+    nativeTheme.themeSource = theme === "dark" ? "dark" : "light";
     return nativeTheme.shouldUseDarkColors;
-  }
+  };
 
   handleVersion = (event: any) => {
     return APP_VERSION;
-  }
+  };
 }
 
 const main = new WriteepiDesktop();

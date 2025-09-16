@@ -1,6 +1,15 @@
-import { AlignmentType, Document, ISectionOptions, Packer, Paragraph, ParagraphChild, Tab, TextRun } from "docx";
-import { convert } from 'html-to-text';
-import { UserProject } from '../../../webui/src/app/types/userproject.js';
+import {
+  AlignmentType,
+  Document,
+  ISectionOptions,
+  Packer,
+  Paragraph,
+  ParagraphChild,
+  Tab,
+  TextRun,
+} from "docx";
+import { convert } from "html-to-text";
+import { UserProject } from "../../../webui/src/app/types/userproject.js";
 
 export class DocxCommon {
   async buildDocx(userContent: UserProject): Promise<Buffer | undefined> {
@@ -54,7 +63,7 @@ export class DocxCommon {
           },
           children: [
             new TextRun({
-              text: "© " + (new Date()).getFullYear() + " " + userContent.author,
+              text: "© " + new Date().getFullYear() + " " + userContent.author,
               bold: false,
               size: 30,
             }),
@@ -75,7 +84,9 @@ export class DocxCommon {
           alignment: AlignmentType.LEFT,
           children: [
             new TextRun({
-              text: "Built with Writeepi (https://www.writeepi.com) " + (new Date()).toLocaleString(),
+              text:
+                "Built with Writeepi (https://www.writeepi.com) " +
+                new Date().toLocaleString(),
               bold: true,
               size: 28,
             }),
@@ -87,56 +98,57 @@ export class DocxCommon {
     const chapters: ISectionOptions[] = [];
     chapters.push(section);
     const options = {
-      wordwrap: 999999
+      wordwrap: 999999,
     };
 
     userContent.content.forEach((c) => {
       if (c !== undefined && c.isBook && !c.isFolder) {
-        const textVersion = convert((c.chapter ?? '').replace(/&nbsp;/g, ' '), options);
+        const textVersion = convert(
+          (c.chapter ?? "").replace(/&nbsp;/g, " "),
+          options,
+        );
         const lines: ParagraphChild[] = [];
-        textVersion.split('\n').forEach((line) => {
+        textVersion.split("\n").forEach((line) => {
           lines.push(
             new TextRun({
               text: line,
               bold: false,
               size: 28,
-              break: 1
-            })
+              break: 1,
+            }),
           );
         });
 
-        chapters.push(
-          {
-            properties: {},
-            children: [
-              new Paragraph({
-                alignment: AlignmentType.CENTER,
-                children: [
-                  new TextRun({
-                    text: c.name,
-                    bold: true,
-                    size: 36,
-                  }),
-                ],
-              }),
-              new Paragraph({
-                alignment: AlignmentType.LEFT,
-                spacing: {
-                  before: 600,
-                },
-                children: lines,
-              })
-            ]
-          }
-        );
+        chapters.push({
+          properties: {},
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun({
+                  text: c.name,
+                  bold: true,
+                  size: 36,
+                }),
+              ],
+            }),
+            new Paragraph({
+              alignment: AlignmentType.LEFT,
+              spacing: {
+                before: 600,
+              },
+              children: lines,
+            }),
+          ],
+        });
       }
     });
 
     const doc = new Document({
       sections: chapters,
       hyphenation: {
-        autoHyphenation: false
-      }
+        autoHyphenation: false,
+      },
     });
 
     return await Packer.toBuffer(doc);

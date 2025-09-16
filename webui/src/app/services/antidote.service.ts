@@ -10,11 +10,11 @@ export interface Correction {
 
 export const ANTIDOTE_AUTO_CONNECT = new InjectionToken<boolean>(
   'ANTIDOTE_AUTO_CONNECT',
-  { providedIn: 'root', factory: () => true } // valeur par défaut
+  { providedIn: 'root', factory: () => true }, // valeur par défaut
 );
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AntidoteService {
   private ws: WebSocket | null = null;
@@ -28,7 +28,9 @@ export class AntidoteService {
   private correctionsResolve: ((value: Correction[]) => void) | null = null;
   public connected = false;
 
-  private candidatePorts = [4989, 49152, 49153, 49154, 49155, 49156, 49157, 49158, 49159, 49160];
+  private candidatePorts = [
+    4989, 49152, 49153, 49154, 49155, 49156, 49157, 49158, 49159, 49160,
+  ];
 
   constructor(@Inject(ANTIDOTE_AUTO_CONNECT) autoConnect: boolean) {
     if (autoConnect) {
@@ -51,7 +53,7 @@ export class AntidoteService {
           setTimeout(() => {
             this.getCorrections('.')
               .then(() => console.log('[Antidote] Warm-up done'))
-              .catch(err => console.warn('[Antidote] Warm-up failed', err));
+              .catch((err) => console.warn('[Antidote] Warm-up failed', err));
           }, 1000);
           break;
         }
@@ -112,8 +114,10 @@ export class AntidoteService {
   private normalizeCorrections(input: any): Correction[] {
     const out: Correction[] = [];
 
-    const corrections = input?.corrections ?? input?.data?.resultats?.corrections ?? [];
-    const detections = input?.detections ?? input?.data?.resultats?.detections ?? [];
+    const corrections =
+      input?.corrections ?? input?.data?.resultats?.corrections ?? [];
+    const detections =
+      input?.detections ?? input?.data?.resultats?.detections ?? [];
 
     for (const corr of corrections) {
       out.push({
@@ -121,7 +125,7 @@ export class AntidoteService {
         end: corr.intervalle?.borneFin ?? 0,
         original: corr.chaine ?? '',
         suggestion: corr.infobulleCorrection ?? '',
-        message: corr.infobulleRetablissement ?? ''
+        message: corr.infobulleRetablissement ?? '',
       });
     }
 
@@ -131,7 +135,7 @@ export class AntidoteService {
         end: det.intervalle?.borneFin ?? 0,
         original: '',
         suggestion: det.titre ?? '',
-        message: det.description ?? ''
+        message: det.description ?? '',
       });
     }
 
@@ -189,16 +193,18 @@ export class AntidoteService {
 
       if (msg === 'finAnalyse') {
         if (this.correctionsResolve) {
-          const unified: Correction[] = this.collectedCorrections.flatMap((c) => {
-            if (typeof c === 'string') {
-              try {
-                return this.normalizeCorrections(JSON.parse(c));
-              } catch {
-                return [];
+          const unified: Correction[] = this.collectedCorrections.flatMap(
+            (c) => {
+              if (typeof c === 'string') {
+                try {
+                  return this.normalizeCorrections(JSON.parse(c));
+                } catch {
+                  return [];
+                }
               }
-            }
-            return this.normalizeCorrections(c);
-          });
+              return this.normalizeCorrections(c);
+            },
+          );
           this.correctionsResolve(unified);
           this.correctionsResolve = null;
         }
@@ -223,7 +229,7 @@ export class AntidoteService {
       _dib81: this.commId,
       uuidDestinataire: 'serveurCS',
       action: JSON.stringify(action),
-      versionPont: '2.0'
+      versionPont: '2.0',
     };
 
     this.ws.send(JSON.stringify(packet));
@@ -245,10 +251,10 @@ export class AntidoteService {
           origine: 'tronc',
           idConnecteur: 'AntidoteCustomClient',
           manifest: 3,
-          plateforme: 'na'
+          plateforme: 'na',
         },
         options: { antiOups: false },
-        style: []
+        style: [],
       });
     });
   }
@@ -271,7 +277,7 @@ export class AntidoteService {
         texteOriginal: '',
         phrasesInvalidees: [],
         texte: text,
-        typeDiff: ''
+        typeDiff: '',
       });
     });
   }

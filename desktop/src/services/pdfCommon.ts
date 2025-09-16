@@ -1,6 +1,6 @@
-import { jsPDF } from 'jspdf';
-import { convert } from 'html-to-text';
-import { UserProject } from '../../../webui/src/app/types/userproject.js';
+import { jsPDF } from "jspdf";
+import { convert } from "html-to-text";
+import { UserProject } from "../../../webui/src/app/types/userproject.js";
 
 export class PdfCommon {
   readonly pdfMargin = 15;
@@ -8,21 +8,30 @@ export class PdfCommon {
   readonly pdfPageHeight = 297;
 
   buildPdf(userContent: UserProject, resultPath?: string) {
-    let pdfConverter = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: [this.pdfPageWidth, this.pdfPageHeight]
+    const pdfConverter = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: [this.pdfPageWidth, this.pdfPageHeight],
     });
 
     pdfConverter.setFont("Verdana", "normal");
 
-    this.addPdfTitle(pdfConverter, userContent.title, userContent.author, userContent.description);
+    this.addPdfTitle(
+      pdfConverter,
+      userContent.title,
+      userContent.author,
+      userContent.description,
+    );
 
     const startPageBeforeChapters = pdfConverter.getNumberOfPages();
 
     userContent.content.forEach((c) => {
       if (c !== undefined && c.isBook && !c.isFolder) {
-        this.addPdfChapter(c.name, c.chapter !== undefined ? c.chapter : '', pdfConverter);
+        this.addPdfChapter(
+          c.name,
+          c.chapter !== undefined ? c.chapter : "",
+          pdfConverter,
+        );
       }
     });
 
@@ -38,9 +47,14 @@ export class PdfCommon {
     for (let i = firstChapterPage; i <= totalPages; i++) {
       pdfConverter.setPage(i);
       const logicalNumber = i - startPageBeforeChapters;
-      pdfConverter.text(`${logicalNumber}`, pageW - margin, pageH - margin / 2, {
-        align: "right",
-      });
+      pdfConverter.text(
+        `${logicalNumber}`,
+        pageW - margin,
+        pageH - margin / 2,
+        {
+          align: "right",
+        },
+      );
     }
 
     if (resultPath !== undefined) {
@@ -51,30 +65,54 @@ export class PdfCommon {
     }
   }
 
-  private addPdfTitle(pdfConverter: jsPDF, title: string, author: string, description: string) {
+  private addPdfTitle(
+    pdfConverter: jsPDF,
+    title: string,
+    author: string,
+    description: string,
+  ) {
     // title
     pdfConverter.setFont("Verdana", "bold").setFontSize(22);
-    pdfConverter.text(title, this.pdfPageWidth / 2, 25, { align: 'center' });
+    pdfConverter.text(title, this.pdfPageWidth / 2, 25, { align: "center" });
     pdfConverter.setFont("Verdana", "bold").setFontSize(18);
-    pdfConverter.text(author, this.pdfPageWidth / 2, 40, { align: 'center' });
+    pdfConverter.text(author, this.pdfPageWidth / 2, 40, { align: "center" });
 
     // description
     let iterations = 1;
     const defaultYJump = 5;
-    const wrappedText = pdfConverter.splitTextToSize(description, this.pdfPageWidth - (this.pdfMargin * 2));
+    const wrappedText = pdfConverter.splitTextToSize(
+      description,
+      this.pdfPageWidth - this.pdfMargin * 2,
+    );
     pdfConverter.setFont("Verdana", "normal").setFontSize(14);
     wrappedText.forEach((line: string) => {
-      let posY = this.pdfMargin + defaultYJump * iterations++;
-      pdfConverter.text(line, 15, 100 + posY, { align: 'justify' });
+      const posY = this.pdfMargin + defaultYJump * iterations++;
+      pdfConverter.text(line, 15, 100 + posY, { align: "justify" });
     });
 
     // footer
     pdfConverter.setFont("Verdana", "normal").setFontSize(15);
-    pdfConverter.text("© " + (new Date()).getFullYear() + " " + author, 15, 245, { align: 'left' });
+    pdfConverter.text(
+      "© " + new Date().getFullYear() + " " + author,
+      15,
+      245,
+      { align: "left" },
+    );
     pdfConverter.setFont("Verdana", "italic").setFontSize(14);
-    pdfConverter.text("Any copy or distribution without the author's consent is forbidden.", 15, 260, { align: 'left' });
+    pdfConverter.text(
+      "Any copy or distribution without the author's consent is forbidden.",
+      15,
+      260,
+      { align: "left" },
+    );
     pdfConverter.setFont("Verdana", "bold").setFontSize(14);
-    pdfConverter.text("Built with Writeepi (https://www.writeepi.com) " + (new Date()).toLocaleString(), 15, 270, { align: 'left' });
+    pdfConverter.text(
+      "Built with Writeepi (https://www.writeepi.com) " +
+        new Date().toLocaleString(),
+      15,
+      270,
+      { align: "left" },
+    );
   }
 
   private addPdfChapter(title: string, content: string, pdf: jsPDF) {
@@ -97,8 +135,15 @@ export class PdfCommon {
       wordwrap: false,
       preserveNewlines: true,
       selectors: [
-        { selector: "p", options: { leadingLineBreaks: 0, trailingLineBreaks: 2 } },
-        { selector: "br", format: "inline", options: { leadingLineBreaks: 0, trailingLineBreaks: 1 } },
+        {
+          selector: "p",
+          options: { leadingLineBreaks: 0, trailingLineBreaks: 2 },
+        },
+        {
+          selector: "br",
+          format: "inline",
+          options: { leadingLineBreaks: 0, trailingLineBreaks: 1 },
+        },
         { selector: "li", format: "inline", options: { itemPrefix: "• " } },
         { selector: "a", options: { ignoreHref: true } },
       ],
@@ -107,7 +152,6 @@ export class PdfCommon {
     const logicalLines = plain.replace(/\r\n/g, "\n").split("\n");
 
     for (const logicalLine of logicalLines) {
-
       if (logicalLine.trim().length === 0) {
         y += smallLineHeight;
         continue;

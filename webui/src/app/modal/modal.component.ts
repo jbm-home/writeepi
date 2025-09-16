@@ -6,7 +6,7 @@ import { SharedModule } from '../shared.module.js';
   selector: 'app-modal',
   imports: [SharedModule],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.scss'
+  styleUrl: './modal.component.scss',
 })
 export class ModaleComponent {
   activeModal = inject(NgbActiveModal);

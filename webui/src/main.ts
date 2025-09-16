@@ -1,14 +1,26 @@
 /// <reference types="@angular/localize" />
 
 import { I18nService } from './app/services/i18n.service.js';
-import { importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
+import {
+  importProvidersFrom,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 import { I18nPipe } from './app/pipes/i18n.pipe.js';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
+import {
+  withInterceptorsFromDi,
+  provideHttpClient,
+} from '@angular/common/http';
 import { AppRoutingModule } from './app/app-routing.module.js';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { NgbModule, NgbCollapseModule, NgbDropdownModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbModule,
+  NgbCollapseModule,
+  NgbDropdownModule,
+  NgbModalModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,8 +38,7 @@ import Quill from 'quill';
 import Searcher from './app/quill-plugins/searcher.js';
 import { ANTIDOTE_AUTO_CONNECT } from './app/services/antidote.service.js';
 
-export function setupI18nFactory(
-  service: I18nService): Function {
+export function setupI18nFactory(service: I18nService): () => void {
   return () => service.use('en');
 }
 
@@ -37,26 +48,44 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(
       BrowserModule,
-      AppRoutingModule, FormsModule,
+      AppRoutingModule,
+      FormsModule,
       QuillModule.forRoot({
         formats: [],
         modules: {
-          syntax: false, toolbar: false, Searcher: true, keyboard: {
+          syntax: false,
+          toolbar: false,
+          Searcher: true,
+          keyboard: {
             bindings: {
-              'list autofill': null
-            }
-          }
-        }, placeholder: '', theme: 'snow'
+              'list autofill': null,
+            },
+          },
+        },
+        placeholder: '',
+        theme: 'snow',
       }),
-      NgbModule, NgbCollapseModule, NgbDropdownModule, NgbModalModule,
-      MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule,
-      MatCheckboxModule, MatBadgeModule, MatSnackBarModule, MatListModule,
-      MatIconModule, MatTabsModule, MatSidenavModule, ResizableDirective
+      NgbModule,
+      NgbCollapseModule,
+      NgbDropdownModule,
+      NgbModalModule,
+      MatDialogModule,
+      MatButtonModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatCheckboxModule,
+      MatBadgeModule,
+      MatSnackBarModule,
+      MatListModule,
+      MatIconModule,
+      MatTabsModule,
+      MatSidenavModule,
+      ResizableDirective,
     ),
     I18nService,
     provideAppInitializer(() => inject(I18nService).use('en')),
     I18nPipe,
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: ANTIDOTE_AUTO_CONNECT, useValue: false }
-  ]
-}).catch(err => console.error(err));
+    { provide: ANTIDOTE_AUTO_CONNECT, useValue: false },
+  ],
+}).catch((err) => console.error(err));

@@ -9,17 +9,16 @@ import { AppComponent } from '../app.component.js';
 import { ElectronService } from './electron.service.js';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class I18nService {
-
   data: any = {};
   supportedLanguages: LangData[] = [
-    { code: "en", name: "English", data: EN, iso: "en-US" },
-    { code: "fr", name: "Français", data: FR, iso: "fr-FR" },
-    { code: "de", name: "Deutsch", data: DE, iso: "de-DE" },
-    { code: "es", name: "Español", data: ES, iso: "es-ES" },
-    { code: "it", name: "Italiano", data: IT, iso: "it-IT" },
+    { code: 'en', name: 'English', data: EN, iso: 'en-US' },
+    { code: 'fr', name: 'Français', data: FR, iso: 'fr-FR' },
+    { code: 'de', name: 'Deutsch', data: DE, iso: 'de-DE' },
+    { code: 'es', name: 'Español', data: ES, iso: 'es-ES' },
+    { code: 'it', name: 'Italiano', data: IT, iso: 'it-IT' },
   ];
   selectedLang: string;
   currentLangFullData: LangData;
@@ -38,11 +37,15 @@ export class I18nService {
   }
 
   isSupportedLanguage(lang: string) {
-    return this.supportedLanguages.find((sl: any) => sl.code === lang) !== undefined;
+    return (
+      this.supportedLanguages.find((sl: any) => sl.code === lang) !== undefined
+    );
   }
 
   use(lang: string): void {
-    const found: any = this.supportedLanguages.find((sl: any) => sl.code === lang);
+    const found: any = this.supportedLanguages.find(
+      (sl: any) => sl.code === lang,
+    );
     if (found === undefined) {
       this.data = this.supportedLanguages[0].data;
       this.currentLangFullData = this.supportedLanguages[0];

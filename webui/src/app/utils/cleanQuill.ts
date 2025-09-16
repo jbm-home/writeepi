@@ -1,26 +1,27 @@
 export function cleanQuillHtmlToParagraphs(html: string): string {
   const doc = globalThis.document;
-  if (!doc) { // fallback
+  if (!doc) {
+    // fallback
     const textOnly = html
-      .replace(/<[^>]*>/g, " ")        // remove tags
-      .replace(/\u00a0/g, " ")         // NBSP -> space
-      .replace(/\s+/g, " ")            // multiple spaces -> only one
+      .replace(/<[^>]*>/g, ' ') // remove tags
+      .replace(/\u00a0/g, ' ') // NBSP -> space
+      .replace(/\s+/g, ' ') // multiple spaces -> only one
       .trim();
-    return textOnly ? `<p>${textOnly}</p>` : "";
+    return textOnly ? `<p>${textOnly}</p>` : '';
   }
 
-  const container = doc.createElement("div");
-  container.innerHTML = html ?? "";
+  const container = doc.createElement('div');
+  container.innerHTML = html ?? '';
 
   const blocks = container.querySelectorAll(
-    "p, li, h1, h2, h3, h4, h5, h6, blockquote, pre"
+    'p, li, h1, h2, h3, h4, h5, h6, blockquote, pre',
   );
 
   const paras: string[] = [];
   const pushPara = (raw: string | null | undefined) => {
-    const clean = (raw ?? "")
-      .replace(/\u00a0/g, " ") // NBSP -> space
-      .replace(/\s+/g, " ")    // compress spaces + newlines
+    const clean = (raw ?? '')
+      .replace(/\u00a0/g, ' ') // NBSP -> space
+      .replace(/\s+/g, ' ') // compress spaces + newlines
       .trim();
     if (clean) paras.push(`<p>${clean}</p>`);
   };
@@ -28,8 +29,8 @@ export function cleanQuillHtmlToParagraphs(html: string): string {
   if (blocks.length === 0) {
     pushPara(container.textContent);
   } else {
-    blocks.forEach(b => pushPara(b.textContent));
+    blocks.forEach((b) => pushPara(b.textContent));
   }
 
-  return paras.join("");
+  return paras.join('');
 }

@@ -8,7 +8,7 @@ import { I18nService } from '../../services/i18n.service.js';
   selector: 'app-speechdialog',
   imports: [SharedModule],
   templateUrl: './speechdialog.component.html',
-  styleUrl: './speechdialog.component.scss'
+  styleUrl: './speechdialog.component.scss',
 })
 export class SpeechdialogComponent implements OnInit {
   voices: SpeechSynthesisVoice[] = [];
@@ -17,7 +17,7 @@ export class SpeechdialogComponent implements OnInit {
     private tts: TextToSpeechService,
     private i18n: I18nService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.tts.selectLang(this.i18n.currentLangFullData.iso);

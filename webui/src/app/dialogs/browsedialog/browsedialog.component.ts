@@ -11,7 +11,7 @@ import { SharedModule } from '../../shared.module.js';
   selector: 'app-browsedialog',
   imports: [SharedModule],
   templateUrl: './browsedialog.component.html',
-  styleUrl: './browsedialog.component.scss'
+  styleUrl: './browsedialog.component.scss',
 })
 export class BrowsedialogComponent implements OnInit {
   @ViewChild('tabgroup', { static: true }) tabgroup!: MatTabGroup;
@@ -23,7 +23,7 @@ export class BrowsedialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (Failover.hasAvailableFailover()) {
@@ -49,13 +49,19 @@ export class BrowsedialogComponent implements OnInit {
   ok(): void {
     if (this.tabgroup.selectedIndex === 0) {
       this.data.tabIndex = 0;
-    } else if (this.tabgroup.selectedIndex === 1 && this.selectedProject.length > 0) {
+    } else if (
+      this.tabgroup.selectedIndex === 1 &&
+      this.selectedProject.length > 0
+    ) {
       this.data.tabIndex = 1;
       this.data.projectId = this.selectedProject[0];
-    } else if (this.tabgroup.selectedIndex === 2 && this.selectedRecovery.length > 0) {
+    } else if (
+      this.tabgroup.selectedIndex === 2 &&
+      this.selectedRecovery.length > 0
+    ) {
       this.data.tabIndex = 2;
       const recoveryId = this.selectedRecovery[0];
-      this.data.recoveryData = this.recovery.find(r => r.id === recoveryId);
+      this.data.recoveryData = this.recovery.find((r) => r.id === recoveryId);
     }
     this.dialogRef.close({ validated: true, data: this.data });
   }

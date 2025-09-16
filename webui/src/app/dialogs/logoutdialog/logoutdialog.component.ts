@@ -6,13 +6,13 @@ import { SharedModule } from '../../shared.module.js';
   selector: 'app-logoutdialog',
   imports: [SharedModule],
   templateUrl: './logoutdialog.component.html',
-  styleUrl: './logoutdialog.component.scss'
+  styleUrl: './logoutdialog.component.scss',
 })
 export class LogoutdialogComponent {
   constructor(
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {}
 
   ok(): void {
     this.dialogRef.close({ validated: true });

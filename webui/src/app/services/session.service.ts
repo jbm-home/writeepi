@@ -3,74 +3,89 @@ import axios from 'axios';
 import { User } from '../../../../server/src/types/user.js';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class SessionService {
-    connected = false;
-    userInfo = {
-        email: '',
-        level: 0,
-        fullname: '',
-        uid: ''
-    };
+  connected = false;
+  userInfo = {
+    email: '',
+    level: 0,
+    fullname: '',
+    uid: '',
+  };
 
-    constructor() {
-        axios.interceptors.request.use(config => {
-            const authToken = localStorage.getItem('authToken');
-            if (authToken) {
-                config.headers.Authorization = `Bearer ${authToken}`;
-            }
-            return config;
-        });
+  constructor() {
+    axios.interceptors.request.use((config) => {
+      const authToken = localStorage.getItem('authToken');
+      if (authToken) {
+        config.headers.Authorization = `Bearer ${authToken}`;
+      }
+      return config;
+    });
 
-        axios.interceptors.response.use(function (response) {
-            return response.data;
-        }, function (error) {
-            return Promise.reject(error);
-        });
-    }
+    axios.interceptors.response.use(
+      function (response) {
+        return response.data;
+      },
+      function (error) {
+        return Promise.reject(error);
+      },
+    );
+  }
 
-    getUserInfos(): Promise<User> {
-        return axios.get('/api/session/user');
-    }
+  getUserInfos(): Promise<User> {
+    return axios.get('/api/session/user');
+  }
 
-    getAllUsers() {
-        return axios.get('/api/user/list');
-    }
+  getAllUsers() {
+    return axios.get('/api/user/list');
+  }
 
-    logout() {
-        return axios.delete('/api/session');
-    }
+  logout() {
+    return axios.delete('/api/session');
+  }
 
-    loginUser(email: string, password: string) {
-        return axios.post('/api/session/login', { email, password });
-    }
+  loginUser(email: string, password: string) {
+    return axios.post('/api/session/login', { email, password });
+  }
 
-    recover(email: string) {
-        return axios.post('/api/reset', { email });
-    }
+  recover(email: string) {
+    return axios.post('/api/reset', { email });
+  }
 
-    update(uid: number, level: number) {
-        return axios.put(`/api/session/users/${uid}`, { level });
-    }
+  update(uid: number, level: number) {
+    return axios.put(`/api/session/users/${uid}`, { level });
+  }
 
-    updatePhone(uid: number, phone: string) {
-        return axios.put(`/api/session/users/phone/${uid}`, { phone });
-    }
+  updatePhone(uid: number, phone: string) {
+    return axios.put(`/api/session/users/phone/${uid}`, { phone });
+  }
 
-    changePasswordByToken(email: string, token: string, password: string) {
-        return axios.post('/api/session/password', { email, token, password });
-    }
+  changePasswordByToken(email: string, token: string, password: string) {
+    return axios.post('/api/session/password', { email, token, password });
+  }
 
-    register(firstname: string, lastname: string, email: string, password: string, captcha: string) {
-        return axios.post('/api/session/register', { firstname, lastname, email, password, captcha });
-    }
+  register(
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string,
+    captcha: string,
+  ) {
+    return axios.post('/api/session/register', {
+      firstname,
+      lastname,
+      email,
+      password,
+      captcha,
+    });
+  }
 
-    simpleToken() {
-        return axios.get('/api/session/token');
-    }
+  simpleToken() {
+    return axios.get('/api/session/token');
+  }
 
-    version(): any {
-        return axios.get('/api/version');
-    }
+  version(): any {
+    return axios.get('/api/version');
+  }
 }

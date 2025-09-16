@@ -5,10 +5,10 @@ import { AppComponent } from '../app.component.js';
 import { ElectronService } from './electron.service.js';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BackupService {
-  constructor(private electronService: ElectronService) { }
+  constructor(private electronService: ElectronService) {}
 
   async saveBackup(project: UserProject) {
     if (AppComponent.CLOUDMODE) {

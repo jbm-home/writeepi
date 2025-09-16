@@ -14,35 +14,40 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ResizableModule } from 'angular-resizable-element';
-import { NgbCollapseModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbCollapseModule,
+  NgbDropdownModule,
+  NgbModalModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule, DatePipe } from '@angular/common';
 import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-    imports: [I18nPipe, DatePipe],
-    exports: [
-        FormsModule,
-        CommonModule,
-        I18nPipe,
-        DatePipe,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatCheckboxModule,
-        MatBadgeModule,
-        MatSnackBarModule,
-        MatListModule,
-        MatIconModule,
-        MatTabsModule,
-        MatSlideToggleModule,
-        MatSidenavModule,
-        ResizableModule,
-        NgbCollapseModule,
-        NgbDropdownModule,
-        NgbModalModule,
-        NgbTooltipModule,
-        QuillModule,
-    ]
+  imports: [I18nPipe, DatePipe],
+  exports: [
+    FormsModule,
+    CommonModule,
+    I18nPipe,
+    DatePipe,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatBadgeModule,
+    MatSnackBarModule,
+    MatListModule,
+    MatIconModule,
+    MatTabsModule,
+    MatSlideToggleModule,
+    MatSidenavModule,
+    ResizableModule,
+    NgbCollapseModule,
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbTooltipModule,
+    QuillModule,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

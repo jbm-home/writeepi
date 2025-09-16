@@ -5,6 +5,7 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
+    "lint": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint . --ext .ts --fix",
     "fullbuildandstart": "cd ../webui && npm run buildprod && cd ../server && npm run build && node dist/server/src/main.js | bunyan -L",
     "build": "npx tsc && npx copyfiles -u3 ../webui/dist/webui/browser/** dist/",
     "start": "npm run build && node dist/server/src/main.js | bunyan -L",
@@ -34,9 +35,18 @@
     "@types/nodemailer": "^7.0.1",
     "@types/pg": "^8.15.5",
     "copyfiles": "^2.4.1",
+    "cross-env": "^10.0.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-security": "^3.0.1",
+    "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

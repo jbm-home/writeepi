@@ -1,6 +1,6 @@
-import { Postgres } from '../../database/postgres.js';
+import { Postgres } from "../../database/postgres.js";
 import bunyan from "bunyan";
-import { UuidUtils } from '../../utils/uuidutils.js';
+import { UuidUtils } from "../../utils/uuidutils.js";
 import { UserProject } from "../../../../webui/src/app/types/userproject.js";
 import { DefaultProject } from "../../../../webui/src/app/types/defaultproject.js";
 
@@ -21,7 +21,7 @@ export class BackupService {
 
       return httpRes.status(200).json(res ?? []);
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 
   async getbackup(req: any, httpRes: any) {
@@ -53,7 +53,7 @@ export class BackupService {
         return httpRes.status(200).json(result);
       }
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 
   async savebackup(req: any, httpRes: any) {
@@ -84,7 +84,7 @@ export class BackupService {
       );
       return httpRes.status(200).json(contentId);
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 
   async createProject(req: any, httpRes: any) {
@@ -112,6 +112,6 @@ export class BackupService {
 
       return httpRes.status(200).json(project);
     }
-    return httpRes.status(400).json('Bad request');
+    return httpRes.status(400).json("Bad request");
   }
 }

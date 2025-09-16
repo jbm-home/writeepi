@@ -1,17 +1,20 @@
-import { Pool } from 'pg';
-import { config } from '../config.js';
-import { Database } from './dbversions.js';
-import fs from 'fs';
-import path from 'path';
+import { Pool } from "pg";
+import { config } from "../config.js";
+import { Database } from "./dbversions.js";
+import fs from "fs";
+import path from "path";
 import bunyan from "bunyan";
-import { Mailer } from '../utils/mailer.js';
-import { MailTemplate } from '../templates/mailtemplate.js';
-import { UuidUtils } from '../utils/uuidutils.js';
-import { fileURLToPath } from 'url';
-import bcrypt from 'bcryptjs';
+import { Mailer } from "../utils/mailer.js";
+import { MailTemplate } from "../templates/mailtemplate.js";
+import { UuidUtils } from "../utils/uuidutils.js";
+import { fileURLToPath } from "url";
+import bcrypt from "bcryptjs";
 
 export class Postgres {
-  static log = bunyan.createLogger({ name: "Writeepi:Postgres", level: "debug" });
+  static log = bunyan.createLogger({
+    name: "Writeepi:Postgres",
+    level: "debug",
+  });
 
   private static pool: Pool;
 
@@ -42,7 +45,7 @@ export class Postgres {
       const result = await client.query(query, values);
       return result.rows.length > 0 ? result.rows : [];
     } catch (err) {
-      this.log.error('Request error: ' + err);
+      this.log.error("Request error: " + err);
       return [];
     } finally {
       if (client) {
@@ -61,7 +64,7 @@ export class Postgres {
       const result = await client.query(query, values);
       return result.rows.length > 0 ? result.rows[0] : null;
     } catch (err) {
-      this.log.error('queryOne error: ' + err);
+      this.log.error("queryOne error: " + err);
       return null;
     } finally {
       client?.release();
@@ -85,7 +88,7 @@ export class Postgres {
       client = await this.getPool().connect();
       await client.query(query, values);
     } catch (err) {
-      this.log.error('Request error: ' + err);
+      this.log.error("Request error: " + err);
     } finally {
       if (client) {
         client.release();
@@ -103,7 +106,7 @@ export class Postgres {
       const result = await client.query(query, values);
       return result.rowCount ?? 0;
     } catch (err) {
-      this.log.error('Request error: ' + err);
+      this.log.error("Request error: " + err);
       return 0;
     } finally {
       if (client) {
@@ -113,7 +116,7 @@ export class Postgres {
   }
 
   public static prepare = async () => {
-    this.log.info('Executing database migrations');
+    this.log.info("Executing database migrations");
     let client;
     try {
       const pool = this.getPool();
@@ -123,11 +126,11 @@ export class Postgres {
         let noSuchTable = false;
         try {
           rows = await client.query(
-            'SELECT * FROM versions WHERE version = $1',
+            "SELECT * FROM versions WHERE version = $1",
             [element.version],
           );
         } catch (err: any) {
-          if (err.code === '42P01') {
+          if (err.code === "42P01") {
             // PostgreSQL "undefined_table"
             this.log.info('Table "versions" does not exist');
             noSuchTable = true;
@@ -142,46 +145,46 @@ export class Postgres {
           );
           const __filename = fileURLToPath(import.meta.url);
           const __dirname = path.dirname(__filename);
-          const filePath = path.join(__dirname, './migrations', element.file);
+          const filePath = path.join(__dirname, "./migrations", element.file);
           const content = fs.readFileSync(filePath).toString();
 
-          for (const query of content.split(';')) {
+          for (const query of content.split(";")) {
             if (query.trim().length > 5) {
               this.log.debug(`Executing query`);
-              await client.query(query.trim() + ';');
+              await client.query(query.trim() + ";");
             }
           }
 
           this.log.debug(`Updating version database: ${element.version}`);
           await client.query(
-            'INSERT INTO versions (version, description) VALUES ($1, $2)',
+            "INSERT INTO versions (version, description) VALUES ($1, $2)",
             [element.version, element.description],
           );
         }
       }
 
-      this.log.info('Database migrations done');
+      this.log.info("Database migrations done");
 
       try {
-        const users = await client.query('SELECT * FROM users LIMIT 1');
+        const users = await client.query("SELECT * FROM users LIMIT 1");
         if (!users.rowCount) {
           this.log.info(
             'Creating admin user "noreply@writeepi.com" with password "changeit"',
           );
           await this.createUser(
-            'Admin',
-            'Admin',
-            'noreply@writeepi.com',
-            'changeit',
-            '+33600000000',
+            "Admin",
+            "Admin",
+            "noreply@writeepi.com",
+            "changeit",
+            "+33600000000",
             config.LEVEL.ADMIN,
           );
         }
       } catch (err: any) {
-        this.log.error('Cannot create user: ' + err);
+        this.log.error("Cannot create user: " + err);
       }
     } catch (err) {
-      this.log.error('General database error: ' + err);
+      this.log.error("General database error: " + err);
     } finally {
       if (client) {
         client.release();
@@ -204,7 +207,7 @@ export class Postgres {
     try {
       client = await this.getPool().connect();
 
-      const users = await client.query('SELECT * FROM users WHERE email = $1', [
+      const users = await client.query("SELECT * FROM users WHERE email = $1", [
         email,
       ]);
 
@@ -233,24 +236,24 @@ export class Postgres {
           ],
         );
 
-        this.log.debug('User created successfully');
+        this.log.debug("User created successfully");
         successful = true;
 
         await Mailer.SendMail(
           email,
-          'Your Writeepi Account Has Been Created',
+          "Your Writeepi Account Has Been Created",
           message1,
           MailTemplate.build(
             message1,
             message2,
-            'Your Writeepi Account Has Been Created',
-            'Open Writeepi',
+            "Your Writeepi Account Has Been Created",
+            "Open Writeepi",
             config.SITE_URL,
           ),
         );
       }
     } catch (err: any) {
-      this.log.error('Cannot create user: ' + err);
+      this.log.error("Cannot create user: " + err);
     } finally {
       if (client) {
         client.release();

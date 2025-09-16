@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EditorService } from '../services/editor.service.js';
-import { Content } from "../types/userproject.js";
+import { Content } from '../types/userproject.js';
 import { I18nService } from '../services/i18n.service.js';
 import { SharedModule } from '../shared.module.js';
 
@@ -8,18 +8,18 @@ import { SharedModule } from '../shared.module.js';
   selector: 'app-tree-item',
   imports: [SharedModule],
   templateUrl: './tree-item.component.html',
-  styleUrl: './tree-item.component.scss'
+  styleUrl: './tree-item.component.scss',
 })
 export class TreeItemComponent implements OnInit {
   @Input() menuItem!: Content;
   @Input() level: number = 0;
 
-  constructor(public editorService: EditorService,
-    private i18n: I18nService) {
-    }
+  constructor(
+    public editorService: EditorService,
+    private i18n: I18nService,
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   nextLevel() {
     return this.level + 1;

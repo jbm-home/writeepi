@@ -5,6 +5,7 @@
   "description": "Simple, accessible but powerful all-in-one word-processing and organization app for writers",
   "type": "module",
   "scripts": {
+    "lint": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint . --ext .ts --fix",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build --base-href ./",
@@ -46,12 +47,21 @@
     "@angular/localize": "^20.2.3",
     "@types/jasmine": "~5.1.9",
     "@types/quill": "^2.0.14",
+    "cross-env": "^10.0.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-security": "^3.0.1",
     "jasmine-core": "~5.10.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.2"
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.44.0"
   }
 }

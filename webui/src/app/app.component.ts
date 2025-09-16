@@ -1,4 +1,11 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ElectronService } from './services/electron.service.js';
 import { EditorService } from './services/editor.service.js';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,9 +28,8 @@ import { AntidoteService } from './services/antidote.service.js';
   selector: 'app-root',
   imports: [SharedModule, TreeItemComponent, WordStatsTableComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
-
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('searchInputRef') searchInputRef!: ElementRef<HTMLInputElement>;
   public static CLOUDMODE = false;
@@ -35,43 +41,57 @@ export class AppComponent implements OnInit, OnDestroy {
   searchInput = '';
   searchResults = 0;
 
-  @HostListener("click") onClick(event: any) {
+  @HostListener('click') onClick(event: any) {
     this.editorService.closeAllContexts();
   }
 
-  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
+  @HostListener('window:beforeunload', ['$event']) unloadHandler(event: Event) {
     if (this.editorService.loadedProject?.settings.backupOnChange) {
-      this.editorService.backup(this.editorService.loadedProject?.settings.backupAutoDisplayMessage);
+      this.editorService.backup(
+        this.editorService.loadedProject?.settings.backupAutoDisplayMessage,
+      );
     }
     event.preventDefault();
   }
 
-  @HostListener('document:keydown.control.s', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+  @HostListener('document:keydown.control.s', ['$event']) onKeydownHandler(
+    event: KeyboardEvent,
+  ) {
     event.preventDefault();
     this.editorService.backup(true);
   }
 
-  @HostListener('document:keydown.meta.s', ['$event']) onCmdS(event: KeyboardEvent) {
+  @HostListener('document:keydown.meta.s', ['$event']) onCmdS(
+    event: KeyboardEvent,
+  ) {
     event.preventDefault();
     this.editorService.backup(true);
   }
 
-  @HostListener('document:keydown.control.f', ['$event']) onCtrlF(event: KeyboardEvent) {
+  @HostListener('document:keydown.control.f', ['$event']) onCtrlF(
+    event: KeyboardEvent,
+  ) {
     event.preventDefault();
-    !this.showSearch && this.toggleSearch();
+    if (!this.showSearch) this.toggleSearch();
   }
 
-  @HostListener('document:keydown.meta.f', ['$event']) onCmdF(event: KeyboardEvent) {
+  @HostListener('document:keydown.meta.f', ['$event']) onCmdF(
+    event: KeyboardEvent,
+  ) {
     event.preventDefault();
-    !this.showSearch && this.toggleSearch();
+    if (!this.showSearch) this.toggleSearch();
   }
 
-  @HostListener('document:keydown.control.j', ['$event']) onCtrlJ(event: KeyboardEvent) {
+  @HostListener('document:keydown.control.j', ['$event']) onCtrlJ(
+    event: KeyboardEvent,
+  ) {
     event.preventDefault();
     this.editorService.exportJEFormat();
   }
 
-  @HostListener('document:keydown.meta.j', ['$event']) onCmdJ(event: KeyboardEvent) {
+  @HostListener('document:keydown.meta.j', ['$event']) onCmdJ(
+    event: KeyboardEvent,
+  ) {
     event.preventDefault();
     this.editorService.exportJEFormat();
   }
@@ -84,9 +104,11 @@ export class AppComponent implements OnInit, OnDestroy {
     ) {
       event.preventDefault();
       if (this.antidote.available()) {
-        this.checkText("Je fais une ou deux fauttes.");
+        this.checkText('Je fais une ou deux fauttes.');
       } else {
-        this.snackBar.open('Antidote is not available', 'Close', { duration: 2000 });
+        this.snackBar.open('Antidote is not available', 'Close', {
+          duration: 2000,
+        });
       }
     }
   }
@@ -100,14 +122,17 @@ export class AppComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     public sessionService: SessionService,
     private antidote: AntidoteService,
-    public tts: TextToSpeechService) {
+    public tts: TextToSpeechService,
+  ) {
     AppComponent.CLOUDMODE = !this.electronService.isElectronApp;
     this.setThemeMode();
   }
 
   ngOnInit(): void {
     this.loadStorageLang();
-    this.setFullVersion().then((value) => { this.fullversion = value; });
+    this.setFullVersion().then((value) => {
+      this.fullversion = value;
+    });
     this.tts.listAllVoices();
 
     if (AppComponent.CLOUDMODE) {
@@ -125,9 +150,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // TODO
   checkText(text: string) {
-    this.antidote.getCorrections(text)
-      .then(resp => console.log(`[RESULT] ${JSON.stringify(resp)}`))
-      .catch(err => console.error('Error', err));
+    this.antidote
+      .getCorrections(text)
+      .then((resp) => console.log(`[RESULT] ${JSON.stringify(resp)}`))
+      .catch((err) => console.error('Error', err));
   }
 
   setThemeMode() {
@@ -135,7 +161,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.darkMode = matchMedia.matches;
     this.switchDarkMode(this.darkMode ? 'dark' : 'light');
 
-    matchMedia.addEventListener('change', e => {
+    matchMedia.addEventListener('change', (e) => {
       const match = e.matches;
       this.darkMode = match;
       this.switchDarkMode(this.darkMode ? 'dark' : 'light');
@@ -150,7 +176,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async toggleDarkMode() {
     if (!AppComponent.CLOUDMODE) {
-      await this.electronService.api.darkModeToggle(this.darkMode ? 'light' : 'dark');
+      await this.electronService.api.darkModeToggle(
+        this.darkMode ? 'light' : 'dark',
+      );
     }
     // TODO: fix me on cloud version
     //this.switchDarkMode(this.darkMode ? 'light' : 'dark');
@@ -164,13 +192,17 @@ export class AppComponent implements OnInit, OnDestroy {
         width: '450px',
         enterAnimationDuration: 250,
         exitAnimationDuration: 250,
-        data: {}
+        data: {},
       });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (!!result) {
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
           const selectedText = this.editorService.getSelectedTextOrUndefined();
-          this.tts.start(selectedText !== undefined && selectedText.length > 0 ? selectedText : this.editorService.getEditorText());
+          this.tts.start(
+            selectedText !== undefined && selectedText.length > 0
+              ? selectedText
+              : this.editorService.getEditorText(),
+          );
         }
       });
     }
@@ -178,7 +210,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async setFullVersion(): Promise<string> {
     if (!AppComponent.CLOUDMODE) {
-      return 'Writeepi Desktop ' + await this.electronService.api.version();
+      return 'Writeepi Desktop ' + (await this.electronService.api.version());
     } else {
       const version: string = await this.sessionService.version();
       return 'Writeepi Cloud ' + version;
@@ -186,7 +218,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   loadStorageLang() {
-    let lang: string = localStorage.getItem('selectedLang') ?? navigator.language.slice(0, 2);
+    const lang: string =
+      localStorage.getItem('selectedLang') ?? navigator.language.slice(0, 2);
     if (lang.length > 0) {
       this.i18n.setLang(lang);
     }
@@ -205,40 +238,60 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   loginUser(login: string, password: string) {
-    this.sessionService.loginUser(login, password).then((data: any) => {
-      if (data?.error !== undefined) {
+    this.sessionService.loginUser(login, password).then(
+      (data: any) => {
+        if (data?.error !== undefined) {
+          this.openLoginModal();
+          this.snackBar.open(`Login error: ${data.error}`, 'Close', {
+            duration: 2000,
+          });
+        } else {
+          localStorage.setItem('authToken', data.access_token);
+          localStorage.setItem('refreshToken', data.refresh_token);
+          this.loadUser();
+        }
+      },
+      (error: any) => {
         this.openLoginModal();
-        this.snackBar.open(`Login error: ${data.error}`, 'Close', { duration: 2000 });
-      } else {
-        localStorage.setItem('authToken', data.access_token);
-        localStorage.setItem('refreshToken', data.refresh_token);
-        this.loadUser();
-      }
-    }, (error: any) => {
-      this.openLoginModal();
-      this.snackBar.open(`Login error`, 'Close', { duration: 2000 });
-    });
+        this.snackBar.open(`Login error`, 'Close', { duration: 2000 });
+      },
+    );
   }
 
   loadUser() {
-    this.sessionService.getUserInfos().then((data: User) => {
-      this.sessionService.connected = data?.level !== undefined && Number.isInteger(data.level) && data.level > 0;
-      if (this.sessionService.connected) {
-        this.sessionService.userInfo = { email: data.email, level: data.level, fullname: data.firstname + ' ' + data.lastname, uid: data.uuid };
-        this.snackBar.open(`Welcome ${this.sessionService.userInfo.fullname}`, 'Close', { duration: 2000 });
-        this.loadAll();
-      }
-    }, (error: any) => {
-      this.sessionService.connected = false;
-      this.sessionService.userInfo = {
-        email: '',
-        level: 0,
-        fullname: '',
-        uid: ''
-      };
-      this.editorService.resetAll();
-      this.openLoginModal();
-    });
+    this.sessionService.getUserInfos().then(
+      (data: User) => {
+        this.sessionService.connected =
+          data?.level !== undefined &&
+          Number.isInteger(data.level) &&
+          data.level > 0;
+        if (this.sessionService.connected) {
+          this.sessionService.userInfo = {
+            email: data.email,
+            level: data.level,
+            fullname: data.firstname + ' ' + data.lastname,
+            uid: data.uuid,
+          };
+          this.snackBar.open(
+            `Welcome ${this.sessionService.userInfo.fullname}`,
+            'Close',
+            { duration: 2000 },
+          );
+          this.loadAll();
+        }
+      },
+      (error: any) => {
+        this.sessionService.connected = false;
+        this.sessionService.userInfo = {
+          email: '',
+          level: 0,
+          fullname: '',
+          uid: '',
+        };
+        this.editorService.resetAll();
+        this.openLoginModal();
+      },
+    );
   }
 
   openLoginModal() {
@@ -246,16 +299,19 @@ export class AppComponent implements OnInit, OnDestroy {
       width: '450px',
       enterAnimationDuration: 250,
       exitAnimationDuration: 250,
-      data: {}
+      data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result !== undefined && result.validated) {
         if (result.register === true) {
           this.openRegisterModal();
           return;
         } else if (result.data !== undefined) {
-          if (result.data.login !== undefined && result.data.password !== undefined) {
+          if (
+            result.data.login !== undefined &&
+            result.data.password !== undefined
+          ) {
             const login = String(result.data.login);
             const password = String(result.data.password);
             if (login.length > 0 && password.length > 0) {
@@ -275,10 +331,10 @@ export class AppComponent implements OnInit, OnDestroy {
       width: '450px',
       enterAnimationDuration: 250,
       exitAnimationDuration: 250,
-      data: {}
+      data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result !== undefined && result.validated) {
         if (result.login === true) {
           this.openLoginModal();
@@ -294,10 +350,10 @@ export class AppComponent implements OnInit, OnDestroy {
       width: '300px',
       enterAnimationDuration: 250,
       exitAnimationDuration: 250,
-      data: {}
+      data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result !== undefined && result.validated) {
         this.sessionService.logout().then((data: any) => {
           this.snackBar.open(`Logged out`, 'Close', { duration: 2000 });
@@ -312,15 +368,18 @@ export class AppComponent implements OnInit, OnDestroy {
     const root = document.documentElement;
 
     const currentSidebar = parseFloat(
-      getComputedStyle(root).getPropertyValue('--sidebarwidth')
+      getComputedStyle(root).getPropertyValue('--sidebarwidth'),
     );
     const currentRightbar = parseFloat(
-      getComputedStyle(root).getPropertyValue('--rightbarwidth')
+      getComputedStyle(root).getPropertyValue('--rightbarwidth'),
     );
 
     if (event?.edges?.left !== undefined) {
       const newSidebar = currentSidebar + event.edges.left;
-      root.style.setProperty('--sidebarwidth', `${newSidebar > 20 ? newSidebar : 20}px`);
+      root.style.setProperty(
+        '--sidebarwidth',
+        `${newSidebar > 20 ? newSidebar : 20}px`,
+      );
       if (this.editorService.loadedProject?.settings) {
         this.editorService.loadedProject.settings.leftbar = newSidebar;
       }
@@ -328,7 +387,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (event?.edges?.right !== undefined) {
       const newRightbar = currentRightbar - event.edges.right;
-      root.style.setProperty('--rightbarwidth', `${newRightbar > 20 ? newRightbar : 20}px`);
+      root.style.setProperty(
+        '--rightbarwidth',
+        `${newRightbar > 20 ? newRightbar : 20}px`,
+      );
       if (this.editorService.loadedProject?.settings) {
         this.editorService.loadedProject.settings.rightbar = newRightbar;
       }
@@ -348,6 +410,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   searchInEditor() {
-    this.searchResults = this.editorService.searchModule?.highlight(this.searchInput) ?? 0;
+    this.searchResults =
+      this.editorService.searchModule?.highlight(this.searchInput) ?? 0;
   }
 }

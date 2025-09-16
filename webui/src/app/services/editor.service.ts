@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModaleComponent } from '../modal/modal.component.js';
-import { Content, UserProject, WordStats } from "../types/userproject.js";
+import { Content, UserProject, WordStats } from '../types/userproject.js';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DownloaddialogComponent } from '../dialogs/downloaddialog/downloaddialog.component.js';
 import Quill from 'quill';
-import Delta from 'quill-delta'
-import { UuidUtils } from "../../../../server/src/utils/uuidutils.js"
+import Delta from 'quill-delta';
+import { UuidUtils } from '../../../../server/src/utils/uuidutils.js';
 import { BrowsedialogComponent } from '../dialogs/browsedialog/browsedialog.component.js';
 import { Failover } from '../utils/failover.js';
 import { I18nService } from './i18n.service.js';
@@ -25,9 +25,18 @@ export class ModalActions {
   addChildFolder = { key: 'ADDCHILDFOLDER', description: 'Add a child folder' };
   addChildEditor = { key: 'ADDCHILDEDITOR', description: 'Add a child editor' };
   addFolderAfter = { key: 'ADDFOLDERAFTER', description: 'Add a folder after' };
-  addFolderBefore = { key: 'ADDFOLDERBEFORE', description: 'Add a folder before' };
-  addEditorAfter = { key: 'ADDEDITORAFTER', description: 'Add an editor after' };
-  addEditorBefore = { key: 'ADDEDITORBEFORE', description: 'Add an editor before' };
+  addFolderBefore = {
+    key: 'ADDFOLDERBEFORE',
+    description: 'Add a folder before',
+  };
+  addEditorAfter = {
+    key: 'ADDEDITORAFTER',
+    description: 'Add an editor after',
+  };
+  addEditorBefore = {
+    key: 'ADDEDITORBEFORE',
+    description: 'Add an editor before',
+  };
   delete = { key: 'DELETE', description: 'Delete this element' };
   emptyTrash = { key: 'EMPTYTRASH', description: 'Empty trash' };
   moveTop = { key: 'MOVETOP', description: 'Move top' };
@@ -35,7 +44,7 @@ export class ModalActions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EditorService {
   private modalService = inject(NgbModal);
@@ -77,20 +86,26 @@ export class EditorService {
 
   currentCharacterData = this.DEFAULT_CHARACTER_DATA;
 
-  characterTemplate = "<p><strong>Character: Name</strong></p><p>x years, location</p><p></p>"
-    + "<p><strong>Details:</strong></p><p><strong>some details about character</strong></p><p></p>"
-    + "<p><strong>Relationships:</strong></p><p></p><p></p><p><strong>Personality:</strong></p><p></p><p></p><p>"
-    + "<strong>Appearance:</strong></p><p></p><p></p><p><strong>Background:</strong></p><p></p><p></p><p><strong>Notes:</strong></p><p></p>";
+  characterTemplate =
+    '<p><strong>Character: Name</strong></p><p>x years, location</p><p></p>' +
+    '<p><strong>Details:</strong></p><p><strong>some details about character</strong></p><p></p>' +
+    '<p><strong>Relationships:</strong></p><p></p><p></p><p><strong>Personality:</strong></p><p></p><p></p><p>' +
+    '<strong>Appearance:</strong></p><p></p><p></p><p><strong>Background:</strong></p><p></p><p></p><p><strong>Notes:</strong></p><p></p>';
 
-  constructor(private i18n: I18nService,
+  constructor(
+    private i18n: I18nService,
     private backupService: BackupService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+  ) {}
 
   startAutoBackup() {
     setInterval(() => {
       const now = Date.now();
-      if (this.loadedProject?.settings.backupInterval && now > (this.lastBackupAt + 120000)) {
+      if (
+        this.loadedProject?.settings.backupInterval &&
+        now > this.lastBackupAt + 120000
+      ) {
         this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
       }
     }, 30000);
@@ -99,8 +114,13 @@ export class EditorService {
   wordCount() {
     const text = this.quill?.getText();
     const trimmed = text?.trim();
-    let words: string[] = trimmed !== undefined && trimmed.length > 0 ? trimmed.split(/\s+|'+|-+/) : []; // or /\s+|'+/ if peut-etre count as only one word
-    const count = words.filter((w: string) => /[A-Za-zÀ-ÖØ-öø-ÿ0-9]/i.test(w)).length;
+    const words: string[] =
+      trimmed !== undefined && trimmed.length > 0
+        ? trimmed.split(/\s+|'+|-+/)
+        : []; // or /\s+|'+/ if peut-etre count as only one word
+    const count = words.filter((w: string) =>
+      /[A-Za-zÀ-ÖØ-öø-ÿ0-9]/i.test(w),
+    ).length;
     const uc = this.getCurrentSelectedUserContent();
     if (uc !== undefined) {
       uc.words = !uc.isFolder && !uc.isCharacter ? count : 0;
@@ -136,13 +156,21 @@ export class EditorService {
         }
       } else if (ops.length === 1 && ops[0].delete !== undefined) {
         // console.log("Suppression de text au début : " + ops[0].delete + " premiers caractères");
-      } else if (ops.length > 1 && ops[0].retain !== undefined && ops[1].insert !== undefined) {
+      } else if (
+        ops.length > 1 &&
+        ops[0].retain !== undefined &&
+        ops[1].insert !== undefined
+      ) {
         // console.log("Ajout au milieu du texte de : " + ops[1].insert + " en position " + ops[0].retain);
         const insert: string = ops[1].insert;
         if (insert.length === 1 && ops[0].retain > 0) {
           this.checkCharacterForReplace(insert, ops[0].retain);
         }
-      } else if (ops.length > 1 && ops[0].retain !== undefined && ops[1].delete !== undefined) {
+      } else if (
+        ops.length > 1 &&
+        ops[0].retain !== undefined &&
+        ops[1].delete !== undefined
+      ) {
         // console.log("Suppression de text : " + ops[1].delete + " caractère en position " + ops[0].retain);
       } else {
         // console.log('non géré');
@@ -169,54 +197,85 @@ export class EditorService {
     const q = this.quill;
     if (!q) return;
 
-    if (this.loadedProject?.settings.dashConf && character === "-") {
+    if (this.loadedProject?.settings.dashConf && character === '-') {
       if (position > 0 && q.getText(position - 1, 1) === '-') {
-        // @ts-ignore
+        // @ts-expect-error Delta as now dts
         const delta = new Delta();
-        const ops = delta.retain(position - 1).insert('— ').delete(2);
+        const ops = delta
+          .retain(position - 1)
+          .insert('— ')
+          .delete(2);
         q.updateContents(ops);
       }
-    } else if (this.loadedProject?.settings.spaceConf && character === " ") {
+    } else if (this.loadedProject?.settings.spaceConf && character === ' ') {
       if (position > 0 && q.getText(position - 1, 1) === ' ') {
-        // @ts-ignore
+        // @ts-expect-error Delta as now dts
         const delta = new Delta();
-        const ops = delta.retain(position - 1).insert('. ').delete(2);
+        const ops = delta
+          .retain(position - 1)
+          .insert('. ')
+          .delete(2);
         q.updateContents(ops);
       }
-    } else if (this.loadedProject?.settings.apostropheConf && character === "'") {
+    } else if (
+      this.loadedProject?.settings.apostropheConf &&
+      character === "'"
+    ) {
       if (position >= 0 && q) {
-        // @ts-ignore
+        // @ts-expect-error Delta as now dts
         const delta = new Delta();
         const ops = delta.retain(position).insert('’').delete(1);
         q.updateContents(ops);
       }
-    } else if (this.loadedProject?.settings.ellipsisConf && character === ".") {
+    } else if (this.loadedProject?.settings.ellipsisConf && character === '.') {
       if (position > 1 && q.getText(position - 2, 2) === '..') {
-        // @ts-ignore
+        // @ts-expect-error Delta as now dts
         const delta = new Delta();
-        const ops = delta.retain(position - 2).insert('…').delete(3);
+        const ops = delta
+          .retain(position - 2)
+          .insert('…')
+          .delete(3);
         q.updateContents(ops);
         q.once('editor-change', () => {
           q.setSelection(position - 1, 0);
         });
       }
     } else if (this.loadedProject?.settings.quoteConf) {
-      if (character === "<" && position > 0 && q.getText(position - 1, 1) === '<') {
-        // @ts-ignore
+      if (
+        character === '<' &&
+        position > 0 &&
+        q.getText(position - 1, 1) === '<'
+      ) {
+        // @ts-expect-error Delta as now dts
         const delta = new Delta();
-        const ops = delta.retain(position - 1).insert('« ').delete(2);
+        const ops = delta
+          .retain(position - 1)
+          .insert('« ')
+          .delete(2);
         q.updateContents(ops);
-      } else if (character === ">" && position > 0 && q.getText(position - 1, 1) === '>') {
-        // @ts-ignore
+      } else if (
+        character === '>' &&
+        position > 0 &&
+        q.getText(position - 1, 1) === '>'
+      ) {
+        // @ts-expect-error Delta as now dts
         const delta = new Delta();
-        const ops = delta.retain(position - 1).insert('» ').delete(2);
+        const ops = delta
+          .retain(position - 1)
+          .insert('» ')
+          .delete(2);
         q.updateContents(ops);
       }
     }
   }
 
   hasMandatoryInfos() {
-    return this.loadedProject !== undefined && this.loadedProject.title.trim().length > 0 && this.loadedProject.author.trim().length > 0 && this.loadedProject.lang.trim().length > 0;
+    return (
+      this.loadedProject !== undefined &&
+      this.loadedProject.title.trim().length > 0 &&
+      this.loadedProject.author.trim().length > 0 &&
+      this.loadedProject.lang.trim().length > 0
+    );
   }
 
   resetAll() {
@@ -228,7 +287,10 @@ export class EditorService {
   }
 
   isCurrentSelected(id?: string) {
-    return this.currentSelectedInTree !== undefined && this.currentSelectedInTree === id;
+    return (
+      this.currentSelectedInTree !== undefined &&
+      this.currentSelectedInTree === id
+    );
   }
 
   openSettings() {
@@ -272,12 +334,13 @@ export class EditorService {
         }
         this.lastBackupAt = Date.now();
       } else {
-        this.snackBar.open(`!!! Backup error - Data not saved !!!`, 'Ok', { duration: 5000 });
+        this.snackBar.open(`!!! Backup error - Data not saved !!!`, 'Ok', {
+          duration: 5000,
+        });
         if (this.hasMandatoryInfos()) {
           this.backupFailover();
         }
       }
-
     }
     this.backupLocalStorage();
   }
@@ -298,12 +361,16 @@ export class EditorService {
       width: '750px',
       enterAnimationDuration: 250,
       exitAnimationDuration: 250,
-      data: { input: data }
+      data: { input: data },
     });
 
     // todo: load backup
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result !== undefined && result.validated && result.data !== undefined) {
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (
+        result !== undefined &&
+        result.validated &&
+        result.data !== undefined
+      ) {
         this.editorEnable = false;
         if (result.data.tabIndex === -1 && result.data.store) {
           await this.storeLocation();
@@ -315,13 +382,20 @@ export class EditorService {
           if (result.data.recoveryData?.data !== undefined) {
             this.loadRecovery(result.data.recoveryData.data);
           } else {
-            this.snackBar.open(`Cannot recover project`, 'Close', { duration: 2000 });
+            this.snackBar.open(`Cannot recover project`, 'Close', {
+              duration: 2000,
+            });
           }
-        } else if (result.data.tabIndex === 1 && result.data.projectId !== undefined) {
+        } else if (
+          result.data.tabIndex === 1 &&
+          result.data.projectId !== undefined
+        ) {
           this.resetAll();
           this.loadBackup(result.data.projectId);
         } else {
-          this.snackBar.open(`Cannot open project`, 'Close', { duration: 2000 });
+          this.snackBar.open(`Cannot open project`, 'Close', {
+            duration: 2000,
+          });
         }
       }
     });
@@ -349,7 +423,10 @@ export class EditorService {
     this.currentBackupUuid = project.id;
     this.loadedProject = project;
     this.setSidebarSize();
-    if (this.loadedProject !== undefined && !this.i18n.isSupportedLanguage(this.loadedProject.lang)) {
+    if (
+      this.loadedProject !== undefined &&
+      !this.i18n.isSupportedLanguage(this.loadedProject.lang)
+    ) {
       if (this.i18n.isSupportedLanguage(this.i18n.selectedLang)) {
         this.loadedProject.lang = this.i18n.selectedLang;
       } else {
@@ -365,7 +442,9 @@ export class EditorService {
     if (data) {
       this.listAllProjects();
     } else {
-      this.snackBar.open(`Cannot open storage location`, 'Close', { duration: 3000 });
+      this.snackBar.open(`Cannot open storage location`, 'Close', {
+        duration: 3000,
+      });
     }
   }
 
@@ -396,8 +475,14 @@ export class EditorService {
   setSidebarSize() {
     try {
       const root = document.documentElement;
-      root.style.setProperty('--sidebarwidth', `${this.loadedProject?.settings.leftbar ?? 240}px`);
-      root.style.setProperty('--rightbarwidth', `${this.loadedProject?.settings.rightbar ?? 240}px`);
+      root.style.setProperty(
+        '--sidebarwidth',
+        `${this.loadedProject?.settings.leftbar ?? 240}px`,
+      );
+      root.style.setProperty(
+        '--rightbarwidth',
+        `${this.loadedProject?.settings.rightbar ?? 240}px`,
+      );
     } catch (e) {
       //
     }
@@ -408,9 +493,16 @@ export class EditorService {
     const data = this.loadedProject;
 
     try {
-      localStorage.setItem('backup', JSON.stringify({ uuid, time: Date.now(), data }));
+      localStorage.setItem(
+        'backup',
+        JSON.stringify({ uuid, time: Date.now(), data }),
+      );
     } catch (error: any) {
-      this.snackBar.open(`!!! Backup error - Browser storage is not available !!!`, 'Ok', { duration: 5000 });
+      this.snackBar.open(
+        `!!! Backup error - Browser storage is not available !!!`,
+        'Ok',
+        { duration: 5000 },
+      );
     }
   }
 
@@ -419,22 +511,33 @@ export class EditorService {
     const data = this.loadedProject;
 
     try {
-      localStorage.setItem(Failover.getBestFailover(), JSON.stringify({ uuid, time: Date.now(), data }));
+      localStorage.setItem(
+        Failover.getBestFailover(),
+        JSON.stringify({ uuid, time: Date.now(), data }),
+      );
     } catch (error: any) {
-      this.snackBar.open(`!!! Backup error - Browser storage is not available !!!`, 'Ok', { duration: 5000 });
+      this.snackBar.open(
+        `!!! Backup error - Browser storage is not available !!!`,
+        'Ok',
+        { duration: 5000 },
+      );
     }
   }
 
   updateGlobalWordsCount() {
     const oldCount = this.globalWordsCount;
-    this.globalWordsCount = this.loadedProject !== undefined
-      ? this.loadedProject.content
-        .filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook)
-        .map((p: { words: number }) => p.words ?? 0)
-        .reduce((a, b) => a + b, 0)
-      : 0;
+    this.globalWordsCount =
+      this.loadedProject !== undefined
+        ? this.loadedProject.content
+            .filter(
+              (p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook,
+            )
+            .map((p: { words: number }) => p.words ?? 0)
+            .reduce((a, b) => a + b, 0)
+        : 0;
     const objective = this.loadedProject?.settings?.totalWords ?? 0;
-    this.globalWordsPct = objective > 0 ? Math.round(100 * this.globalWordsCount / objective) : 0;
+    this.globalWordsPct =
+      objective > 0 ? Math.round((100 * this.globalWordsCount) / objective) : 0;
     this.updateCharsCount();
     return { old: oldCount, new: this.globalWordsCount };
   }
@@ -445,8 +548,8 @@ export class EditorService {
     this.loadedProject?.content
       .filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook)
       .forEach((p: any) => {
-        const text = p.chapter ?? "";
-        const clean = text.replace(/<\/?p>/gi, "");
+        const text = p.chapter ?? '';
+        const clean = text.replace(/<\/?p>/gi, '');
         totalChars += clean.length;
       });
 
@@ -462,18 +565,29 @@ export class EditorService {
   }
 
   getCurrentSelectedUserContent(): Content | undefined {
-    return this.loadedProject?.content.find((c: { id: string | undefined; }) => c.id === this.currentSelectedInTree);
+    return this.loadedProject?.content.find(
+      (c: { id: string | undefined }) => c.id === this.currentSelectedInTree,
+    );
   }
 
   checkMandatorySettings() {
-    const checked = this.loadedProject !== undefined && this.loadedProject.title.trim().length > 0 && this.loadedProject.author.trim().length > 0 && this.loadedProject.lang.trim().length > 0;
-    if (this.loadedProject !== undefined && this.loadedProject.description.trim().length === 0) {
+    const checked =
+      this.loadedProject !== undefined &&
+      this.loadedProject.title.trim().length > 0 &&
+      this.loadedProject.author.trim().length > 0 &&
+      this.loadedProject.lang.trim().length > 0;
+    if (
+      this.loadedProject !== undefined &&
+      this.loadedProject.description.trim().length === 0
+    ) {
       this.loadedProject.description = 'n/a';
     }
     if (!checked) {
       this.showSettings = true;
       this.showStats = false;
-      this.snackBar.open(`Please fill in the basic information`, 'Ok', { duration: 2000 });
+      this.snackBar.open(`Please fill in the basic information`, 'Ok', {
+        duration: 2000,
+      });
     }
     return checked;
   }
@@ -482,7 +596,9 @@ export class EditorService {
     const selected = this.getCurrentSelectedUserContent();
     if (selected !== undefined) {
       selected.isBook = this.isBookRootChild(selected);
-      selected.chapter = this.isCharacterContext() ? this.saveCharacter() : cleanQuillHtmlToParagraphs(this.editor);
+      selected.chapter = this.isCharacterContext()
+        ? this.saveCharacter()
+        : cleanQuillHtmlToParagraphs(this.editor);
       selected.notes = this.notes;
     }
   }
@@ -496,7 +612,7 @@ export class EditorService {
 
     const formattedParagraphs = chapter.replaceAll(
       /<p>(.*?)<\/p>/gs,
-      `<p style="line-height:20px; text-align: justify; margin: 0 0 5px 0;">\n$1\n</p>`
+      `<p style="line-height:20px; text-align: justify; margin: 0 0 5px 0;">\n$1\n</p>`,
     );
 
     const finalHtml = `
@@ -505,9 +621,11 @@ ${title}
 ${formattedParagraphs}
 </div>`.trim();
 
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(finalHtml).catch(err => {
-        this.snackBar.open(`Cannot copy to clipboard`, 'Ok', { duration: 3000 });
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(finalHtml).catch((err) => {
+        this.snackBar.open(`Cannot copy to clipboard`, 'Ok', {
+          duration: 3000,
+        });
       });
     } else {
       this.snackBar.open(`No clipboard available`, 'Ok', { duration: 3000 });
@@ -557,16 +675,24 @@ ${formattedParagraphs}
   }
 
   increaseOrderIdsFrom(fromOrderId: number) {
-    this.loadedProject?.content.forEach((item: { orderId: number; }) => item.orderId = item.orderId >= fromOrderId ? item.orderId + 1 : item.orderId);
+    this.loadedProject?.content.forEach(
+      (item: { orderId: number }) =>
+        (item.orderId =
+          item.orderId >= fromOrderId ? item.orderId + 1 : item.orderId),
+    );
   }
 
   getRootMenuItems() {
-    return this.getChildren(undefined).filter((item) => item.isTrash !== true || this.getChildren(item.id).length > 0);
+    return this.getChildren(undefined).filter(
+      (item) => item.isTrash !== true || this.getChildren(item.id).length > 0,
+    );
   }
 
   getChildren(parentId?: string): Content[] {
-    const arr = this.loadedProject?.content.filter((item: any) => item.parentId === parentId);
-    return arr !== undefined ? this.sortBy(arr, t => t.orderId) : [];
+    const arr = this.loadedProject?.content.filter(
+      (item: any) => item.parentId === parentId,
+    );
+    return arr !== undefined ? this.sortBy(arr, (t) => t.orderId) : [];
   }
 
   hasChildren(id?: string): boolean {
@@ -574,12 +700,22 @@ ${formattedParagraphs}
   }
 
   getMaxOrderId(): number {
-    return this.loadedProject !== undefined ? Math.max(...this.loadedProject.content.map((arr: { orderId: any; }) => arr.orderId)) : 0;
+    return this.loadedProject !== undefined
+      ? Math.max(
+          ...this.loadedProject.content.map(
+            (arr: { orderId: any }) => arr.orderId,
+          ),
+        )
+      : 0;
   }
 
   getNewMaxOrder(): number {
     if (this.loadedProject !== undefined) {
-      let maxOrderId = Math.max(...this.loadedProject.content.map((arr: { orderId: any; }) => arr.orderId));
+      const maxOrderId = Math.max(
+        ...this.loadedProject.content.map(
+          (arr: { orderId: any }) => arr.orderId,
+        ),
+      );
       return 1 + maxOrderId;
     } else {
       return 0;
@@ -587,11 +723,15 @@ ${formattedParagraphs}
   }
 
   getMenuItemById(id: string): Content | undefined {
-    return this.loadedProject?.content.find((item: { id: string; }) => item.id === id);
+    return this.loadedProject?.content.find(
+      (item: { id: string }) => item.id === id,
+    );
   }
 
   getTrashId(): string | undefined {
-    const trashId = this.loadedProject?.content.find((item: { isTrash: boolean; }) => item.isTrash === true);
+    const trashId = this.loadedProject?.content.find(
+      (item: { isTrash: boolean }) => item.isTrash === true,
+    );
     return trashId !== undefined ? trashId.id : undefined;
   }
 
@@ -610,7 +750,9 @@ ${formattedParagraphs}
   }
 
   getBookRootId(): string | undefined {
-    const bookId = this.loadedProject?.content.find((item: { isBook: boolean; }) => item.isBook === true);
+    const bookId = this.loadedProject?.content.find(
+      (item: { isBook: boolean }) => item.isBook === true,
+    );
     return bookId !== undefined ? bookId.id : undefined;
   }
 
@@ -631,7 +773,9 @@ ${formattedParagraphs}
   }
 
   getCharacterRootId(): string | undefined {
-    const characterId = this.loadedProject?.content.find((item: { isCharacter: boolean; }) => item.isCharacter === true);
+    const characterId = this.loadedProject?.content.find(
+      (item: { isCharacter: boolean }) => item.isCharacter === true,
+    );
     return characterId !== undefined ? characterId.id : undefined;
   }
 
@@ -712,7 +856,9 @@ ${formattedParagraphs}
 
   private getSiblingsSorted(menuItem: any): any[] {
     const parentId = menuItem.parentId ?? undefined;
-    const siblings = (this.loadedProject?.content ?? []).filter(it => it.parentId === parentId);
+    const siblings = (this.loadedProject?.content ?? []).filter(
+      (it) => it.parentId === parentId,
+    );
     return this.sortBy(siblings, (t: any) => t.orderId);
   }
 
@@ -720,7 +866,7 @@ ${formattedParagraphs}
     const siblings = this.getSiblingsSorted(menuItem);
     if (!siblings.length) return;
 
-    const idx = siblings.findIndex(it => it.id === menuItem.id);
+    const idx = siblings.findIndex((it) => it.id === menuItem.id);
     if (idx < 0) return;
 
     const targetIdx = idx + direction;
@@ -750,14 +896,14 @@ ${formattedParagraphs}
 
   toggleContextualMenu(event: any, item: any) {
     event.preventDefault();
-    this.loadedProject?.content.forEach((element: { context: boolean; }) => {
+    this.loadedProject?.content.forEach((element: { context: boolean }) => {
       element.context = false;
     });
-    item.context = true
+    item.context = true;
   }
 
   closeAllContexts() {
-    this.loadedProject?.content.forEach((element: { context: boolean; }) => {
+    this.loadedProject?.content.forEach((element: { context: boolean }) => {
       element.context = false;
     });
   }
@@ -767,17 +913,22 @@ ${formattedParagraphs}
     let menuItemName: string = menuItem.name;
     if (menuItemName.endsWith('|I18N')) {
       const treeNodes = this.i18n.data.treeNodes;
-      menuItemName = treeNodes[menuItemName] !== undefined ? treeNodes[menuItemName] : menuItemName;
+      menuItemName =
+        treeNodes[menuItemName] !== undefined
+          ? treeNodes[menuItemName]
+          : menuItemName;
     }
     modalRef.componentInstance.name = `${action.description}: ${menuItemName}`;
 
     if (action.key === this.modalActions.delete.key) {
-      modalRef.componentInstance.extraMessage = 'This item and its children will be moved to trash';
+      modalRef.componentInstance.extraMessage =
+        'This item and its children will be moved to trash';
       modalRef.componentInstance.inputTitle = 'HIDE';
       modalRef.componentInstance.inputContent = '';
       modalRef.componentInstance.confirmLabel = 'Move to trash';
     } else if (action.key === this.modalActions.emptyTrash.key) {
-      modalRef.componentInstance.extraMessage = 'Please confirm deletion by typing DELETE';
+      modalRef.componentInstance.extraMessage =
+        'Please confirm deletion by typing DELETE';
       modalRef.componentInstance.inputTitle = 'Confirm deletion';
       modalRef.componentInstance.inputContent = '';
       modalRef.componentInstance.confirmLabel = 'Delete';
@@ -795,9 +946,9 @@ ${formattedParagraphs}
 
     modalRef.result.then(
       async (result) => {
-        let newName = new String(result);
+        const newName = new String(result);
         if (newName.length > 0 || action.key === this.modalActions.delete.key) {
-          let refOrder = menuItem.orderId;
+          const refOrder = menuItem.orderId;
           if (action.key === this.modalActions.rename.key) {
             menuItem.name = newName;
           } else if (action.key === this.modalActions.addChildFolder.key) {
@@ -816,8 +967,8 @@ ${formattedParagraphs}
               isSummary: false,
               isTrash: false,
               isCharacter: this.isCharacterRootChildByParentId(menuItem.id),
-              words: 0
-            })
+              words: 0,
+            });
           } else if (action.key === this.modalActions.addChildEditor.key) {
             menuItem.expanded = true;
             this.loadedProject?.content.push({
@@ -836,8 +987,8 @@ ${formattedParagraphs}
               isSummary: false,
               isTrash: false,
               isCharacter: this.isCharacterRootChildByParentId(menuItem.id),
-              words: 0
-            })
+              words: 0,
+            });
           } else if (action.key === this.modalActions.addFolderAfter.key) {
             this.increaseOrderIdsFrom(refOrder + 1);
             this.loadedProject?.content.push({
@@ -853,9 +1004,11 @@ ${formattedParagraphs}
               isBook: false,
               isSummary: false,
               isTrash: false,
-              isCharacter: this.isCharacterRootChildByParentId(menuItem.parentId),
-              words: 0
-            })
+              isCharacter: this.isCharacterRootChildByParentId(
+                menuItem.parentId,
+              ),
+              words: 0,
+            });
           } else if (action.key === this.modalActions.addFolderBefore.key) {
             this.increaseOrderIdsFrom(refOrder);
             this.loadedProject?.content.push({
@@ -871,9 +1024,11 @@ ${formattedParagraphs}
               isBook: false,
               isSummary: false,
               isTrash: false,
-              isCharacter: this.isCharacterRootChildByParentId(menuItem.parentId),
-              words: 0
-            })
+              isCharacter: this.isCharacterRootChildByParentId(
+                menuItem.parentId,
+              ),
+              words: 0,
+            });
           } else if (action.key === this.modalActions.addEditorAfter.key) {
             this.increaseOrderIdsFrom(refOrder + 1);
             this.loadedProject?.content.push({
@@ -891,9 +1046,11 @@ ${formattedParagraphs}
               isBook: false,
               isSummary: false,
               isTrash: false,
-              isCharacter: this.isCharacterRootChildByParentId(menuItem.parentId),
-              words: 0
-            })
+              isCharacter: this.isCharacterRootChildByParentId(
+                menuItem.parentId,
+              ),
+              words: 0,
+            });
           } else if (action.key === this.modalActions.addEditorBefore.key) {
             this.increaseOrderIdsFrom(refOrder);
             this.loadedProject?.content.push({
@@ -911,17 +1068,31 @@ ${formattedParagraphs}
               isBook: false,
               isSummary: false,
               isTrash: false,
-              isCharacter: this.isCharacterRootChildByParentId(menuItem.parentId),
-              words: 0
-            })
-          } else if (action.key === this.modalActions.delete.key && menuItem.canBeDeleted) {
+              isCharacter: this.isCharacterRootChildByParentId(
+                menuItem.parentId,
+              ),
+              words: 0,
+            });
+          } else if (
+            action.key === this.modalActions.delete.key &&
+            menuItem.canBeDeleted
+          ) {
             const trashId = this.getTrashId();
-            this.loadedProject?.content.filter((item: any) => item.parentId === menuItem.id).forEach((item: any) => { item.parentId = trashId });
+            this.loadedProject?.content
+              .filter((item: any) => item.parentId === menuItem.id)
+              .forEach((item: any) => {
+                item.parentId = trashId;
+              });
             menuItem.parentId = trashId;
-          } else if (action.key === this.modalActions.emptyTrash.key && newName.toUpperCase() === 'DELETE') {
+          } else if (
+            action.key === this.modalActions.emptyTrash.key &&
+            newName.toUpperCase() === 'DELETE'
+          ) {
             if (this.loadedProject !== undefined) {
               const trashId = this.getTrashId();
-              this.loadedProject.content = this.loadedProject?.content.filter((item: any) => item.parentId !== trashId);
+              this.loadedProject.content = this.loadedProject?.content.filter(
+                (item: any) => item.parentId !== trashId,
+              );
             }
           }
         }
@@ -938,9 +1109,10 @@ ${formattedParagraphs}
   sortBy<T, V>(
     array: T[],
     valueExtractor: (t: T) => V,
-    comparator?: (a: V, b: V) => number) {
-    const c = comparator ?? ((a, b) => a > b ? 1 : -1)
-    return array.sort((a, b) => c(valueExtractor(a), valueExtractor(b)))
+    comparator?: (a: V, b: V) => number,
+  ) {
+    const c = comparator ?? ((a, b) => (a > b ? 1 : -1));
+    return array.sort((a, b) => c(valueExtractor(a), valueExtractor(b)));
   }
 
   async exportEpub() {
@@ -949,18 +1121,20 @@ ${formattedParagraphs}
       enterAnimationDuration: 250,
       exitAnimationDuration: 250,
       autoFocus: false,
-      data: { uuid: this.currentBackupUuid }
+      data: { uuid: this.currentBackupUuid },
     });
   }
 
   isCharacterContext(): boolean {
-    return this.currentSelectedInTree !== undefined ? this.isCharacterRootChildByParentId(this.currentSelectedInTree) : false;
+    return this.currentSelectedInTree !== undefined
+      ? this.isCharacterRootChildByParentId(this.currentSelectedInTree)
+      : false;
   }
 
   parseCharacter(content: Content): any {
     if (content.chapter !== undefined) {
       try {
-        let charData = JSON.parse(content.chapter);
+        const charData = JSON.parse(content.chapter);
         return {
           name: charData.name,
           age: charData.age,
@@ -971,7 +1145,7 @@ ${formattedParagraphs}
           personality: charData.personality,
           appearance: charData.appearance,
           notes: charData.notes,
-        }
+        };
       } catch (e) {
         // console.log(e);
       }
