@@ -5,9 +5,10 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
-    "fullbuildandstart": "cd ../webui && npm run buildprod && cd ../server && npx tsx src/main.ts | bunyan -L",
-    "build": "npx tsc",
-    "start": "npx tsx src/main.ts | bunyan -L",
+    "fullbuildandstart": "cd ../webui && npm run buildprod && cd ../server && npm run build && node dist/server/src/main.js | bunyan -L",
+    "build": "npx tsc && npx copyfiles -u3 ../webui/dist/webui/browser/** dist/",
+    "start": "npm run build && node dist/server/src/main.js | bunyan -L",
+    "start:prod": "node dist/server/src/main.js | bunyan -L",
     "startdevwin": "set PROFILE=DEV && npx tsx src/main.ts | bunyan -L",
     "startdevlinux": "set PROFILE=DEV npx tsx src/main.ts | bunyan -L"
   },
@@ -32,6 +33,7 @@
     "@types/node": "^24.5.0",
     "@types/nodemailer": "^7.0.1",
     "@types/pg": "^8.15.5",
+    "copyfiles": "^2.4.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
@@ -50,6 +52,7 @@
     "html-entities": "^2.6.0",
     "html-to-text": "^9.0.5",
     "jimp": "^1.6.0",
+    "jspdf": "^3.0.2",
     "mariadb": "^3.4.5",
     "nodemailer": "^7.0.6",
     "pg": "^8.16.3",

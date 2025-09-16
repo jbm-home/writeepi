@@ -32,7 +32,7 @@ const ONEHOUR = ONEMINUTE * 60;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const webpath = __dirname + '/../../webui/dist/webui/browser/';
+const webpath = __dirname + '/../../webui/browser/';
 
 scheduler.Schedule(
   'Session cleaner',

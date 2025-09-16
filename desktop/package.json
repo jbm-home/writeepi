@@ -7,7 +7,8 @@
   "main": "./dist/desktop/src/main.js",
   "type": "module",
   "scripts": {
-    "build": "npm run build:version && tsc && npm run copy-files && npm run copy-app && npm run copy-resources",
+    "build": "npm run dist && npm run copy-files && npm run copy-app && npm run copy-resources",
+    "dist": "npm run build:version && tsc",
     "clean": "rimraf out dist release build node_modules",
     "start": "set ELECTRON_ENABLE_LOGGING=1 && npm run build && electron dist/desktop/src/main.js",
     "start:buildfront": "cd ../webui && npm run buildprod && cd ../desktop && npm run start",
