@@ -171,7 +171,6 @@ export class Postgres {
           await this.createUser(
             'Admin',
             'Admin',
-            'Admin',
             'noreply@writeepi.com',
             'changeit',
             '+33600000000',
@@ -191,7 +190,6 @@ export class Postgres {
   };
 
   public static createUser = async (
-    nickname: string,
     firstname: string,
     lastname: string,
     email: string,
@@ -221,11 +219,10 @@ export class Postgres {
 
         await client.query(
           `INSERT INTO users
-                  (uuid, nickname, firstname, lastname, email, password, resetKey, phone, level)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+                  (uuid, firstname, lastname, email, password, resetKey, phone, level)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
           [
             newUuid,
-            nickname,
             firstname,
             lastname,
             email,

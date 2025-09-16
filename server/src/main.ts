@@ -70,6 +70,15 @@ app.use('/api/session', SessionController);
 app.use('/api/export', ExportController);
 app.use('/api/content', BackupController);
 app.use('/api/captcha', CaptchaController);
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'UP',
+    version,
+  });
+});
+app.get('/api/version', (req, res) => {
+  res.send(version);
+});
 
 if (process.env['PROFILE']?.trim() === 'DEV') {
   log.warn("Starting in dev mode");
@@ -79,13 +88,10 @@ if (process.env['PROFILE']?.trim() === 'DEV') {
   app.use('/', express.static(webpath));
 }
 
-app.get('/api/version', (req, res) => {
-  res.send(version);
-});
 log.info("Server version: " + version);
 
 // Unknown + error handlers
-app.all('*', UnknownRoutesHandler);
+app.use(UnknownRoutesHandler);
 app.use(ExceptionsHandler);
 
 log.info('Web path: ' + webpath);

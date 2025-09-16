@@ -7,20 +7,22 @@ CREATE TABLE IF NOT EXISTS versions (
 
 -- Table users
 CREATE TABLE IF NOT EXISTS users (
-  uuid UUID NOT NULL,
+  uuid UUID PRIMARY KEY,
   firstname VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  email VARCHAR(512) NOT NULL,
+  email VARCHAR(512) UNIQUE NOT NULL,
   phone VARCHAR(255) NOT NULL,
   creation TIMESTAMPTZ NOT NULL DEFAULT now(),
   updatedAt TIMESTAMPTZ NOT NULL DEFAULT now(),
   resetkey VARCHAR(255) NOT NULL,
   resetdate TIMESTAMPTZ NOT NULL DEFAULT now(),
   active BOOLEAN NOT NULL DEFAULT true,
-  level SMALLINT NOT NULL DEFAULT 0,
-  PRIMARY KEY (uuid, email, resetkey)
+  level SMALLINT NOT NULL DEFAULT 0
 );
+
+CREATE INDEX idx_users_resetkey ON users(resetkey);
+CREATE INDEX idx_users_active ON users(active);
 
 -- Table sessions
 CREATE TABLE IF NOT EXISTS sessions (
@@ -50,21 +52,21 @@ CREATE TABLE IF NOT EXISTS user_content (
 CREATE INDEX idx_user_content_userId ON user_content(userId);
 
 -- Trigger function to auto-update updatedAt
-CREATE OR REPLACE FUNCTION set_updatedAt()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updatedAt = now();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION set_updatedAt()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--   NEW.updatedAt = now();
+--   RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
--- Attach triggers
-CREATE TRIGGER trg_users_updatedAt
-BEFORE UPDATE ON users
-FOR EACH ROW
-EXECUTE FUNCTION set_updatedAt();
+-- -- Attach triggers
+-- CREATE TRIGGER trg_users_updatedAt
+-- BEFORE UPDATE ON users
+-- FOR EACH ROW
+-- EXECUTE FUNCTION set_updatedAt();
 
-CREATE TRIGGER trg_user_content_updatedAt
-BEFORE UPDATE ON user_content
-FOR EACH ROW
-EXECUTE FUNCTION set_updatedAt();
+-- CREATE TRIGGER trg_user_content_updatedAt
+-- BEFORE UPDATE ON user_content
+-- FOR EACH ROW
+-- EXECUTE FUNCTION set_updatedAt();
