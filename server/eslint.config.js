@@ -5,7 +5,8 @@ import nodePlugin from 'eslint-plugin-node';
 import securityPlugin from 'eslint-plugin-security';
 import prettierPlugin from 'eslint-plugin-prettier';
 
-export default [
+/** @type {import('eslint').FlatConfig[]} */
+const config = [
   {
     ignores: ['dist/**/*', 'build/**/*', 'node_modules/**/*', '**/*.d.ts', '**/*.js', '**/*.mjs', '**/*.cjs'],
   },
@@ -49,3 +50,5 @@ export default [
     },
   },
 ];
+
+export default config;
