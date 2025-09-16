@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(512) UNIQUE NOT NULL,
   phone VARCHAR(255) NOT NULL,
   creation TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updatedAt TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   resetkey VARCHAR(255) NOT NULL,
   resetdate TIMESTAMPTZ NOT NULL DEFAULT now(),
   active BOOLEAN NOT NULL DEFAULT true,
@@ -38,35 +38,35 @@ CREATE INDEX IF NOT EXISTS idx_lastseen ON sessions (lastseen);
 -- Table user_content
 CREATE TABLE IF NOT EXISTS user_content (
   id UUID PRIMARY KEY,
-  userId UUID NOT NULL,
+  user_id UUID NOT NULL,
   lang VARCHAR(10) NOT NULL,
   title VARCHAR(512) NOT NULL,
   description TEXT NOT NULL,
   author VARCHAR(512) NOT NULL,
   settings JSONB NOT NULL,
   content JSONB NOT NULL,
-  createdAt TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updatedAt TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES users(uuid)
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(uuid)
 );
-CREATE INDEX idx_user_content_userId ON user_content(userId);
+CREATE INDEX idx_user_content_user_id ON user_content(user_id);
 
--- Trigger function to auto-update updatedAt
--- CREATE OR REPLACE FUNCTION set_updatedAt()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   NEW.updatedAt = now();
---   RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
+-- Trigger function to auto-update updated_at
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
--- -- Attach triggers
--- CREATE TRIGGER trg_users_updatedAt
--- BEFORE UPDATE ON users
--- FOR EACH ROW
--- EXECUTE FUNCTION set_updatedAt();
+-- Attach triggers
+CREATE TRIGGER trg_users_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
 
--- CREATE TRIGGER trg_user_content_updatedAt
--- BEFORE UPDATE ON user_content
--- FOR EACH ROW
--- EXECUTE FUNCTION set_updatedAt();
+CREATE TRIGGER trg_user_content_updated_at
+BEFORE UPDATE ON user_content
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();

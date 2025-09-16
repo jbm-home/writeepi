@@ -38,7 +38,7 @@ scheduler.Schedule(
   'Session cleaner',
   () => {
     Postgres.querySimple(
-      `DELETE FROM sessions WHERE expires < now() - interval '1 day' OR lastSeen < now() - interval '$1 day'`,
+      `DELETE FROM sessions WHERE expires < now() - interval '1 day' OR lastSeen < now() - ($1 * interval '1 day')`,
       [config.SESSION_DURATION_DAYS]
     );
   },

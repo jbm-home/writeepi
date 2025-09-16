@@ -69,8 +69,8 @@ export class ExportService {
       const res = await Postgres.query<UserProject>(
         `SELECT *
                FROM user_content
-              WHERE id = $1 AND "userId" = $2
-              ORDER BY "updatedAt" DESC
+              WHERE id = $1 AND user_id = $2
+              ORDER BY updated_at DESC
               LIMIT 1`,
         [contentUid, userUid],
       );

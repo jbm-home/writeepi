@@ -33,7 +33,7 @@ export class SessionService {
                         req.session.email = res.email;
 
                         await Postgres.querySimple(
-                            `UPDATE users SET "updatedAt" = now() WHERE uuid = $1`,
+                            `UPDATE users SET updated_at = now() WHERE uuid = $1`,
                             [res.uuid],
                         );
 
@@ -54,7 +54,7 @@ export class SessionService {
 
     async allUsers(req: any): Promise<User[]> {
         const res = await Postgres.query<User>(
-            `SELECT uuid, firstname, lastname, email, phone, creation, "updatedAt", active, level FROM users`,
+            `SELECT uuid, firstname, lastname, email, phone, creation, updated_at, active, level FROM users`,
         );
         this.log.debug(`Listing users from '${IpUtils.getIp(req)}'`);
         return res ?? [];

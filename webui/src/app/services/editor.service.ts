@@ -427,7 +427,12 @@ export class EditorService {
 
   updateGlobalWordsCount() {
     const oldCount = this.globalWordsCount;
-    this.globalWordsCount = this.loadedProject !== undefined ? this.loadedProject.content.filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook).map((p: { words: any; }) => p.words ?? 0).reduce((a: any, b: any) => { return a + b; }) : 0;
+    this.globalWordsCount = this.loadedProject !== undefined
+      ? this.loadedProject.content
+        .filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook)
+        .map((p: { words: number }) => p.words ?? 0)
+        .reduce((a, b) => a + b, 0)
+      : 0;
     const objective = this.loadedProject?.settings?.totalWords ?? 0;
     this.globalWordsPct = objective > 0 ? Math.round(100 * this.globalWordsCount / objective) : 0;
     this.updateCharsCount();
