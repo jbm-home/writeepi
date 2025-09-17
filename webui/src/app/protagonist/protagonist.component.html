@@ -1,0 +1,74 @@
+<div class="container-fluid full-container">
+  <div class="full-container-scroll">
+    <h2 class="mb-4 text-center">
+      Protagoniste
+    </h2>
+
+    <!-- === PHASES DU HÉROS === -->
+    <h4 class="mt-4 mb-3">Phases du parcours</h4>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4" *ngFor="let phase of phases; let i = index">
+        <mat-card class="h-100 shadow-sm card-clickable" (click)="toggleExpand('phase', i)">
+          <mat-card-header>
+            <mat-card-title>{{ phase.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="text-muted">{{ phase.question }}</p>
+
+            <!-- Zone réponse (seulement si expand = true) -->
+            <div *ngIf="expanded.type === 'phase' && expanded.index === i">
+              <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>Réponse</mat-label>
+                <textarea matInput rows="3" [(ngModel)]="phase.answer" placeholder="Écrire ici..." (click)="$event.stopPropagation()"></textarea>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- === ARCHÉTYPES === -->
+    <h4 class="mt-5 mb-3">Archétypes de personnages</h4>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4" *ngFor="let archetype of archetypes; let i = index">
+        <mat-card class="h-100 shadow-sm border-primary card-clickable" (click)="toggleExpand('archetype', i)">
+          <mat-card-header>
+            <mat-card-title>{{ archetype.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="text-muted">{{ archetype.question }}</p>
+
+            <div *ngIf="expanded.type === 'archetype' && expanded.index === i">
+              <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>Réponse</mat-label>
+                <textarea matInput rows="3" [(ngModel)]="archetype.answer" placeholder="Écrire ici..." (click)="$event.stopPropagation()"></textarea>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- === RELATIONS === -->
+    <h4 class="mt-5 mb-3">Relations</h4>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4" *ngFor="let relation of relations; let i = index">
+        <mat-card class="h-100 shadow-sm border-success card-clickable" (click)="toggleExpand('relation', i)">
+          <mat-card-header>
+            <mat-card-title>{{ relation.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="text-muted">{{ relation.question }}</p>
+
+            <div *ngIf="expanded.type === 'relation' && expanded.index === i">
+              <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-label>Réponse</mat-label>
+                <textarea matInput rows="3" [(ngModel)]="relation.answer" placeholder="Écrire ici..." (click)="$event.stopPropagation()"></textarea>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

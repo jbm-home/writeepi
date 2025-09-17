@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ElectronService } from './services/electron.service.js';
-import { EditorService } from './services/editor.service.js';
+import { EditorService, DisplayedView } from './services/editor.service.js';
 import { MatDialog } from '@angular/material/dialog';
 import { I18nService } from './services/i18n.service.js';
 import { I18nPipe } from './pipes/i18n.pipe.js';
@@ -23,16 +23,18 @@ import { TextToSpeechService } from './services/textToSpeech.service.js';
 import { SpeechdialogComponent } from './dialogs/speechdialog/speechdialog.component.js';
 import { WordStatsTableComponent } from './word-stats-table/word-stats-table.component.js';
 import { AntidoteService } from './services/antidote.service.js';
+import { ProtagonistComponent } from './protagonist/protagonist.component.js';
 
 @Component({
   selector: 'app-root',
-  imports: [SharedModule, TreeItemComponent, WordStatsTableComponent],
+  imports: [SharedModule, TreeItemComponent, WordStatsTableComponent, ProtagonistComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('searchInputRef') searchInputRef!: ElementRef<HTMLInputElement>;
   public static CLOUDMODE = false;
+  readonly DisplayedView = DisplayedView;
 
   notifications = [];
   darkMode = false;
@@ -97,7 +99,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:keydown', ['$event'])
-  onShortcut(event: KeyboardEvent) {
+  onSpelling(event: KeyboardEvent) {
     if (
       (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'c') ||
       (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'c')
@@ -110,6 +112,17 @@ export class AppComponent implements OnInit, OnDestroy {
           duration: 2000,
         });
       }
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onDebug(event: KeyboardEvent) {
+    if (
+      (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'd') ||
+      (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'd')
+    ) {
+      event.preventDefault();
+      this.editorService.editorDisplayedView = DisplayedView.Protagonist;
     }
   }
 

@@ -43,6 +43,13 @@ export class ModalActions {
   moveBottom = { key: 'MOVEBOTTOM', description: 'Move bottom' };
 }
 
+export enum DisplayedView {
+  Default,
+  Settings,
+  Stats,
+  Protagonist,
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -65,8 +72,7 @@ export class EditorService {
   globalCharsCount: number = 0;
   globalWordsPct: number = 0;
 
-  showSettings = false;
-  showStats = false;
+  editorDisplayedView: DisplayedView = DisplayedView.Default;
   hasOpenningQuote = false;
   lastBackupAt = 0;
 
@@ -289,14 +295,12 @@ export class EditorService {
 
   openSettings() {
     this.changeSelection();
-    this.showSettings = true;
-    this.showStats = false;
+    this.editorDisplayedView = DisplayedView.Settings;
   }
 
   openStats() {
     this.changeSelection();
-    this.showStats = true;
-    this.showSettings = false;
+    this.editorDisplayedView = DisplayedView.Stats;
   }
 
   async backup(message: boolean = true) {
@@ -577,8 +581,7 @@ export class EditorService {
       this.loadedProject.description = 'n/a';
     }
     if (!checked) {
-      this.showSettings = true;
-      this.showStats = false;
+      this.editorDisplayedView = DisplayedView.Settings;
       this.snackBar.open(`Please fill in the basic information`, 'Ok', {
         duration: 2000,
       });
@@ -645,8 +648,7 @@ ${formattedParagraphs}
     if (!this.checkMandatorySettings()) {
       return;
     }
-    this.showSettings = false;
-    this.showStats = false;
+    this.editorDisplayedView = DisplayedView.Default;
     this.saveCurrentToProject();
     this.currentCharacterData = this.DEFAULT_CHARACTER_DATA;
     this.currentSelectedInTree = menuItem?.id;
