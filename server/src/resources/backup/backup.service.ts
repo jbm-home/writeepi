@@ -29,7 +29,7 @@ export class BackupService {
     const userUid = req.session.uid;
 
     if (UuidUtils.isValidUuid(contentUid) && UuidUtils.isValidUuid(userUid)) {
-      const row = await Postgres.queryOne<UserProject>(
+      const row = await Postgres.queryOne(
         `SELECT *
                    FROM user_content
                   WHERE id = $1 AND user_id = $2
@@ -40,16 +40,16 @@ export class BackupService {
       if (row) {
         const result: UserProject = {
           id: row.id,
-          userId: row.userId,
+          userId: row.user_id,
           lang: row.lang,
           title: row.title,
           description: row.description,
           author: row.author,
           settings: row.settings,
           content: row.content,
-          wordStats: row.wordStats,
-          createdAt: row.createdAt,
-          updatedAt: row.updatedAt,
+          wordStats: row.wordstats,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
         };
         return httpRes.status(200).json(result);
       }
