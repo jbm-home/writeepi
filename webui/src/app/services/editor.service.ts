@@ -1115,7 +1115,8 @@ ${formattedParagraphs}
     return array.sort((a, b) => c(valueExtractor(a), valueExtractor(b)));
   }
 
-  async exportEpub() {
+  async exportModal() {
+    this.backup(false);
     const dialogRef = this.dialog.open(DownloaddialogComponent, {
       width: '500px',
       enterAnimationDuration: 250,

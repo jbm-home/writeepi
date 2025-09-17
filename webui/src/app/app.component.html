@@ -47,7 +47,7 @@
     </div>
     @if (editorService.loadedProject !== undefined) {
     <div class="app-header-button me-3" placement="left" ngbTooltip="{{ 'menu.export' | i18n }}"
-      (click)="editorService.exportEpub()"><i class="bi bi-box-arrow-up"></i>
+      (click)="editorService.exportModal()"><i class="bi bi-box-arrow-up"></i>
     </div>
     }
     @if (!cloudMode) {
@@ -116,7 +116,7 @@
           </button>
         </li>
         <li class="nav-item app-only-on-small-device" *ngIf="editorService.loadedProject !== undefined">
-          <button type="button" class="btn app-nav-item" (click)="editorService.exportEpub()">
+          <button type="button" class="btn app-nav-item" (click)="editorService.exportModal()">
             <div class="bi bi-box-arrow-up ms-2 me-1">&nbsp; {{ 'menu.export' | i18n }}</div>
           </button>
         </li>

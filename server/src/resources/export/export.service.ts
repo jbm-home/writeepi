@@ -32,7 +32,7 @@ export class ExportService {
       if (pdf === undefined) {
         return httpRes.status(500).json("Server error");
       }
-      const mimeType = "application/pdf; charset=utf-8";
+      const mimeType = "application/pdf";
       httpRes.setHeader("Content-Type", mimeType);
       httpRes.setHeader(
         "Content-Disposition",

@@ -14,7 +14,7 @@ export class PdfCommon {
       format: [this.pdfPageWidth, this.pdfPageHeight],
     });
 
-    pdfConverter.setFont("Verdana", "normal");
+    pdfConverter.setFont("times", "normal");
 
     this.addPdfTitle(
       pdfConverter,
@@ -42,7 +42,7 @@ export class PdfCommon {
 
     const firstChapterPage = startPageBeforeChapters + 1;
 
-    pdfConverter.setFont("Verdana", "normal").setFontSize(10);
+    pdfConverter.setFont("times", "normal").setFontSize(10);
 
     for (let i = firstChapterPage; i <= totalPages; i++) {
       pdfConverter.setPage(i);
@@ -61,7 +61,7 @@ export class PdfCommon {
       pdfConverter.save(resultPath);
       return undefined;
     } else {
-      return pdfConverter.output();
+      return Buffer.from(pdfConverter.output("arraybuffer"));
     }
   }
 
@@ -72,9 +72,9 @@ export class PdfCommon {
     description: string,
   ) {
     // title
-    pdfConverter.setFont("Verdana", "bold").setFontSize(22);
+    pdfConverter.setFont("times", "bold").setFontSize(22);
     pdfConverter.text(title, this.pdfPageWidth / 2, 25, { align: "center" });
-    pdfConverter.setFont("Verdana", "bold").setFontSize(18);
+    pdfConverter.setFont("times", "bold").setFontSize(18);
     pdfConverter.text(author, this.pdfPageWidth / 2, 40, { align: "center" });
 
     // description
@@ -84,28 +84,28 @@ export class PdfCommon {
       description,
       this.pdfPageWidth - this.pdfMargin * 2,
     );
-    pdfConverter.setFont("Verdana", "normal").setFontSize(14);
+    pdfConverter.setFont("times", "normal").setFontSize(14);
     wrappedText.forEach((line: string) => {
       const posY = this.pdfMargin + defaultYJump * iterations++;
       pdfConverter.text(line, 15, 100 + posY, { align: "justify" });
     });
 
     // footer
-    pdfConverter.setFont("Verdana", "normal").setFontSize(15);
+    pdfConverter.setFont("times", "normal").setFontSize(15);
     pdfConverter.text(
       "© " + new Date().getFullYear() + " " + author,
       15,
       245,
       { align: "left" },
     );
-    pdfConverter.setFont("Verdana", "italic").setFontSize(14);
+    pdfConverter.setFont("times", "italic").setFontSize(14);
     pdfConverter.text(
       "Any copy or distribution without the author's consent is forbidden.",
       15,
       260,
       { align: "left" },
     );
-    pdfConverter.setFont("Verdana", "bold").setFontSize(14);
+    pdfConverter.setFont("times", "bold").setFontSize(14);
     pdfConverter.text(
       "Built with Writeepi (https://www.writeepi.com) " +
         new Date().toLocaleString(),
@@ -122,12 +122,12 @@ export class PdfCommon {
     const pageH = this.pdfPageHeight;
     const usableW = pageW - margin * 2;
 
-    pdf.setFont("Verdana", "bold").setFontSize(20);
+    pdf.setFont("times", "bold").setFontSize(20);
     let y = margin;
     pdf.text(title, pageW / 2, y, { align: "center" });
     y += 18;
 
-    pdf.setFont("Verdana", "normal").setFontSize(16);
+    pdf.setFont("times", "normal").setFontSize(16);
     const lineHeight = 8;
     const smallLineHeight = 3;
 
@@ -162,7 +162,7 @@ export class PdfCommon {
       for (const line of wrapped) {
         if (y > pageH - margin) {
           pdf.addPage();
-          pdf.setFont("Verdana", "normal").setFontSize(16);
+          pdf.setFont("times", "normal").setFontSize(16);
           y = margin;
         }
         pdf.text(line, margin, y, { align: "justify" });
