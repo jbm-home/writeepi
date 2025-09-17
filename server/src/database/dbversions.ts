@@ -7,5 +7,10 @@ export class Database {
       description: "Full database installation",
       file: "1_full.sql",
     },
+    {
+      version: 2,
+      description: "Missing wordstats column in cloud mode",
+      file: "2_wordstats.sql",
+    },
   ];
 }

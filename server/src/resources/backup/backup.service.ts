@@ -47,6 +47,7 @@ export class BackupService {
           author: row.author,
           settings: row.settings,
           content: row.content,
+          wordStats: row.wordStats,
           createdAt: row.createdAt,
           updatedAt: row.updatedAt,
         };
@@ -69,8 +70,9 @@ export class BackupService {
                         description = $4,
                         settings = $5,
                         content = $6,
+                        wordstats = $7,
                         updated_at = now()
-                  WHERE id = $7 AND user_id = $8`,
+                  WHERE id = $8 AND user_id = $9`,
         [
           req.body.lang,
           req.body.title,
@@ -78,6 +80,7 @@ export class BackupService {
           req.body.description,
           JSON.stringify(req.body.settings),
           JSON.stringify(req.body.content),
+          JSON.stringify(req.body.wordStats),
           contentId,
           userUid,
         ],
