@@ -86,18 +86,12 @@ export class EditorService {
 
   currentCharacterData = this.DEFAULT_CHARACTER_DATA;
 
-  characterTemplate =
-    '<p><strong>Character: Name</strong></p><p>x years, location</p><p></p>' +
-    '<p><strong>Details:</strong></p><p><strong>some details about character</strong></p><p></p>' +
-    '<p><strong>Relationships:</strong></p><p></p><p></p><p><strong>Personality:</strong></p><p></p><p></p><p>' +
-    '<strong>Appearance:</strong></p><p></p><p></p><p><strong>Background:</strong></p><p></p><p></p><p><strong>Notes:</strong></p><p></p>';
-
   constructor(
     private i18n: I18nService,
     private backupService: BackupService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
-  ) {}
+  ) { }
 
   startAutoBackup() {
     setInterval(() => {
@@ -529,11 +523,11 @@ export class EditorService {
     this.globalWordsCount =
       this.loadedProject !== undefined
         ? this.loadedProject.content
-            .filter(
-              (p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook,
-            )
-            .map((p: { words: number }) => p.words ?? 0)
-            .reduce((a, b) => a + b, 0)
+          .filter(
+            (p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook,
+          )
+          .map((p: { words: number }) => p.words ?? 0)
+          .reduce((a, b) => a + b, 0)
         : 0;
     const objective = this.loadedProject?.settings?.totalWords ?? 0;
     this.globalWordsPct =
@@ -638,13 +632,10 @@ ${formattedParagraphs}
     if (menuItem === undefined) {
       return '';
     } else if (menuItem?.chapter === undefined) {
-      // default template for character (add others after)
       if (this.isCharacterRootChild(menuItem)) {
         menuItem.isCharacter = true;
-        return this.characterTemplate;
-      } else {
-        return '';
       }
+      return '';
     } else {
       return menuItem.chapter;
     }
@@ -677,8 +668,8 @@ ${formattedParagraphs}
   increaseOrderIdsFrom(fromOrderId: number) {
     this.loadedProject?.content.forEach(
       (item: { orderId: number }) =>
-        (item.orderId =
-          item.orderId >= fromOrderId ? item.orderId + 1 : item.orderId),
+      (item.orderId =
+        item.orderId >= fromOrderId ? item.orderId + 1 : item.orderId),
     );
   }
 
@@ -702,10 +693,10 @@ ${formattedParagraphs}
   getMaxOrderId(): number {
     return this.loadedProject !== undefined
       ? Math.max(
-          ...this.loadedProject.content.map(
-            (arr: { orderId: any }) => arr.orderId,
-          ),
-        )
+        ...this.loadedProject.content.map(
+          (arr: { orderId: any }) => arr.orderId,
+        ),
+      )
       : 0;
   }
 
@@ -1133,7 +1124,7 @@ ${formattedParagraphs}
   }
 
   parseCharacter(content: Content): any {
-    if (content.chapter !== undefined) {
+    if (content.chapter !== undefined && content.chapter.length > 0) {
       try {
         const charData = JSON.parse(content.chapter);
         return {

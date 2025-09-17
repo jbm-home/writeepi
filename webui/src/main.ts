@@ -51,7 +51,7 @@ bootstrapApplication(AppComponent, {
       AppRoutingModule,
       FormsModule,
       QuillModule.forRoot({
-        formats: [],
+        formats: ['bold', 'italic'],
         modules: {
           syntax: false,
           toolbar: false,
