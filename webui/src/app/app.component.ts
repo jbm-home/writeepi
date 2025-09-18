@@ -470,6 +470,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onResizeEnd(event: any) {
     const root = document.documentElement;
+    const screenWidth = window.innerWidth;
 
     const currentSidebar = parseFloat(
       getComputedStyle(root).getPropertyValue('--sidebarwidth'),
@@ -478,7 +479,7 @@ export class AppComponent implements OnInit, OnDestroy {
       getComputedStyle(root).getPropertyValue('--rightbarwidth'),
     );
 
-    if (event?.edges?.left !== undefined) {
+    if (event?.edges?.left !== undefined && screenWidth >= 768) {
       const newSidebar = currentSidebar + event.edges.left;
       root.style.setProperty(
         '--sidebarwidth',
@@ -489,7 +490,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (event?.edges?.right !== undefined) {
+    if (event?.edges?.right !== undefined && screenWidth >= 1000) {
       const newRightbar = currentRightbar - event.edges.right;
       root.style.setProperty(
         '--rightbarwidth',

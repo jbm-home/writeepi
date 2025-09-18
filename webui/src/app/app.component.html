@@ -140,9 +140,16 @@
         }
         <li class="nav-item">
           <button type="button" class="btn app-nav-item"
+            [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Stats"
+            (click)="editorService.openStats()">
+            <div class="bi bi-clock-history ms-2 me-1">&nbsp; {{ 'main.stats' | i18n }}</div>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn app-nav-item"
             [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Settings"
             (click)="editorService.openSettings()">
-            <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'menu.settings' | i18n }}</div>
+            <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'main.settings' | i18n }}</div>
           </button>
         </li>
         <li class="nav-item app-only-on-small-device" *ngIf="!!cloudMode && sessionService.connected">
@@ -163,7 +170,7 @@
 
   <div class="app-content" mwlResizable [enableGhostResize]="true" (resizeEnd)="onResizeEnd($event)">
     <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
-    
+
     @if (editorService.loadedProject === undefined || editorService.loadedProject.settings === undefined) {
     <div class="app-settings">
       <h5 class="pt-3 text-muted text-center">{{ 'main.notloaded' | i18n }}</h5>

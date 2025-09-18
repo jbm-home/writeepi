@@ -473,14 +473,19 @@ export class EditorService {
   setSidebarSize() {
     try {
       const root = document.documentElement;
-      root.style.setProperty(
-        '--sidebarwidth',
-        `${this.loadedProject?.settings.leftbar ?? 240}px`,
-      );
-      root.style.setProperty(
-        '--rightbarwidth',
-        `${this.loadedProject?.settings.rightbar ?? 240}px`,
-      );
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 768) {
+        root.style.setProperty(
+          '--sidebarwidth',
+          `${this.loadedProject?.settings.leftbar ?? 240}px`,
+        );
+      }
+      if (screenWidth >= 1000) {
+        root.style.setProperty(
+          '--rightbarwidth',
+          `${this.loadedProject?.settings.rightbar ?? 240}px`,
+        );
+      }
     } catch (e) {
       //
     }
