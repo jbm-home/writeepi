@@ -171,6 +171,26 @@ $editor-margin: 0.5rem;
     outline: none;
     box-shadow: none;
   }
+
+  @media (width <=1200px) {
+    .search-toggle {
+      right: 0.5rem;
+    }
+
+    .search-box {
+      right: 0.5rem;
+    }
+  }
+
+  @media (width <540px) {
+    .search-toggle {
+      display: none;
+    }
+
+    .search-box {
+      display: none;
+    }
+  }
 }
 
 mwlResizable {

@@ -354,6 +354,13 @@ body {
   }
 }
 
+@media (width <=600px) {
+  .ql-editor {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 .ql-formats {
   margin-right: 3px !important;
 }
