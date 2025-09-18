@@ -78,13 +78,15 @@
         <app-tree-item [menuItem]="menuItem" [level]="0"></app-tree-item>
       </li>
       <li class="nav-item">
-        <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Stats"
+        <button type="button" class="btn app-nav-item"
+          [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Stats"
           (click)="editorService.openStats()">
           <div class="bi bi-clock-history ms-2 me-1">&nbsp; {{ 'main.stats' | i18n }}</div>
         </button>
       </li>
       <li class="nav-item">
-        <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Settings"
+        <button type="button" class="btn app-nav-item"
+          [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Settings"
           (click)="editorService.openSettings()">
           <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'main.settings' | i18n }}</div>
         </button>
@@ -137,7 +139,8 @@
         </li>
         }
         <li class="nav-item">
-          <button type="button" class="btn app-nav-item" [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Settings"
+          <button type="button" class="btn app-nav-item"
+            [class.app-nav-selected]="editorService.editorDisplayedView === DisplayedView.Settings"
             (click)="editorService.openSettings()">
             <div class="bi bi-gear ms-2 me-1">&nbsp; {{ 'menu.settings' | i18n }}</div>
           </button>
@@ -253,7 +256,7 @@
     </div>
     }
     @else if (editorService.editorDisplayedView === DisplayedView.Protagonist) {
-      <protagonist></protagonist>
+    <protagonist></protagonist>
     }
     @else if (editorService.isCharacterContext() && editorService.editorEnable) {
     <div class="app-settings" style="overflow-y: scroll">

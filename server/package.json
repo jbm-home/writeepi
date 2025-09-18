@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "lint": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint . --ext .ts --fix",
+    "copy:webui": "npx copyfiles -u3 ../webui/dist/webui/browser/** dist/",
+    "copy:migrations": "npx copyfiles -u3 src/database/migrations/*.sql dist/server/src/database/migrations",
     "fullbuildandstart": "cd ../webui && npm run buildprod && cd ../server && npm run build && node dist/server/src/main.js | bunyan -L",
-    "build": "npx tsc && npx copyfiles -u3 ../webui/dist/webui/browser/** dist/",
+    "build": "npx tsc && npm run copy:webui && npm run copy:migrations",
     "start": "npm run build && node dist/server/src/main.js | bunyan -L",
     "start:prod": "node dist/server/src/main.js | bunyan -L",
     "startdevwin": "set PROFILE=DEV && npx tsx src/main.ts | bunyan -L",
