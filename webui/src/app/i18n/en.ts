@@ -65,6 +65,10 @@ const EN = {
   'dialog.captcha': 'Security code',
   'dialog.reloadcaptcha': 'Renew the code',
   'dialog.accountcreated': 'The account has been created',
+  'dialog.lostpassword': 'Lost password',
+  'dialog.recoverdisclaimer': "You will receive a reset email if the address is associated with an account.",
+  'dialog.passwordchanged': 'The password has been successfully changed.',
+  'dialog.mailsentifexists': "An email has been sent if the address is recognized.",
   // settings
   'settings.projectsettings': 'Project Settings',
   'settings.projectname': 'Project Name',

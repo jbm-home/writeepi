@@ -3,12 +3,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SharedModule } from '../../shared.module.js';
 
 @Component({
-  selector: 'app-logindialog',
+  selector: 'app-recoverdialog',
   imports: [SharedModule],
-  templateUrl: './logindialog.component.html',
-  styleUrl: './logindialog.component.scss',
+  templateUrl: './recoverdialog.component.html',
+  styleUrl: './recoverdialog.component.scss',
 })
-export class LogindialogComponent {
+export class RecoverdialogComponent {
   constructor(
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -22,11 +22,7 @@ export class LogindialogComponent {
     this.dialogRef.close({ validated: false });
   }
 
-  register(): void {
-    this.dialogRef.close({ validated: true, register: true });
-  }
-
-  recover(): void {
-    this.dialogRef.close({ validated: true, recover: true });
+  login(): void {
+    this.dialogRef.close({ validated: true, login: true });
   }
 }

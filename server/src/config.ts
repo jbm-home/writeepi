@@ -1,5 +1,5 @@
 export const config = {
-  SITE_URL: process.env["CONF_SITE_URL"] ?? "https://www.writeepi.com",
+  SITE_URL: process.env["CONF_SITE_URL"] ?? "https://app.writeepi.com",
   API_PORT: process.env["CONF_API_PORT"]
     ? Number.parseInt(process.env["CONF_API_PORT"])
     : 8337,

@@ -68,6 +68,10 @@ const IT = {
   'dialog.captcha': 'Codice di sicurezza',
   'dialog.reloadcaptcha': 'Rinnova il codice',
   'dialog.accountcreated': "L'account è stato creato",
+  'dialog.lostpassword': 'Password dimenticata',
+  'dialog.recoverdisclaimer': "Riceverai un'email di reimpostazione se l'indirizzo è associato a un account.",
+  'dialog.passwordchanged': 'La password è stata cambiata con successo.',
+  'dialog.mailsentifexists': "È stata inviata un'email se l'indirizzo è stato riconosciuto.",
   // settings
   'settings.projectsettings': 'Impostazioni del progetto',
   'settings.projectname': 'Nome del progetto',

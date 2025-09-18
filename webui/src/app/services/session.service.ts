@@ -37,10 +37,6 @@ export class SessionService {
     return axios.get('/api/session/user');
   }
 
-  getAllUsers() {
-    return axios.get('/api/user/list');
-  }
-
   logout() {
     return axios.delete('/api/session');
   }
@@ -50,7 +46,7 @@ export class SessionService {
   }
 
   recover(email: string) {
-    return axios.post('/api/reset', { email });
+    return axios.post('/api/session/reset', { email });
   }
 
   update(uid: number, level: number) {

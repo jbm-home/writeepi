@@ -68,6 +68,10 @@ const DE = {
   'dialog.captcha': 'Sicherheitscode',
   'dialog.reloadcaptcha': 'Code erneuern',
   'dialog.accountcreated': 'Das Konto wurde erstellt',
+  'dialog.lostpassword': 'Passwort vergessen',
+  'dialog.recoverdisclaimer': "Sie erhalten eine E-Mail zur Zurücksetzung, wenn die Adresse mit einem Konto verknüpft ist.",
+  'dialog.passwordchanged': 'Das Passwort wurde erfolgreich geändert.',
+  'dialog.mailsentifexists': "Eine E-Mail wurde gesendet, wenn die Adresse erkannt wurde.",
   // settings
   'settings.projectsettings': 'Projekteinstellungen',
   'settings.projectname': 'Projektname',

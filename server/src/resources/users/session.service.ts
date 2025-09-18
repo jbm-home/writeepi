@@ -171,7 +171,7 @@ export class SessionService {
       } else if (
         req.session.captcha &&
         Capitalize.from(req.session.captcha) !==
-          Capitalize.from(req.body.captcha)
+        Capitalize.from(req.body.captcha)
       ) {
         this.log.debug(
           `Failed registration from '${IpUtils.getIp(req)}' (invalid captcha)`,
@@ -221,209 +221,132 @@ export class SessionService {
   }
 
   async reset(req: any) {
-    if (req.body.email) {
-      const rawEmail = req.body.email.toLowerCase();
-      const res = await Postgres.queryOne<User>(
-        `SELECT * FROM users WHERE email = $1`,
-        [rawEmail],
-      );
-      if (res && res.resetdate) {
-        const diff = Date.now() - res.resetdate.getTime();
-        if (diff < 60 * 1000 * 5) {
-          this.log.debug(
-            `Failed password reset attempt from '${IpUtils.getIp(req)}' for ${rawEmail} (too early)`,
-          );
-          return { error: true, message: "Too early" };
-        } else {
-          this.log.debug(
-            `Reset password request from '${IpUtils.getIp(req)}' for ${rawEmail}`,
-          );
-          const resetKey = UuidUtils.v7();
-          await Postgres.querySimple(
-            `UPDATE users SET resetkey = $1, resetdate = now() WHERE email = $2`,
-            [resetKey, rawEmail],
-          );
-          const url = `${config.SITE_URL}/recover?token=${resetKey}`;
-          const message = `Vous avez demandé à réinitialiser votre mot de passe. Veuillez suivre le lien suivant afin d'en choisir un nouveau : ${url}`;
-          await Mailer.SendMail(
-            rawEmail,
-            "Réinitialisation du mot de passe Writeepi",
-            message,
-            MailTemplate.build(
-              message,
-              "",
-              "Réinitialisation de votre mot de passe Writeepi",
-              "Réinitialiser le mot de passe",
-              url,
-            ),
-          );
-          return { error: false };
-        }
-      }
-      this.log.debug(
-        `Failed password reset attempt from '${IpUtils.getIp(req)}' (email not found)`,
-      );
-      return { error: true, message: "Not found" };
-    }
-    this.log.debug(
-      `Failed password reset attempt from '${IpUtils.getIp(req)}' (empty)`,
+    const email = req.body?.email?.toLowerCase?.();
+    const ip = IpUtils.getIp(req);
+
+    this.log.debug(`Password reset requested for ${email}`);
+
+    const emailValidated = email && email.match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}(\.[0-9]{1,3}){3}\])|(([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}))$/,
     );
-    return { error: true, message: "Not found" };
+
+    if (!emailValidated) {
+      this.log.debug(`Failed password reset attempt from '${ip}' (invalid email)`);
+      return { error: "Invalid email" };
+    }
+
+    // Check user
+    const user = await Postgres.queryOne<User>(
+      `SELECT * FROM users WHERE email = $1`,
+      [email],
+    );
+
+    if (!user) {
+      this.log.debug(`Failed password reset attempt from '${ip}' (email not found: ${email})`);
+      return {};
+    }
+
+    // Too early request: 1 minute
+    if (user.resetdate) {
+      const diffMs = Date.now() - user.resetdate.getTime();
+      if (diffMs < 1 * 60 * 1000) {
+        this.log.debug(`Failed password reset attempt from '${ip}' for ${email} (too early)`);
+        return { error: "Too early" };
+      }
+    }
+
+    // Generate new reset key
+    const resetKey = UuidUtils.v7();
+    await Postgres.querySimple(
+      `UPDATE users SET resetkey = $1, resetdate = now() WHERE email = $2`,
+      [resetKey, email],
+    );
+
+    // Recover uri
+    const url = `${config.SITE_URL}/?recoverToken=${resetKey}`;
+    const plainMessage = `Vous avez demandé à réinitialiser votre mot de passe. 
+Veuillez suivre le lien suivant afin d'en choisir un nouveau : ${url}`;
+
+    // Send mail
+    await Mailer.SendMail(
+      email,
+      "Réinitialisation du mot de passe Writeepi",
+      plainMessage,
+      MailTemplate.build(
+        plainMessage,
+        "",
+        "Réinitialisation de votre mot de passe Writeepi",
+        "Réinitialiser le mot de passe",
+        url,
+      ),
+    );
+
+    this.log.debug(`Password reset email sent to ${email} from '${ip}'`);
+    return {};
   }
 
   async password(req: any) {
-    if (
-      req.body.email &&
-      req.body.token &&
-      req.body.password &&
-      req.body.password.length > 3
-    ) {
-      const email = req.body.email.toLowerCase();
-      const token = req.body.token;
-      const res = await Postgres.queryOne<User>(
-        `SELECT * FROM users WHERE email = $1 AND resetkey = $2`,
-        [email, token],
-      );
+    const email = req.body?.email?.toLowerCase?.();
+    const token = req.body?.token;
+    const password = req.body?.password;
+    const ip = IpUtils.getIp(req);
 
-      if (res && res.resetdate) {
-        const diff = Date.now() - res.resetdate.getTime();
-        if (diff < 60 * 1000 * 60 * config.RESET_MAX_HOUR) {
-          this.log.debug(
-            `Password changed from '${IpUtils.getIp(req)}' for ${email}`,
-          );
-          const encryptedPwd = await bcrypt.hash(
-            `${email}:${req.body.password}`,
-            10,
-          );
-          const resetKey = UuidUtils.v7();
-          await Postgres.querySimple(
-            `UPDATE users SET resetkey = $1, password = $2 WHERE email = $3`,
-            [resetKey, encryptedPwd, email],
-          );
-
-          const url = `${config.SITE_URL}/login`;
-          const message1 = `Votre mot de passe a bien été modifié sur le portail Writeepi. Vous pouvez dès à présent vous connecter : ${url}`;
-          const message2 = `Si vous n'êtes pas à l'initiative de ce changement, veuillez réinitialiser votre mot de passe immédiatement : ${config.SITE_URL}/recover`;
-          await Mailer.SendMail(
-            req.body.email,
-            "Votre mot de passe Writeepi",
-            message1,
-            MailTemplate.build(
-              message1,
-              message2,
-              "Votre mot de passe Writeepi",
-              "Se connecter",
-              `${config.SITE_URL}/recover`,
-            ),
-          );
-          return { error: false };
-        } else {
-          this.log.debug(
-            `Failed password update from '${IpUtils.getIp(req)}' (token expired)`,
-          );
-          return { error: true, message: "Token expired" };
-        }
-      }
-      this.log.debug(
-        `Failed password update from '${IpUtils.getIp(req)}' (email or token not found)`,
-      );
-      return { error: true, message: "Not found" };
+    // check
+    if (!email || !token || !password || password.length <= 3) {
+      this.log.debug(`Failed password update from '${ip}' (missing fields)`);
+      return { error: "Missing fields" };
     }
-    this.log.debug(
-      `Failed password update from '${IpUtils.getIp(req)}' (empty)`,
+
+    // get user
+    const user = await Postgres.queryOne<User>(
+      `SELECT * FROM users WHERE email = $1 AND resetkey = $2`,
+      [email, token],
     );
-    return { error: true, message: "Not found" };
-  }
 
-  async passwordAdmin(req: any) {
-    if (req.level === undefined || req.level < config.LEVEL.ADMIN) {
-      this.log.debug(
-        `Failed password update by admin from '${IpUtils.getIp(req)}' (access denied)`,
-      );
-      return { error: true, message: "Access denied" };
-    } else {
-      if (req.body.email && req.body.password) {
-        const email = req.body.email.toLowerCase();
-        const res = await Postgres.query<User>(
-          `SELECT * FROM users WHERE email = $1`,
-          [email],
-        );
-        if (res.length > 0) {
-          this.log.debug(
-            `Password changed by admin from '${IpUtils.getIp(req)}' for ${email}`,
-          );
-          const encryptedPwd = await bcrypt.hash(
-            `${email}:${req.body.password}`,
-            10,
-          );
-          const resetKey = UuidUtils.v7();
-          await Postgres.querySimple(
-            `UPDATE users SET resetkey = $1, password = $2 WHERE email = $3`,
-            [resetKey, encryptedPwd, email],
-          );
-          return { error: false };
-        }
-        this.log.debug(
-          `Failed password update by admin from '${IpUtils.getIp(req)}' (email not found)`,
-        );
-        return { error: true, message: "Not found" };
-      }
-      this.log.debug(
-        `Failed password update by admin from '${IpUtils.getIp(req)}' (empty)`,
-      );
-      return { error: true, message: "Not found" };
+    if (!user || !user.resetdate) {
+      this.log.debug(`Failed password update from '${ip}' (email or token not found: ${email})`);
+      return { error: "Not found or invalid token" };
     }
-  }
 
-  async passwordUser(req: any) {
-    if (req.level === undefined || req.level < config.LEVEL.USER) {
-      this.log.debug(
-        `Failed password update by user from '${IpUtils.getIp(req)}' (access denied)`,
-      );
-      return { error: true, message: "Access denied" };
-    } else {
-      if (req.body.email && req.body.password && req.body.oldPassword) {
-        const email = req.body.email.toLowerCase();
-        const res = await Postgres.queryOne<User>(
-          `SELECT * FROM users WHERE email = $1`,
-          [email],
-        );
-        if (res && res.password) {
-          const isValid = await bcrypt.compare(
-            `${email}:${req.body.oldPassword}`,
-            res.password,
-          );
-          if (isValid) {
-            this.log.debug(
-              `Password changed by user from '${IpUtils.getIp(req)}' for ${email}`,
-            );
-            const encryptedPwd = await bcrypt.hash(
-              `${email}:${req.body.password}`,
-              10,
-            );
-            const resetKey = UuidUtils.v7();
-            await Postgres.querySimple(
-              `UPDATE users SET resetkey = $1, password = $2 WHERE email = $3`,
-              [resetKey, encryptedPwd, email],
-            );
-            return { error: false };
-          } else {
-            this.log.debug(
-              `Failed password update by user from '${IpUtils.getIp(req)}' (wrong password)`,
-            );
-            return { error: true, message: "Wrong password" };
-          }
-        }
-        this.log.debug(
-          `Failed password update by user from '${IpUtils.getIp(req)}' (email not found)`,
-        );
-        return { error: true, message: "Not found" };
-      }
-      this.log.debug(
-        `Failed password update by user from '${IpUtils.getIp(req)}' (empty)`,
-      );
-      return { error: true, message: "Not found" };
+    // is token expired?
+    const diffMs = Date.now() - user.resetdate.getTime();
+    const maxLifetimeMs = config.RESET_MAX_HOUR * 60 * 60 * 1000;
+    if (diffMs > maxLifetimeMs) {
+      this.log.debug(`Failed password update from '${ip}' for ${email} (token expired)`);
+      return { error: "Token expired" };
     }
+
+    // update password
+    const encryptedPwd = await bcrypt.hash(`${email}:${password}`, 10);
+    const newResetKey = UuidUtils.v7();
+
+    await Postgres.querySimple(
+      `UPDATE users SET resetkey = $1, password = $2 WHERE email = $3`,
+      [newResetKey, encryptedPwd, email],
+    );
+
+    // send mail
+    const loginUrl = `${config.SITE_URL}`;
+    const recoverUrl = `${config.SITE_URL}/?recover=true`;
+
+    const message1 = `Votre mot de passe a bien été modifié sur Writeepi. Vous pouvez dès à présent vous connecter : ${loginUrl}`;
+    const message2 = `Si vous n'êtes pas à l'initiative de ce changement, veuillez réinitialiser votre mot de passe immédiatement : ${recoverUrl}`;
+
+    await Mailer.SendMail(
+      email,
+      "Votre mot de passe Writeepi",
+      message1,
+      MailTemplate.build(
+        message1,
+        message2,
+        "Votre mot de passe Writeepi",
+        "Se connecter",
+        recoverUrl,
+      ),
+    );
+
+    this.log.debug(`Password changed for ${email} from '${ip}'`);
+    return {};
   }
 
   async simpleToken(req: any) {

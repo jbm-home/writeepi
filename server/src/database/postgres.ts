@@ -216,7 +216,7 @@ export class Postgres {
         const recoverToken = UuidUtils.v7();
         const encryptedPwd = await bcrypt.hash(`${email}:${password}`, 10);
 
-        const url = `${config.SITE_URL}/recover?token=${recoverToken}`;
+        const url = `${config.SITE_URL}/?recoverToken=${recoverToken}`;
         const message1 = `Your Writeepi account has been successfully created!<br>You can now log in by following this link: ${config.SITE_URL}`;
         const message2 = `You can also change your password by following this link. It will expire in ${config.RESET_MAX_HOUR} hours: ${url}`;
 

@@ -82,22 +82,6 @@ SessionController.post(
   },
 );
 
-SessionController.post(
-  "/password/admin",
-  Authorized.ADMIN,
-  async (req, res): Promise<any> => {
-    return res.status(200).json(await service.passwordAdmin(req));
-  },
-);
-
-SessionController.post(
-  "/password/user",
-  Authorized.USER,
-  async (req, res): Promise<any> => {
-    return res.status(200).json(await service.passwordUser(req));
-  },
-);
-
 SessionController.delete("/", (req, res) => {
   req.session.destroy((err) => {
     return res.status(200).json(req.session);

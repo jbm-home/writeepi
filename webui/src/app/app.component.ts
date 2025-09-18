@@ -24,6 +24,8 @@ import { SpeechdialogComponent } from './dialogs/speechdialog/speechdialog.compo
 import { WordStatsTableComponent } from './word-stats-table/word-stats-table.component.js';
 import { AntidoteService } from './services/antidote.service.js';
 import { ProtagonistComponent } from './protagonist/protagonist.component.js';
+import { RecoverdialogComponent } from './dialogs/recoverdialog/recoverdialog.component.js';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -136,6 +138,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public sessionService: SessionService,
     private antidote: AntidoteService,
     public tts: TextToSpeechService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     AppComponent.CLOUDMODE = !this.electronService.isElectronApp;
     this.setThemeMode();
@@ -302,7 +306,15 @@ export class AppComponent implements OnInit, OnDestroy {
           uid: '',
         };
         this.editorService.resetAll();
-        this.openLoginModal();
+        const recoverToken = this.route.snapshot.queryParamMap.get('recoverToken');
+        const recover = this.route.snapshot.queryParamMap.get('recover');
+        if (recoverToken) {
+          this.openRecoverModal(recoverToken);
+        } else if (recover) {
+          this.openRecoverModal();
+        } else {
+          this.openLoginModal();
+        }
       },
     );
   }
@@ -319,6 +331,9 @@ export class AppComponent implements OnInit, OnDestroy {
       if (result !== undefined && result.validated) {
         if (result.register === true) {
           this.openRegisterModal();
+          return;
+        } else if (result.recover === true) {
+          this.openRecoverModal();
           return;
         } else if (result.data !== undefined) {
           if (
@@ -355,6 +370,82 @@ export class AppComponent implements OnInit, OnDestroy {
         }
         this.snackBar.open(`Cannot register`, 'Close', { duration: 2000 });
       }
+    });
+  }
+
+  openRecoverModal(token?: string) {
+    const dialogRef = this.dialog.open(RecoverdialogComponent, {
+      width: '450px',
+      enterAnimationDuration: 250,
+      exitAnimationDuration: 250,
+      data: { token },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined && result.validated) {
+        if (result.login === true) {
+          this.openLoginModal();
+          return;
+        } else if (result.data?.login !== undefined && result.data?.token !== undefined && result.data.login.length > 3) {
+          this.sessionService.changePasswordByToken(result.data.login, result.data.token, result.data.password).then(
+            (data: any) => {
+              if (data?.error !== undefined) {
+                this.snackBar.open(`Error: ${data.error}`, 'Close', {
+                  duration: 3000,
+                });
+                this.openRecoverModal(result.data.token);
+              } else {
+                this.snackBar.open(
+                  this.i18nPipe.transform('dialog.passwordchanged'),
+                  'Close',
+                  { duration: 3000 },
+                );
+                this.removeAllQueryParams();
+              }
+            },
+            (error: any) => {
+              this.snackBar.open(`Error from server`, 'Close', {
+                duration: 3000,
+              });
+              this.openRecoverModal(result.data.token);
+            },
+          );
+        } else if (result.data?.login !== undefined && result.data.login.length > 3) {
+          this.sessionService.recover(result.data.login).then(
+            (data: any) => {
+              if (data?.error !== undefined) {
+                this.snackBar.open(`Error: ${data.error}`, 'Close', {
+                  duration: 3000,
+                });
+                this.openRecoverModal();
+              } else {
+                this.snackBar.open(
+                  this.i18nPipe.transform('dialog.mailsentifexists'),
+                  'Close',
+                  { duration: 3000 },
+                );
+                this.removeAllQueryParams();
+              }
+            },
+            (error: any) => {
+              this.snackBar.open(`Error from server`, 'Close', {
+                duration: 3000,
+              });
+              this.openRecoverModal();
+            },
+          );
+        } else {
+          this.snackBar.open(`Cannot recover`, 'Close', { duration: 2000 });
+          this.openRecoverModal(result.data?.token);
+        }
+      }
+    });
+  }
+
+  removeAllQueryParams() {
+    this.router.navigate([], {
+      queryParams: {},
+      replaceUrl: true
     });
   }
 
