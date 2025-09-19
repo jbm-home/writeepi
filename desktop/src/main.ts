@@ -53,6 +53,8 @@ export class WriteepiDesktop {
 
     ipcMain.handle("save-backup", this.project.handleSaveBackup);
     ipcMain.handle("load-backup", this.project.handleLoadBackup);
+    ipcMain.handle("save-cover", this.project.handleSaveCover);
+    ipcMain.handle("load-cover", this.project.handleLoadCover);
     ipcMain.handle("list-backup", this.project.handleListBackup);
     ipcMain.handle("store-location", this.project.handleChangeStoreLocation);
     ipcMain.handle("export", this.project.handleExport);

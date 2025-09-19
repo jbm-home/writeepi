@@ -4,6 +4,8 @@ import { UserProject } from '../../webui/src/app/types/userproject.js';
 contextBridge.exposeInMainWorld('electronAPI', {
     saveBackup: (data: UserProject) => ipcRenderer.invoke('save-backup', data),
     loadBackup: (id: string) => ipcRenderer.invoke('load-backup', id),
+    saveCover: (id: string, data: string) => ipcRenderer.invoke('save-cover', id, data),
+    loadCover: (id: string) => ipcRenderer.invoke('load-cover', id),
     listBackup: () => ipcRenderer.invoke('list-backup'),
     createProject: (data: UserProject) => ipcRenderer.invoke('create-project', data),
     export: (data: UserProject) => ipcRenderer.invoke('export', data),

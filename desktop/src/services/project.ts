@@ -6,6 +6,7 @@ import { DefaultProject } from "../../../webui/src/app/types/defaultproject.js";
 import { existsSync, writeFileSync } from "original-fs";
 import { createHash } from "crypto";
 import { UuidUtils } from "../../../server/src/utils/uuidutils.js";
+import { fileTypeFromBuffer } from 'file-type';
 
 export class Project {
   desktop: WriteepiDesktop;
@@ -140,6 +141,56 @@ export class Project {
       }
     } catch (e) {
       return DefaultProject.buildDefaultProject();
+    }
+  };
+
+  handleSaveCover = async (event: any, id: string, data: string) => {
+    try {
+      let previous = this.desktop.mainstore.get("cover") as any[];
+      if (previous === undefined) {
+        previous = [];
+      }
+      const cover = previous.filter((elem) => elem.contentId !== id);
+      const buffer: Buffer = Buffer.from(data, "base64");
+
+      const type = await fileTypeFromBuffer(buffer);
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+      if (!type || !allowedTypes.includes(type.mime)) {
+        dialog.showErrorBox("Backup error", "Unsupported image format");
+        return { error: "Cannot save" };
+      }
+
+      cover.push({
+        contentId: id,
+        data: data,
+        mimeType: type.mime,
+      });
+
+      this.desktop.mainstore.set("cover", cover);
+      return {};
+    } catch (e: any) {
+      dialog.showErrorBox("Backup error", "Cannot save cover");
+      return { error: "Cannot save" };
+    }
+  };
+
+  handleLoadCover = async (event: any, id: string) => {
+    try {
+      const backup = this.desktop.mainstore.get("cover") as any[];
+      if (backup === undefined || backup.length === 0) {
+        return undefined;
+      } else {
+        const candidate = backup.find((elem) => elem.id === id);
+        
+        if (!candidate) {
+          return undefined;
+        }
+        
+        const dataUrl = `data:${candidate.mimeType};base64,${candidate.data}`;
+        return dataUrl;
+      }
+    } catch (e) {
+      return undefined;
     }
   };
 

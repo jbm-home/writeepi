@@ -54,8 +54,7 @@ export class BackupService {
     if (AppComponent.CLOUDMODE) {
       return await axios.post('/api/content/cover', { id: projectId, data });
     } else {
-      // TODO
-      return undefined;
+      return await this.electronService.api.saveCover(projectId, data);
     }
   }
 
@@ -63,8 +62,7 @@ export class BackupService {
     if (AppComponent.CLOUDMODE) {
       return await axios.get(`/api/content/cover/${projectId}`);
     } else {
-      // TODO
-      return undefined;
+      return await this.electronService.api.loadCover(projectId);
     }
   }
 
