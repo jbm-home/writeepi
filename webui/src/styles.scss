@@ -312,7 +312,7 @@ body {
 }
 
 .ql-container {
-  max-height: 100%;
+  max-height: calc(100% - 42px);
   position: relative;
 }
 

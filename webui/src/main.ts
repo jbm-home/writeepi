@@ -51,10 +51,23 @@ bootstrapApplication(AppComponent, {
       AppRoutingModule,
       FormsModule,
       QuillModule.forRoot({
-        formats: [],
+        formats: [
+          'bold',
+          'italic',
+          'underline',
+          'align',
+        ],
         modules: {
           syntax: false,
-          toolbar: false,
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            [
+              { align: '' },        // align left
+              { align: 'center' },  // align center
+              { align: 'right' },   // align right
+              { align: 'justify' }, // align justify
+            ],
+          ],
           Searcher: true,
           keyboard: {
             bindings: {
