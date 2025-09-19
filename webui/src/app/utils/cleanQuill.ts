@@ -58,3 +58,18 @@ export function cleanQuillHtmlToParagraphs(html: string): string {
 
   return paras.join('');
 }
+
+export function isTextContentEqual(before: string, after: string): boolean {
+  const doc = globalThis.document;
+
+  const normalize = (input: string): string => {
+    const tmp = doc.createElement('div');
+    tmp.innerHTML = input ?? '';
+    return (tmp.textContent ?? '')
+      .replace(/\u00a0/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
+  return normalize(before) === normalize(after);
+}

@@ -13,7 +13,7 @@ import { Failover } from '../utils/failover.js';
 import { I18nService } from './i18n.service.js';
 import { BackupService } from './backup.service.js';
 import Searcher from '../quill-plugins/searcher.js';
-import { cleanQuillHtmlToParagraphs } from '../utils/cleanQuill.js';
+import { cleanQuillHtmlToParagraphs, isTextContentEqual } from '../utils/cleanQuill.js';
 
 export class ModalAction {
   key: string = '';
@@ -310,7 +310,7 @@ export class EditorService {
       return;
     }
     const wordsCount = this.updateGlobalWordsCount();
-    this.saveCurrentToProject();
+    const hasError = this.saveCurrentToProject();
 
     if (this.loadedProject !== undefined) {
       // stats
@@ -329,7 +329,9 @@ export class EditorService {
 
       if (data !== undefined) {
         this.currentBackupUuid = data;
-        if (message) {
+        if (hasError) {
+          this.snackBar.open(`!! Text check integrity error !!`, 'Ok', { duration: 5000 });
+        } else if (message) {
           this.snackBar.open(`Backup done`, 'Ok', { duration: 2000 });
         }
         this.lastBackupAt = Date.now();
@@ -598,14 +600,24 @@ export class EditorService {
   }
 
   saveCurrentToProject() {
+    let hasError = false;
     const selected = this.getCurrentSelectedUserContent();
     if (selected !== undefined) {
       selected.isBook = this.isBookRootChild(selected);
-      selected.chapter = this.isCharacterContext()
-        ? this.saveCharacter()
-        : cleanQuillHtmlToParagraphs(this.editor);
+
+      if (this.isCharacterContext()) {
+        selected.chapter = this.saveCharacter();
+      } else {
+        const rawHtml = this.editor;
+        const cleanHtml = cleanQuillHtmlToParagraphs(rawHtml);
+        if (!isTextContentEqual(rawHtml, cleanHtml)) {
+          hasError = false;
+        }
+        selected.chapter = cleanHtml;
+      }
       selected.notes = this.notes;
     }
+    return hasError;
   }
 
   exportJEFormat() {
@@ -657,7 +669,7 @@ ${formattedParagraphs}
       return;
     }
     this.editorDisplayedView = DisplayedView.Default;
-    this.saveCurrentToProject();
+    const hasError = this.saveCurrentToProject();
     this.currentCharacterData = this.DEFAULT_CHARACTER_DATA;
     this.currentSelectedInTree = menuItem?.id;
     this.editor = this.loadDefaultEditorContent(menuItem);
@@ -672,6 +684,8 @@ ${formattedParagraphs}
     }
     if (this.loadedProject?.settings.backupOnChange) {
       await this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
+    } else if (hasError) {
+      this.snackBar.open(`!! Text integrity check failed !!`, 'Ok', { duration: 5000 });
     }
   }
 
