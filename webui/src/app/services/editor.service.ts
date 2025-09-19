@@ -668,24 +668,27 @@ ${formattedParagraphs}
     if (!this.checkMandatorySettings()) {
       return;
     }
-    this.editorDisplayedView = DisplayedView.Default;
     const hasError = this.saveCurrentToProject();
+    this.disableEditor();
+
+    if (this.loadedProject?.settings.backupOnChange) {
+      await this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
+    } else if (hasError) {
+      this.snackBar.open(`!! Text integrity check failed !!`, 'Ok', { duration: 5000 });
+    }
+
+    this.editorDisplayedView = DisplayedView.Default;
+    this.editor = '';
     this.currentCharacterData = this.DEFAULT_CHARACTER_DATA;
     this.currentSelectedInTree = menuItem?.id;
-    this.editor = this.loadDefaultEditorContent(menuItem);
     this.notes = menuItem?.notes ?? '';
     if (menuItem !== undefined && !menuItem.isFolder) {
       this.enableEditor();
       if (this.isCharacterContext()) {
         this.currentCharacterData = this.parseCharacter(menuItem);
+      } else {
+        this.editor = this.loadDefaultEditorContent(menuItem);
       }
-    } else {
-      this.disableEditor();
-    }
-    if (this.loadedProject?.settings.backupOnChange) {
-      await this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
-    } else if (hasError) {
-      this.snackBar.open(`!! Text integrity check failed !!`, 'Ok', { duration: 5000 });
     }
   }
 
