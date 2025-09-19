@@ -77,7 +77,7 @@ export class EditorService {
   lastBackupAt = 0;
 
   loadedProject?: UserProject;
-  
+
   coverPreview: string | undefined = undefined;
 
   DEFAULT_CHARACTER_DATA = {
@@ -1189,20 +1189,26 @@ ${formattedParagraphs}
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.coverPreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const base64Data = btoa(
+        new Uint8Array(arrayBuffer)
+          .reduce((data, byte) => data + String.fromCharCode(byte), "")
+      );
 
-    const arrayBuffer = await file.arrayBuffer();
-    const base64Data = btoa(
-      new Uint8Array(arrayBuffer)
-        .reduce((data, byte) => data + String.fromCharCode(byte), "")
-    );
+      if (this.loadedProject?.id) {
+        await this.backupService.saveCover(this.loadedProject.id, base64Data);
+      }
 
-    if (this.loadedProject?.id) {
-      await this.backupService.saveCover(this.loadedProject.id, base64Data);
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.coverPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    } catch (error: any) {
+      if (error.message) {
+        this.snackBar.open(`Error: ${error.message}`, 'Ok', { duration: 3000 });
+      }
     }
   }
 }
