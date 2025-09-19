@@ -38,4 +38,5 @@ export const config = {
     USER: 1,
     ADMIN: 2,
   },
+  MAX_COVER_SIZE: 5,
 };

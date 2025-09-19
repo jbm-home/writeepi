@@ -205,6 +205,17 @@
         <textarea class="form-control" id="description" rows="5"
           [(ngModel)]="editorService.loadedProject.description"></textarea>
       </div>
+      <div class="form-group mb-3">
+        <label for="coverUpload" class="form-text text-muted">
+          {{ 'settings.cover' | i18n }}
+        </label>
+        <div class="mb-2" *ngIf="editorService.coverPreview">
+          <img [src]="editorService.coverPreview" alt="Cover preview" class="img-thumbnail"
+            style="max-width: 200px; max-height: 300px; object-fit: cover;">
+        </div>
+        <input type="file" id="coverUpload" class="form-control" accept="image/jpeg,image/png,image/webp"
+          (change)="editorService.onCoverSelected($event)">
+      </div>
       <h3 class="pt-3 pb-3">{{ 'settings.objectives' | i18n }}</h3>
       <div class="mb-3">
         <label for="totalWords" class="form-text text-muted">{{ 'settings.totalwords' | i18n }}</label>

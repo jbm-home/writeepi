@@ -21,4 +21,12 @@ BackupController.post("/create", Authorized.USER, async (req, res) => {
   return await service.createProject(req, res);
 });
 
+BackupController.post("/cover", Authorized.USER, async (req, res) => {
+  return await service.saveCover(req, res);
+});
+
+BackupController.get("/cover/:id", Authorized.USER, async (req, res) => {
+  return await service.getCover(req, res);
+});
+
 export { BackupController };

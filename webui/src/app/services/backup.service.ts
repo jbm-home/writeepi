@@ -8,7 +8,7 @@ import { ElectronService } from './electron.service.js';
   providedIn: 'root',
 })
 export class BackupService {
-  constructor(private electronService: ElectronService) {}
+  constructor(private electronService: ElectronService) { }
 
   async saveBackup(project: UserProject) {
     if (AppComponent.CLOUDMODE) {
@@ -47,6 +47,24 @@ export class BackupService {
       return await axios.post('/api/content/create');
     } else {
       return await this.electronService.api.createProject();
+    }
+  }
+
+  async saveCover(projectId: string, data: string) {
+    if (AppComponent.CLOUDMODE) {
+      return await axios.post('/api/content/cover', { id: projectId, data });
+    } else {
+      // TODO
+      return undefined;
+    }
+  }
+
+  async getCover(projectId: string): Promise<{ cover: string; } | undefined> {
+    if (AppComponent.CLOUDMODE) {
+      return await axios.get(`/api/content/cover/${projectId}`);
+    } else {
+      // TODO
+      return undefined;
     }
   }
 

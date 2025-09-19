@@ -61,6 +61,7 @@
     "express": "^5.1.0",
     "express-http-proxy": "^2.1.2",
     "express-session": "^1.18.2",
+    "file-type": "^21.0.0",
     "html-entities": "^2.6.0",
     "html-to-text": "^9.0.5",
     "jimp": "^1.6.0",

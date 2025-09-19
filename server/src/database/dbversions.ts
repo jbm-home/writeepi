@@ -12,5 +12,15 @@ export class Database {
       description: "Missing wordstats column in cloud mode",
       file: "2_wordstats.sql",
     },
+    {
+      version: 3,
+      description: "Add user content history",
+      file: "3_user_content_history.sql",
+    },
+    {
+      version: 4,
+      description: "Add user content cover",
+      file: "4_user_content_cover.sql",
+    },
   ];
 }

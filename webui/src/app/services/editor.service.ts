@@ -77,6 +77,8 @@ export class EditorService {
   lastBackupAt = 0;
 
   loadedProject?: UserProject;
+  
+  coverPreview: string | undefined = undefined;
 
   DEFAULT_CHARACTER_DATA = {
     name: '',
@@ -459,6 +461,7 @@ export class EditorService {
     this.i18n.setLang(project.lang);
     this.updateGlobalWordsCount();
     this.checkMandatorySettings();
+    this.loadCover(projectId);
   }
 
   loadRecovery(data: any) {
@@ -1163,5 +1166,43 @@ ${formattedParagraphs}
       }
     }
     return JSON.stringify(this.DEFAULT_CHARACTER_DATA);
+  }
+
+
+  async loadCover(contentId: string) {
+    try {
+      this.coverPreview = (await this.backupService.getCover(contentId))?.cover;
+    } catch (error) {
+      this.coverPreview = undefined;
+    }
+  }
+
+  async onCoverSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    if (file.size > 10 * 1024 * 1024) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.coverPreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    const arrayBuffer = await file.arrayBuffer();
+    const base64Data = btoa(
+      new Uint8Array(arrayBuffer)
+        .reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+
+    if (this.loadedProject?.id) {
+      await this.backupService.saveCover(this.loadedProject.id, base64Data);
+    }
   }
 }
