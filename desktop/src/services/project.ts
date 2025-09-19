@@ -180,14 +180,14 @@ export class Project {
       if (backup === undefined || backup.length === 0) {
         return undefined;
       } else {
-        const candidate = backup.find((elem) => elem.id === id);
-        
+        const candidate = backup.find((elem) => elem.contentId === id);
+
         if (!candidate) {
           return undefined;
         }
-        
+
         const dataUrl = `data:${candidate.mimeType};base64,${candidate.data}`;
-        return dataUrl;
+        return { cover: dataUrl };
       }
     } catch (e) {
       return undefined;
