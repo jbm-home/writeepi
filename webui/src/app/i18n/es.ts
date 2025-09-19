@@ -98,6 +98,7 @@ const ES = {
     'Mostrar un mensaje de confirmación al guardar automáticamente.',
   'settings.about': 'Acerca de',
   'settings.buymecoffee': '¿Te gusta Writeepi? Apoya el desarrollo en',
+  'settings.cover': 'Portada',
 
   // tree nodes (structure)
   treeNodes: {

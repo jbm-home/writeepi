@@ -101,6 +101,7 @@ const DE = {
   'settings.about': 'Über',
   'settings.buymecoffee':
     'Mögen Sie Writeepi? Unterstützen Sie die Entwicklung auf',
+  'settings.cover': 'Umschlag',
 
   // tree nodes (structure)
   treeNodes: {

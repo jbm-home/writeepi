@@ -99,6 +99,7 @@ const IT = {
     'Mostra un messaggio di conferma durante il salvataggio automatico.',
   'settings.about': 'Informazioni',
   'settings.buymecoffee': 'Ti piace Writeepi? Sostieni lo sviluppo su',
+  'settings.cover': 'Copertina',
 
   // tree nodes (structure)
   treeNodes: {

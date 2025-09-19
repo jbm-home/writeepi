@@ -95,6 +95,7 @@ const EN = {
     'Display a confirmation message when saving automatically.',
   'settings.about': 'About',
   'settings.buymecoffee': 'Do you like Writeepi? Support the development on',
+  'settings.cover': 'Cover',
 
   // tree
   treeNodes: {

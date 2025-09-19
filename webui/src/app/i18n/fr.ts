@@ -97,6 +97,7 @@ const FR = {
     "Afficher un message de confirmation lors de l'enregistrement automatique.",
   'settings.about': 'A propos',
   'settings.buymecoffee': 'Vous aimez Writeepi ? Soutenez le développement sur',
+  'settings.cover': 'Couverture',
 
   // tree
   treeNodes: {
