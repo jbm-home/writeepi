@@ -295,13 +295,13 @@ export class EditorService {
     );
   }
 
-  openSettings() {
-    this.changeSelection();
+  async openSettings() {
+    await this.changeSelection();
     this.editorDisplayedView = DisplayedView.Settings;
   }
 
-  openStats() {
-    this.changeSelection();
+  async openStats() {
+    await this.changeSelection();
     this.editorDisplayedView = DisplayedView.Stats;
   }
 
