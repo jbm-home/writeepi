@@ -60,6 +60,7 @@ export class EditorService {
 
   quill?: Quill = undefined;
   editorEnable: boolean = false;
+  isRightbarOpen = false;
   searchModule?: Searcher = undefined;
 
   editor: string = '';
@@ -669,6 +670,7 @@ ${formattedParagraphs}
       return;
     }
     const hasError = this.saveCurrentToProject();
+    this.isRightbarOpen = false;
     this.disableEditor();
 
     if (this.loadedProject?.settings.backupOnChange) {
@@ -1227,5 +1229,9 @@ ${formattedParagraphs}
         this.snackBar.open(`Error: ${error.message}`, 'Ok', { duration: 3000 });
       }
     }
+  }
+
+  toggleRightbar() {
+    this.isRightbarOpen = !this.isRightbarOpen;
   }
 }

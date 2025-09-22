@@ -88,20 +88,6 @@ $btn-color: rgb(0, 150, 136);
   }
 }
 
-@media (width < 1000px) {
-  :root {
-    --sidebarwidth: 12rem;
-    --rightbarwidth: 0rem;
-  }
-
-  .app-rightbar,
-  .app-rightbar-menu,
-  .app-rightbar-textbox {
-    visibility: hidden;
-    display: none;
-  }
-}
-
 @media (width >=768px) {
   .app-only-on-small-device {
     visibility: hidden;
@@ -116,9 +102,6 @@ $btn-color: rgb(0, 150, 136);
     --headerinfowidth: 0rem;
   }
 
-  .app-rightbar,
-  .app-rightbar-menu,
-  .app-rightbar-textbox,
   .app-sidebar,
   .app-header-info {
     visibility: hidden;
@@ -160,6 +143,9 @@ $btn-color: rgb(0, 150, 136);
   }
 }
 
+.mat-sidenav-container {
+  z-index: 3;
+}
 
 /* cyrillic-ext */
 @font-face {

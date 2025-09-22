@@ -81,24 +81,3 @@
   font-size: 12px;
   color: #6b7280;
 }
-
-.ws-actions {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-}
-
-.ws-refresh {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  padding: 2px 4px;
-  color: #6b7280;
-  transition: color 0.2s ease;
-}
-
-.ws-refresh:hover {
-  color: #111827;
-}

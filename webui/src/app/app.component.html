@@ -330,6 +330,11 @@
         (onEditorCreated)="editorService.initialize($event)"
         (onContentChanged)="editorService.contentChanged($event)"></quill-editor>
 
+      <!-- < 1000px -->
+      <div class="app-rightbar-toggle" (click)="editorService.toggleRightbar()">
+        <i class="bi" [ngClass]="editorService.isRightbarOpen ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+      </div>
+
       <!-- search button -->
       <button class="btn btn-light btn-sm search-toggle" (click)="toggleSearch()" title="Rechercher">
         <i class="bi bi-search"></i>
@@ -354,7 +359,7 @@
     }
     <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
   </div>
-  <div class="app-rightbar">
+  <div class="app-rightbar" [class.open]="editorService.isRightbarOpen">
     <div class="app-rightbar-menu ps-1">
       {{ 'main.contextnotes' | i18n }} <i class="bi bi-chevron-down"></i>
     </div>

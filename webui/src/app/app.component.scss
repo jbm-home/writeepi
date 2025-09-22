@@ -154,9 +154,9 @@ $editor-margin: 0.5rem;
 
   .search-toggle {
     position: absolute;
-    top: 0.5rem;
+    top: 5px;
     right: 2rem;
-    z-index: 10;
+    z-index: 1;
   }
 
   .search-box {
@@ -164,7 +164,7 @@ $editor-margin: 0.5rem;
     top: 2.5rem;
     right: 2rem;
     width: 200px;
-    z-index: 10;
+    z-index: 1;
   }
 
   .search-box .form-control:focus {
@@ -179,16 +179,6 @@ $editor-margin: 0.5rem;
 
     .search-box {
       right: 0.5rem;
-    }
-  }
-
-  @media (width <540px) {
-    .search-toggle {
-      display: none;
-    }
-
-    .search-box {
-      display: none;
     }
   }
 }
@@ -223,6 +213,7 @@ mwlResizable {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  transition: width .3s ease;
 }
 
 .app-rightbar-menu {
@@ -261,6 +252,50 @@ mwlResizable {
   background-color: var(--editortool-bg);
   border-radius: 20px;
   border: 3px solid #eee;
+}
+
+@media (width >=1000px) {
+  .app-rightbar-toggle {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+@media (width < 1000px) {
+  :root {
+    --sidebarwidth: 12rem;
+    --rightbarwidth: 0rem;
+  }
+
+  .app-rightbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80vw;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 2;
+  }
+
+  .app-rightbar.open {
+    transform: translateX(0);
+  }
+
+  .app-rightbar-toggle {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: $logo-green;
+    color: white;
+    border-radius: 1rem 0 0 1rem;
+    padding: 3px;
+    cursor: pointer;
+    z-index: 3;
+  }
 }
 
 .nav-item {
