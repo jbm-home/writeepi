@@ -7,6 +7,7 @@ const ES = {
   'main.contextnotes': 'Notas contextuales',
   'counter.current': 'Actual:',
   'counter.words': 'palabras',
+  'counter.chars': 'caracteres',
   'counter.total': 'Total:',
   'menu.savenow': 'Guardar ahora',
   'menu.openorcreate': 'Abrir o crear nuevo',
@@ -69,9 +70,11 @@ const ES = {
   'dialog.reloadcaptcha': 'Renovar el código',
   'dialog.accountcreated': 'La cuenta ha sido creada',
   'dialog.lostpassword': 'Contraseña perdida',
-  'dialog.recoverdisclaimer': "Recibirás un correo de restablecimiento si la dirección está asociada a una cuenta.",
+  'dialog.recoverdisclaimer':
+    'Recibirás un correo de restablecimiento si la dirección está asociada a una cuenta.',
   'dialog.passwordchanged': 'La contraseña se ha cambiado correctamente.',
-  'dialog.mailsentifexists': "Se ha enviado un correo si la dirección ha sido reconocida.",
+  'dialog.mailsentifexists':
+    'Se ha enviado un correo si la dirección ha sido reconocida.',
   // settings
   'settings.projectsettings': 'Configuración del proyecto',
   'settings.projectname': 'Nombre del proyecto',
@@ -79,7 +82,17 @@ const ES = {
   'settings.lang': 'Idioma',
   'settings.description': 'Descripción',
   'settings.objectives': 'Objetivos',
+
   'settings.totalwords': 'Número total de palabras',
+  'settings.totalchars': 'Número total de caracteres',
+  'settings.chapterwords': 'Palabras por capítulo',
+  'settings.chapterchars': 'Caracteres por capítulo',
+  'settings.chapterobjectiveenabled': 'Activar objetivo por capítulo',
+  'settings.objectivetype': 'Tipo de objetivo',
+  'settings.words': 'Palabras',
+  'settings.signsincluding': 'Caracteres (incluyendo espacios)',
+  'settings.signsexcluding': 'Caracteres (excluyendo espacios)',
+
   'settings.editorsettings': 'Configuración del editor',
   'settings.dashConf': 'Reemplazar guiones dobles "-" por un guion largo "—".',
   'settings.quoteConf':

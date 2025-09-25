@@ -1,5 +1,5 @@
 import { UuidUtils } from '../../../../server/src/utils/uuidutils.js';
-import { UserProject } from './userproject.js';
+import { ObjectiveType, UserProject } from './userproject.js';
 
 export class DefaultProject {
   public static buildDefaultProject(): UserProject {
@@ -19,7 +19,14 @@ export class DefaultProject {
         backupOnChange: true,
         backupInterval: true,
         backupAutoDisplayMessage: false,
-        totalWords: 70000,
+        objectives: {
+          wordsGlobal: 70000,
+          signsGlobal: 420000,
+          wordsChapter: 3500,
+          signsChapter: 21000,
+          chapterObjectiveEnabled: true,
+          type: ObjectiveType.words,
+        },
       },
       content: [
         {
@@ -34,6 +41,7 @@ export class DefaultProject {
           isSummary: true,
           isBook: false,
           words: 0,
+          signs: 0,
           isTrash: false,
           isCharacter: false,
         },
@@ -48,6 +56,7 @@ export class DefaultProject {
           canBeDeleted: false,
           isBook: true,
           words: 0,
+          signs: 0,
           isTrash: false,
           isCharacter: false,
           isSummary: false,
@@ -64,6 +73,7 @@ export class DefaultProject {
           canBeDeleted: false,
           isBook: false,
           words: 0,
+          signs: 0,
           isTrash: false,
           isSummary: false,
         },
@@ -78,6 +88,7 @@ export class DefaultProject {
           canBeDeleted: false,
           isBook: false,
           words: 0,
+          signs: 0,
           isTrash: false,
           isCharacter: false,
           isSummary: false,
@@ -93,6 +104,7 @@ export class DefaultProject {
           canBeDeleted: false,
           isBook: false,
           words: 0,
+          signs: 0,
           isTrash: false,
           isCharacter: false,
           isSummary: false,
@@ -109,6 +121,7 @@ export class DefaultProject {
           isTrash: true,
           isBook: false,
           words: 0,
+          signs: 0,
           isCharacter: false,
           isSummary: false,
         },

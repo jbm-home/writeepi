@@ -25,15 +25,14 @@
       '-'}}</div>
     <div>
       @if (editorService.editorEnable && editorService.loadedProject !== undefined) {
-      {{ 'counter.current' | i18n }} {{editorService.wordCount()}} {{ 'counter.words' | i18n }}
+      {{ 'counter.current' | i18n }} {{editorService.getCurrentDocumentForDisplay()}}
       }
       @else {
       &nbsp;
       }
     </div>
     @if (editorService.loadedProject !== undefined && editorService.loadedProject.settings !== undefined) {
-    <div>{{ 'counter.total' | i18n }} {{editorService.globalWordsCount}} /
-      {{editorService.loadedProject.settings.totalWords}} ({{editorService.globalWordsPct}}%)</div>
+    <div>{{ 'counter.total' | i18n }} {{editorService.getObjectivesForDisplay()}}</div>
     }
   </div>
   <div class="app-header-menu">
@@ -218,9 +217,42 @@
       </div>
       <h3 class="pt-3 pb-3">{{ 'settings.objectives' | i18n }}</h3>
       <div class="mb-3">
-        <label for="totalWords" class="form-text text-muted">{{ 'settings.totalwords' | i18n }}</label>
-        <input type="number" class="form-control" id="totalWords" placeholder="{{ 'settings.totalwords' | i18n }}"
-          [(ngModel)]="editorService.loadedProject.settings.totalWords">
+        <label for="objectivetype" class="form-text text-muted">
+          {{ 'settings.objectivetype' | i18n }}
+        </label>
+        <select id="objectivetype" class="form-control"
+          [(ngModel)]="editorService.loadedProject.settings.objectives.type">
+
+          <option [ngValue]="0">{{ 'settings.words' | i18n }}</option>
+          <option [ngValue]="1">{{ 'settings.signsincluding' | i18n }}</option>
+          <option [ngValue]="2" disabled>{{ 'settings.signsexcluding' | i18n }}</option>
+
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="totalwords" class="form-text text-muted">{{ 'settings.totalwords' | i18n }}</label>
+        <input type="number" class="form-control" id="totalwords" placeholder="{{ 'settings.totalwords' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.settings.objectives.wordsGlobal">
+      </div>
+      <div class="mb-3">
+        <label for="totalchars" class="form-text text-muted">{{ 'settings.totalchars' | i18n }}</label>
+        <input type="number" class="form-control" id="totalchars" placeholder="{{ 'settings.totalchars' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.settings.objectives.signsGlobal">
+      </div>
+      <div class="mb-3">
+        <label for="chapterwords" class="form-text text-muted">{{ 'settings.chapterwords' | i18n }}</label>
+        <input type="number" class="form-control" id="chapterwords" placeholder="{{ 'settings.chapterwords' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.settings.objectives.wordsChapter">
+      </div>
+      <div class="mb-3">
+        <label for="chapterchars" class="form-text text-muted">{{ 'settings.chapterchars' | i18n }}</label>
+        <input type="number" class="form-control" id="chapterchars" placeholder="{{ 'settings.chapterchars' | i18n }}"
+          [(ngModel)]="editorService.loadedProject.settings.objectives.signsChapter">
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle [(ngModel)]="editorService.loadedProject.settings.objectives.chapterObjectiveEnabled">
+          {{ 'settings.chapterobjectiveenabled' | i18n }}
+        </mat-slide-toggle>
       </div>
       <h3 class="pt-3 pb-3">{{ 'settings.editorsettings' | i18n }}</h3>
       <div class="mb-3">
@@ -328,7 +360,8 @@
       <!-- editor -->
       <quill-editor class="app-editor" [(ngModel)]="editorService.editor"
         (onEditorCreated)="editorService.initialize($event)"
-        (onContentChanged)="editorService.contentChanged($event)"></quill-editor>
+        (onContentChanged)="editorService.contentChanged($event)"
+        [trackChanges]="'all'"></quill-editor>
 
       <!-- < 1000px -->
       <div class="app-rightbar-toggle" (click)="editorService.toggleRightbar()">

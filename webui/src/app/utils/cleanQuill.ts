@@ -21,16 +21,32 @@ export function cleanQuillHtmlToParagraphs(html: string): string {
         const tag = childEl.tagName.toLowerCase();
         const children = Array.from(childEl.childNodes).map(walk).join('');
 
-        if (tag === 'strong' || tag === 'b') return `<strong>${children}</strong>`;
+        if (tag === 'strong' || tag === 'b')
+          return `<strong>${children}</strong>`;
         if (tag === 'em' || tag === 'i') return `<em>${children}</em>`;
         if (tag === 'u') return `<u>${children}</u>`;
+
+        // le surlignage
+        if (tag === 'span') {
+          const bg = childEl.style.backgroundColor;
+          if (bg) {
+            const safeColor = bg.match(/^yellow|#[0-9a-f]{3,6}$/i) ? bg : '';
+            return safeColor
+              ? `<span style="background-color: ${safeColor};">${children}</span>`
+              : children;
+          }
+          return children;
+        }
 
         // blocs : on garde les classes ql-align-xxx si présentes
         if (tag === 'p' || tag === 'div' || tag.startsWith('h')) {
           let cssClass = '';
-          if (childEl.classList.contains('ql-align-center')) cssClass = 'ql-align-center';
-          else if (childEl.classList.contains('ql-align-right')) cssClass = 'ql-align-right';
-          else if (childEl.classList.contains('ql-align-justify')) cssClass = 'ql-align-justify';
+          if (childEl.classList.contains('ql-align-center'))
+            cssClass = 'ql-align-center';
+          else if (childEl.classList.contains('ql-align-right'))
+            cssClass = 'ql-align-right';
+          else if (childEl.classList.contains('ql-align-justify'))
+            cssClass = 'ql-align-justify';
 
           return cssClass
             ? `<p class="${cssClass}">${children}</p>`

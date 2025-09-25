@@ -29,7 +29,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [SharedModule, TreeItemComponent, WordStatsTableComponent, ProtagonistComponent],
+  imports: [
+    SharedModule,
+    TreeItemComponent,
+    WordStatsTableComponent,
+    ProtagonistComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -306,7 +311,8 @@ export class AppComponent implements OnInit, OnDestroy {
           uid: '',
         };
         this.editorService.resetAll();
-        const recoverToken = this.route.snapshot.queryParamMap.get('recoverToken');
+        const recoverToken =
+          this.route.snapshot.queryParamMap.get('recoverToken');
         const recover = this.route.snapshot.queryParamMap.get('recover');
         if (recoverToken) {
           this.openRecoverModal(recoverToken);
@@ -386,31 +392,44 @@ export class AppComponent implements OnInit, OnDestroy {
         if (result.login === true) {
           this.openLoginModal();
           return;
-        } else if (result.data?.login !== undefined && result.data?.token !== undefined && result.data.login.length > 3) {
-          this.sessionService.changePasswordByToken(result.data.login, result.data.token, result.data.password).then(
-            (data: any) => {
-              if (data?.error !== undefined) {
-                this.snackBar.open(`Error: ${data.error}`, 'Close', {
+        } else if (
+          result.data?.login !== undefined &&
+          result.data?.token !== undefined &&
+          result.data.login.length > 3
+        ) {
+          this.sessionService
+            .changePasswordByToken(
+              result.data.login,
+              result.data.token,
+              result.data.password,
+            )
+            .then(
+              (data: any) => {
+                if (data?.error !== undefined) {
+                  this.snackBar.open(`Error: ${data.error}`, 'Close', {
+                    duration: 3000,
+                  });
+                  this.openRecoverModal(result.data.token);
+                } else {
+                  this.snackBar.open(
+                    this.i18nPipe.transform('dialog.passwordchanged'),
+                    'Close',
+                    { duration: 3000 },
+                  );
+                  this.removeAllQueryParams();
+                }
+              },
+              (error: any) => {
+                this.snackBar.open(`Error from server`, 'Close', {
                   duration: 3000,
                 });
                 this.openRecoverModal(result.data.token);
-              } else {
-                this.snackBar.open(
-                  this.i18nPipe.transform('dialog.passwordchanged'),
-                  'Close',
-                  { duration: 3000 },
-                );
-                this.removeAllQueryParams();
-              }
-            },
-            (error: any) => {
-              this.snackBar.open(`Error from server`, 'Close', {
-                duration: 3000,
-              });
-              this.openRecoverModal(result.data.token);
-            },
-          );
-        } else if (result.data?.login !== undefined && result.data.login.length > 3) {
+              },
+            );
+        } else if (
+          result.data?.login !== undefined &&
+          result.data.login.length > 3
+        ) {
           this.sessionService.recover(result.data.login).then(
             (data: any) => {
               if (data?.error !== undefined) {
@@ -445,7 +464,7 @@ export class AppComponent implements OnInit, OnDestroy {
   removeAllQueryParams() {
     this.router.navigate([], {
       queryParams: {},
-      replaceUrl: true
+      replaceUrl: true,
     });
   }
 

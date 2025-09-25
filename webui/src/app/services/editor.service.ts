@@ -1,7 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModaleComponent } from '../modal/modal.component.js';
-import { Content, UserProject, WordStats } from '../types/userproject.js';
+import {
+  Content,
+  ObjectiveType,
+  UserProject,
+  WordStats,
+} from '../types/userproject.js';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DownloaddialogComponent } from '../dialogs/downloaddialog/downloaddialog.component.js';
@@ -13,7 +18,11 @@ import { Failover } from '../utils/failover.js';
 import { I18nService } from './i18n.service.js';
 import { BackupService } from './backup.service.js';
 import Searcher from '../quill-plugins/searcher.js';
-import { cleanQuillHtmlToParagraphs, isTextContentEqual } from '../utils/cleanQuill.js';
+import {
+  cleanQuillHtmlToParagraphs,
+  isTextContentEqual,
+} from '../utils/cleanQuill.js';
+import { I18nPipe } from '../pipes/i18n.pipe.js';
 
 export class ModalAction {
   key: string = '';
@@ -71,7 +80,7 @@ export class EditorService {
 
   globalWordsCount: number = 0;
   globalCharsCount: number = 0;
-  globalWordsPct: number = 0;
+  globalObjectivePct: number = 0;
 
   editorDisplayedView: DisplayedView = DisplayedView.Default;
   hasOpenningQuote = false;
@@ -97,6 +106,7 @@ export class EditorService {
 
   constructor(
     private i18n: I18nService,
+    private i18nPipe: I18nPipe,
     private backupService: BackupService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
@@ -128,6 +138,17 @@ export class EditorService {
     if (uc !== undefined) {
       uc.words = !uc.isFolder && !uc.isCharacter ? count : 0;
       return uc.words;
+    }
+    return 0;
+  }
+
+  charsCount() {
+    const text = this.quill?.getText();
+    const trimmed = text?.trim();
+    const uc = this.getCurrentSelectedUserContent();
+    if (trimmed && uc !== undefined) {
+      uc.signs = !uc.isFolder && !uc.isCharacter ? trimmed.length : 0;
+      return uc.signs;
     }
     return 0;
   }
@@ -310,7 +331,7 @@ export class EditorService {
     if (!this.hasMandatoryInfos()) {
       return;
     }
-    const wordsCount = this.updateGlobalWordsCount();
+    const wordsCount = this.updateGlobalCounts();
     const hasError = this.saveCurrentToProject();
 
     if (this.loadedProject !== undefined) {
@@ -326,12 +347,19 @@ export class EditorService {
       this.loadedProject.wordStats = baseStats;
       // end stats
 
-      const data = await this.backupService.saveBackup(this.loadedProject);
+      let data = undefined;
+      try {
+        data = await this.backupService.saveBackup(this.loadedProject);
+      } catch (error) {
+        //
+      }
 
       if (data !== undefined) {
         this.currentBackupUuid = data;
         if (hasError) {
-          this.snackBar.open(`!! Text check integrity error !!`, 'Ok', { duration: 5000 });
+          this.snackBar.open(`!! Text check integrity error !!`, 'Ok', {
+            duration: 5000,
+          });
         } else if (message) {
           this.snackBar.open(`Backup done`, 'Ok', { duration: 2000 });
         }
@@ -436,7 +464,7 @@ export class EditorService {
         this.loadedProject.lang = this.i18n.getDefaultLang().code;
       }
     }
-    this.updateGlobalWordsCount();
+    this.updateGlobalCounts();
     this.openSettings();
   }
 
@@ -458,11 +486,26 @@ export class EditorService {
         delete c.parentId;
       }
     });
+
+    // words migrator
+    if (!project.settings.objectives) {
+      project.settings.objectives = {
+        wordsGlobal: project.settings.totalWords ?? 70000,
+        signsGlobal: 420000,
+        wordsChapter: 3500,
+        signsChapter: 21000,
+        chapterObjectiveEnabled: true,
+        type: ObjectiveType.words,
+      }
+      project.settings.totalWords = undefined;
+    }
+    //
+
     this.currentBackupUuid = project.id;
     this.loadedProject = project;
     this.setSidebarSize();
     this.i18n.setLang(project.lang);
-    this.updateGlobalWordsCount();
+    this.updateGlobalCounts();
     this.checkMandatorySettings();
     this.loadCover(projectId);
   }
@@ -471,7 +514,7 @@ export class EditorService {
     this.loadedProject = data;
     this.setSidebarSize();
     this.currentBackupUuid = '';
-    this.updateGlobalWordsCount();
+    this.updateGlobalCounts();
     this.checkMandatorySettings();
     this.openSettings();
   }
@@ -519,6 +562,8 @@ export class EditorService {
     const uuid = this.currentBackupUuid;
     const data = this.loadedProject;
 
+    if (!data) return;
+    
     try {
       localStorage.setItem(
         Failover.getBestFailover(),
@@ -533,8 +578,67 @@ export class EditorService {
     }
   }
 
-  updateGlobalWordsCount() {
+  getCurrentDocumentForDisplay() {
+    const objectives = this.loadedProject?.settings?.objectives;
+    if (!objectives) return '';
+    const objective =
+      objectives.type === ObjectiveType.words
+        ? objectives.wordsChapter
+        : objectives.signsChapter;
+    const current =
+      objectives.type === ObjectiveType.words
+        ? this.wordCount()
+        : this.charsCount();
+
+    const objectivePct =
+      objective > 0 ? Math.round((100 * current) / objective) : 0;
+
+    const label =
+      objectives.type === ObjectiveType.words ?
+        this.i18nPipe.transform('counter.words')
+        : this.i18nPipe.transform('counter.chars');
+
+    return objectives.chapterObjectiveEnabled ? `${current} / ${objective} (${objectivePct}%)` : `${current} ${label}`;
+  }
+
+  getObjectivesForDisplay() {
+    const objectives = this.loadedProject?.settings?.objectives;
+    if (!objectives) return '';
+    const objective =
+      objectives.type === ObjectiveType.words
+        ? objectives.wordsGlobal
+        : objectives.signsGlobal;
+    const current =
+      objectives.type === ObjectiveType.words
+        ? this.globalWordsCount
+        : this.globalCharsCount;
+    return `${current} / ${objective} (${this.globalObjectivePct}%)`;
+  }
+
+  updateGlobalCounts() {
     const oldCount = this.globalWordsCount;
+    this.updateWordsCount();
+    this.updateCharsCount();
+
+    const objectives = this.loadedProject?.settings?.objectives;
+    if (objectives) {
+      const objective =
+        objectives.type === ObjectiveType.words
+          ? objectives.wordsGlobal
+          : objectives.signsGlobal;
+      const current =
+        objectives.type === ObjectiveType.words
+          ? this.globalWordsCount
+          : this.globalCharsCount;
+
+      this.globalObjectivePct =
+        objective > 0 ? Math.round((100 * current) / objective) : 0;
+    }
+
+    return { old: oldCount, new: this.globalWordsCount };
+  }
+
+  updateWordsCount() {
     this.globalWordsCount =
       this.loadedProject !== undefined
         ? this.loadedProject.content
@@ -544,25 +648,18 @@ export class EditorService {
           .map((p: { words: number }) => p.words ?? 0)
           .reduce((a, b) => a + b, 0)
         : 0;
-    const objective = this.loadedProject?.settings?.totalWords ?? 0;
-    this.globalWordsPct =
-      objective > 0 ? Math.round((100 * this.globalWordsCount) / objective) : 0;
-    this.updateCharsCount();
-    return { old: oldCount, new: this.globalWordsCount };
   }
 
-  async updateCharsCount() {
-    let totalChars = 0;
-
-    this.loadedProject?.content
-      .filter((p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook)
-      .forEach((p: any) => {
-        const text = p.chapter ?? '';
-        const clean = text.replace(/<\/?p>/gi, '');
-        totalChars += clean.length;
-      });
-
-    this.globalCharsCount = totalChars;
+  updateCharsCount() {
+    this.globalCharsCount =
+      this.loadedProject !== undefined
+        ? this.loadedProject.content
+          .filter(
+            (p: Content) => !p.isFolder && !this.isTrashChild(p) && p.isBook,
+          )
+          .map((p: { signs: number }) => p.signs ?? 0)
+          .reduce((a, b) => a + b, 0)
+        : 0;
   }
 
   disableEditor() {
@@ -676,7 +773,9 @@ ${formattedParagraphs}
     if (this.loadedProject?.settings.backupOnChange) {
       await this.backup(this.loadedProject?.settings.backupAutoDisplayMessage);
     } else if (hasError) {
-      this.snackBar.open(`!! Text integrity check failed !!`, 'Ok', { duration: 5000 });
+      this.snackBar.open(`!! Text integrity check failed !!`, 'Ok', {
+        duration: 5000,
+      });
     }
 
     this.editorDisplayedView = DisplayedView.Default;
@@ -988,6 +1087,7 @@ ${formattedParagraphs}
               isTrash: false,
               isCharacter: this.isCharacterRootChildByParentId(menuItem.id),
               words: 0,
+              signs: 0,
             });
           } else if (action.key === this.modalActions.addChildEditor.key) {
             menuItem.expanded = true;
@@ -1008,6 +1108,7 @@ ${formattedParagraphs}
               isTrash: false,
               isCharacter: this.isCharacterRootChildByParentId(menuItem.id),
               words: 0,
+              signs: 0,
             });
           } else if (action.key === this.modalActions.addFolderAfter.key) {
             this.increaseOrderIdsFrom(refOrder + 1);
@@ -1028,6 +1129,7 @@ ${formattedParagraphs}
                 menuItem.parentId,
               ),
               words: 0,
+              signs: 0,
             });
           } else if (action.key === this.modalActions.addFolderBefore.key) {
             this.increaseOrderIdsFrom(refOrder);
@@ -1048,6 +1150,7 @@ ${formattedParagraphs}
                 menuItem.parentId,
               ),
               words: 0,
+              signs: 0,
             });
           } else if (action.key === this.modalActions.addEditorAfter.key) {
             this.increaseOrderIdsFrom(refOrder + 1);
@@ -1070,6 +1173,7 @@ ${formattedParagraphs}
                 menuItem.parentId,
               ),
               words: 0,
+              signs: 0,
             });
           } else if (action.key === this.modalActions.addEditorBefore.key) {
             this.increaseOrderIdsFrom(refOrder);
@@ -1092,6 +1196,7 @@ ${formattedParagraphs}
                 menuItem.parentId,
               ),
               words: 0,
+              signs: 0,
             });
           } else if (
             action.key === this.modalActions.delete.key &&
@@ -1187,7 +1292,6 @@ ${formattedParagraphs}
     return JSON.stringify(this.DEFAULT_CHARACTER_DATA);
   }
 
-
   async loadCover(contentId: string) {
     try {
       this.coverPreview = (await this.backupService.getCover(contentId))?.cover;
@@ -1211,8 +1315,10 @@ ${formattedParagraphs}
     try {
       const arrayBuffer = await file.arrayBuffer();
       const base64Data = btoa(
-        new Uint8Array(arrayBuffer)
-          .reduce((data, byte) => data + String.fromCharCode(byte), "")
+        new Uint8Array(arrayBuffer).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          '',
+        ),
       );
 
       if (this.loadedProject?.id) {

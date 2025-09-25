@@ -7,6 +7,7 @@ const FR = {
   'main.contextnotes': 'Notes de contexte',
   'counter.current': 'Document:',
   'counter.words': 'mots',
+  'counter.chars': 'signes',
   'counter.total': 'Total:',
   'menu.savenow': 'Sauvegarder',
   'menu.openorcreate': 'Créer ou ouvrir un projet',
@@ -66,7 +67,8 @@ const FR = {
   'dialog.reloadcaptcha': 'Renouveler le code',
   'dialog.accountcreated': 'Le compte a été créé',
   'dialog.lostpassword': 'Mot de passe perdu',
-  'dialog.recoverdisclaimer': "Vous recevrez un email de réinitialisation si l'adresse est associée à un compte.",
+  'dialog.recoverdisclaimer':
+    "Vous recevrez un email de réinitialisation si l'adresse est associée à un compte.",
   'dialog.passwordchanged': 'Le mot de passe a bien été changé.',
   'dialog.mailsentifexists': "Un email a été envoyé si l'adresse est reconnue.",
   // settings
@@ -76,7 +78,17 @@ const FR = {
   'settings.lang': 'Langue',
   'settings.description': 'Description',
   'settings.objectives': 'Objectifs',
+
   'settings.totalwords': 'Nombre de mots',
+  'settings.totalchars': 'Nombre de signes',
+  'settings.chapterwords': 'Nombre de mots par chapitre',
+  'settings.chapterchars': 'Nombre de signes par chapitre',
+  'settings.chapterobjectiveenabled': 'Activer l’objectif par chapitre',
+  'settings.objectivetype': 'Type d’objectif',
+  'settings.words': 'Mots',
+  'settings.signsincluding': 'Signes (espaces inclus)',
+  'settings.signsexcluding': 'Signes (espaces exclus)',
+
   'settings.editorsettings': "Paramètres de l'éditeur",
   'settings.dashConf':
     'Remplacer les doubles tirets "-" par un long tiret "—".',

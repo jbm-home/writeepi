@@ -7,6 +7,7 @@ const EN = {
   'main.contextnotes': 'Context notes',
   'counter.current': 'Current:',
   'counter.words': 'words',
+  'counter.chars': 'characters',
   'counter.total': 'Total:',
   'menu.savenow': 'Save now',
   'menu.openorcreate': 'Open or Create new',
@@ -66,9 +67,11 @@ const EN = {
   'dialog.reloadcaptcha': 'Renew the code',
   'dialog.accountcreated': 'The account has been created',
   'dialog.lostpassword': 'Lost password',
-  'dialog.recoverdisclaimer': "You will receive a reset email if the address is associated with an account.",
+  'dialog.recoverdisclaimer':
+    'You will receive a reset email if the address is associated with an account.',
   'dialog.passwordchanged': 'The password has been successfully changed.',
-  'dialog.mailsentifexists': "An email has been sent if the address is recognized.",
+  'dialog.mailsentifexists':
+    'An email has been sent if the address is recognized.',
   // settings
   'settings.projectsettings': 'Project Settings',
   'settings.projectname': 'Project Name',
@@ -76,7 +79,17 @@ const EN = {
   'settings.lang': 'Language',
   'settings.description': 'Description',
   'settings.objectives': 'Objectives',
-  'settings.totalwords': 'Total Words',
+
+  'settings.totalwords': 'Total words',
+  'settings.totalchars': 'Total characters',
+  'settings.chapterwords': 'Words per chapter',
+  'settings.chapterchars': 'Characters per chapter',
+  'settings.chapterobjectiveenabled': 'Enable chapter objective',
+  'settings.objectivetype': 'Objective type',
+  'settings.words': 'Words',
+  'settings.signsincluding': 'Characters (including spaces)',
+  'settings.signsexcluding': 'Characters (excluding spaces)',
+
   'settings.editorsettings': 'Editor Settings',
   'settings.dashConf': 'Replace double dashes "-" by a long dash "—".',
   'settings.quoteConf':

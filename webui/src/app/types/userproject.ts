@@ -46,6 +46,7 @@ export interface Content {
   chapter?: string;
   notes?: string;
   words: number;
+  signs: number;
 }
 
 export interface Settings {
@@ -57,7 +58,29 @@ export interface Settings {
   backupOnChange: boolean;
   backupInterval: boolean;
   backupAutoDisplayMessage: boolean;
-  totalWords: number;
   leftbar?: number;
   rightbar?: number;
+  /**
+   * Objectives
+   */
+  objectives: Objectives;
+  /**
+   * @deprecated Ambiguous variable
+   */
+  totalWords?: number;
+}
+
+export interface Objectives {
+  wordsGlobal: number;
+  signsGlobal: number;
+  wordsChapter: number;
+  signsChapter: number;
+  chapterObjectiveEnabled: boolean;
+  type: ObjectiveType;
+}
+
+export enum ObjectiveType {
+  words,
+  signsIncludingSpaces,
+  signsExcludingSpaces,
 }

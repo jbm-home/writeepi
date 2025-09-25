@@ -8,7 +8,7 @@ import { ElectronService } from './electron.service.js';
   providedIn: 'root',
 })
 export class BackupService {
-  constructor(private electronService: ElectronService) { }
+  constructor(private electronService: ElectronService) {}
 
   async saveBackup(project: UserProject) {
     if (AppComponent.CLOUDMODE) {
@@ -58,7 +58,7 @@ export class BackupService {
     }
   }
 
-  async getCover(projectId: string): Promise<{ cover: string; } | undefined> {
+  async getCover(projectId: string): Promise<{ cover: string } | undefined> {
     if (AppComponent.CLOUDMODE) {
       return await axios.get(`/api/content/cover/${projectId}`);
     } else {

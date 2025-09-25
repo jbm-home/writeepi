@@ -7,6 +7,7 @@ const IT = {
   'main.contextnotes': 'Note contestuali',
   'counter.current': 'Attuale:',
   'counter.words': 'parole',
+  'counter.chars': 'caratteri',
   'counter.total': 'Totale:',
   'menu.savenow': 'Salva ora',
   'menu.openorcreate': 'Apri o crea nuovo',
@@ -69,9 +70,11 @@ const IT = {
   'dialog.reloadcaptcha': 'Rinnova il codice',
   'dialog.accountcreated': "L'account è stato creato",
   'dialog.lostpassword': 'Password dimenticata',
-  'dialog.recoverdisclaimer': "Riceverai un'email di reimpostazione se l'indirizzo è associato a un account.",
+  'dialog.recoverdisclaimer':
+    "Riceverai un'email di reimpostazione se l'indirizzo è associato a un account.",
   'dialog.passwordchanged': 'La password è stata cambiata con successo.',
-  'dialog.mailsentifexists': "È stata inviata un'email se l'indirizzo è stato riconosciuto.",
+  'dialog.mailsentifexists':
+    "È stata inviata un'email se l'indirizzo è stato riconosciuto.",
   // settings
   'settings.projectsettings': 'Impostazioni del progetto',
   'settings.projectname': 'Nome del progetto',
@@ -79,7 +82,17 @@ const IT = {
   'settings.lang': 'Lingua',
   'settings.description': 'Descrizione',
   'settings.objectives': 'Obiettivi',
+
   'settings.totalwords': 'Numero totale di parole',
+  'settings.totalchars': 'Numero totale di caratteri',
+  'settings.chapterwords': 'Parole per capitolo',
+  'settings.chapterchars': 'Caratteri per capitolo',
+  'settings.chapterobjectiveenabled': 'Attiva obiettivo per capitolo',
+  'settings.objectivetype': 'Tipo di obiettivo',
+  'settings.words': 'Parole',
+  'settings.signsincluding': 'Caratteri (spazi inclusi)',
+  'settings.signsexcluding': 'Caratteri (spazi esclusi)',
+
   'settings.editorsettings': "Impostazioni dell'editor",
   'settings.dashConf':
     'Sostituisci i doppi trattini "-" con un trattino lungo "—".',

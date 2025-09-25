@@ -7,6 +7,7 @@ const DE = {
   'main.contextnotes': 'Kontextnotizen',
   'counter.current': 'Aktuell:',
   'counter.words': 'Wörter',
+  'counter.chars': 'zeichen',
   'counter.total': 'Gesamt:',
   'menu.savenow': 'Jetzt speichern',
   'menu.openorcreate': 'Öffnen oder neu erstellen',
@@ -69,9 +70,11 @@ const DE = {
   'dialog.reloadcaptcha': 'Code erneuern',
   'dialog.accountcreated': 'Das Konto wurde erstellt',
   'dialog.lostpassword': 'Passwort vergessen',
-  'dialog.recoverdisclaimer': "Sie erhalten eine E-Mail zur Zurücksetzung, wenn die Adresse mit einem Konto verknüpft ist.",
+  'dialog.recoverdisclaimer':
+    'Sie erhalten eine E-Mail zur Zurücksetzung, wenn die Adresse mit einem Konto verknüpft ist.',
   'dialog.passwordchanged': 'Das Passwort wurde erfolgreich geändert.',
-  'dialog.mailsentifexists': "Eine E-Mail wurde gesendet, wenn die Adresse erkannt wurde.",
+  'dialog.mailsentifexists':
+    'Eine E-Mail wurde gesendet, wenn die Adresse erkannt wurde.',
   // settings
   'settings.projectsettings': 'Projekteinstellungen',
   'settings.projectname': 'Projektname',
@@ -79,7 +82,17 @@ const DE = {
   'settings.lang': 'Sprache',
   'settings.description': 'Beschreibung',
   'settings.objectives': 'Ziele',
+
   'settings.totalwords': 'Gesamtanzahl Wörter',
+  'settings.totalchars': 'Gesamtanzahl Zeichen',
+  'settings.chapterwords': 'Wörter pro Kapitel',
+  'settings.chapterchars': 'Zeichen pro Kapitel',
+  'settings.chapterobjectiveenabled': 'Kapitelziel aktivieren',
+  'settings.objectivetype': 'Zieltyp',
+  'settings.words': 'Wörter',
+  'settings.signsincluding': 'Zeichen (einschließlich Leerzeichen)',
+  'settings.signsexcluding': 'Zeichen (ohne Leerzeichen)',
+
   'settings.editorsettings': 'Editor-Einstellungen',
   'settings.dashConf':
     'Doppelte Bindestriche "-" durch einen langen Bindestrich "—" ersetzen.',
