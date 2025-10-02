@@ -171,16 +171,6 @@ $editor-margin: 0.5rem;
     outline: none;
     box-shadow: none;
   }
-
-  @media (width <=1200px) {
-    .search-toggle {
-      right: 0.5rem;
-    }
-
-    .search-box {
-      right: 0.5rem;
-    }
-  }
 }
 
 mwlResizable {
@@ -285,10 +275,9 @@ mwlResizable {
   }
 
   .app-rightbar-toggle {
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    top: 5px;
     right: 0;
-    transform: translateY(-50%);
     background: $logo-green;
     color: white;
     border-radius: 1rem 0 0 1rem;

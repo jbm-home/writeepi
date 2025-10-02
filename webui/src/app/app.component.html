@@ -359,9 +359,13 @@
     <div class="editor-container">
       <!-- editor -->
       <quill-editor class="app-editor" [(ngModel)]="editorService.editor"
-        (onEditorCreated)="editorService.initialize($event)"
-        (onContentChanged)="editorService.contentChanged($event)"
+        (onEditorCreated)="editorService.initialize($event)" (onContentChanged)="editorService.contentChanged($event)"
         [trackChanges]="'all'"></quill-editor>
+
+      <!-- < 1000px -->
+      <div class="app-rightbar-toggle" (click)="editorService.toggleRightbar()">
+        <i class="bi" [ngClass]="editorService.isRightbarOpen ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+      </div>
 
       <!-- < 1000px -->
       <div class="app-rightbar-toggle" (click)="editorService.toggleRightbar()">
