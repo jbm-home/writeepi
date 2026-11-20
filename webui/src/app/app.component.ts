@@ -37,6 +37,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  host: { '[class.sunset-mode]': 'cloudMode' },
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('searchInputRef') searchInputRef!: ElementRef<HTMLInputElement>;

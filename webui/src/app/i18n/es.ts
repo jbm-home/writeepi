@@ -17,6 +17,11 @@ const ES = {
   'menu.login': 'Iniciar sesión',
   'menu.logout': 'Cerrar sesión',
   'menu.speech': 'Síntesis de voz',
+  // saas shutdown banner
+  'sunset.title': "Writeepi en línea cerrará pronto",
+  'sunset.text': "Por falta de recursos, el servicio en línea va a cerrar. Exporta ahora cada proyecto en formato JSON (Exportar → JSON) para guardar una copia local e importarla en la aplicación Writeepi Desktop.",
+  'sunset.export': "Exportar este proyecto",
+  'sunset.download': "Descargar Writeepi Desktop",
 
   // tree
   'tree.rename': 'Renombrar',

@@ -1,3 +1,20 @@
+@if (cloudMode) {
+<div class="sunset-banner" role="alert">
+  <i class="bi bi-exclamation-triangle-fill sunset-banner-icon"></i>
+  <div class="sunset-banner-text">
+    <strong>{{ 'sunset.title' | i18n }}</strong> &mdash; {{ 'sunset.text' | i18n }}
+  </div>
+  <div class="sunset-banner-actions">
+    @if (editorService.loadedProject !== undefined) {
+    <button type="button" class="sunset-banner-button" (click)="editorService.exportModal()">
+      <i class="bi bi-box-arrow-up"></i>&nbsp;{{ 'sunset.export' | i18n }}
+    </button>
+    }
+    <a class="sunset-banner-link" href="https://github.com/jbm-home/writeepi/releases" target="_blank"
+      rel="noopener noreferrer">{{ 'sunset.download' | i18n }}</a>
+  </div>
+</div>
+}
 <div class="app-header">
   <div class="app-logo">
     <div class="app-only-on-small-device">
